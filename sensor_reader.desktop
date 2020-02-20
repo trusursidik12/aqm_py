@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=sensor_reader
+Comment=sensor_reader
+Icon=gnome-info
+Exec=sh /home/admin/sensor_reader.sh
+Terminal=true
+Type=Application
+Categories=
+
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=3

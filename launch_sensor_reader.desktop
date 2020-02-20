@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Sensor Reader
+Comment=Sensor Reader
+Icon=gnome-info
+Exec=sh /home/admin/sensor_reader.sh
+Terminal=true
+Type=Application

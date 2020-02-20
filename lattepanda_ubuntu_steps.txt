@@ -1,0 +1,85 @@
+clone ubuntu 16
+koneksi internet
+wget https://raw.githubusercontent.com/warihsuryono/python/master/lattepanda_ubuntu_steps.txt
+auto login
+	open the Activities overview and start typing Users.
+	Click Users to open the panel.
+	Select the user account that you want to log in to automatically at startup.
+	Press Unlock in the top right corner and type in your password when prompted.
+	Switch the Automatic Login switch to on.
+Auto Hide the launcher
+	All setting => appearance ==> behavior ==> "on"
+	
+set never logoff/sleep:
+		all settings => brightness&Lock
+		
+software & updates ganti ke "main server"
+
+install teamviewer*.deb
+	setting autostart
+	register
+	
+sudo apt-get update
+sudo apt-get install vim
+sudo apt-get install git
+sudo apt install python-pip
+pip install --upgrade pip
+pip install mysql-connector-python
+pip install labjack-ljm
+pip install pyserial
+pip install pyvantagepro
+pip install pywebview
+
+install lampp
+	sudo apt-get install -y apache2
+	sudo apt-get install mysql-server mysql-client libmysqlclient-dev
+	sudo apt-get install -y php libapache2-mod-php php-mcrypt php-mysql
+	sudo apt-get -y install php7.0-mysql php7.0-mysqli php7.0-curl php7.0-gd php7.0-intl php-pear php-imagick php7.0-imap php7.0-mcrypt php-memcache  php7.0-pspell php7.0-recode php7.0-sqlite3 php7.0-tidy php7.0-xmlrpc php7.0-xsl php7.0-mbstring php-gettext
+	sudo /etc/init.d/apache2 restart
+	cd /var/www/ && sudo chmod 777 html
+	
+sudo a2enmod rewrite
+sudo vim /etc/apache2/apache2.conf
+add:
+	<Directory /var/www/html/>
+		AllowOverride All
+	</Directory>
+sudo service apache2 restart
+
+cd /var/www/html/
+git clone https://github.com/trusursidik12/aqmmaster.git
+cd aqmmaster
+mysql -u root -p < new_database.sql
+mv MyAdmin.zip ../MyAdmin.zip
+cd ..
+unzip MyAdmin.zip
+
+cd ~
+Install Labjack
+	wget https://labjack.com/sites/default/files/software/labjack_ljm_software_2019_07_16_x86_64.tar.gz
+	tar -zvxf labjack_ljm_software_2019_07_16_x86_64.tar.gz
+	cd labjack_ljm_software_2019_07_16_x86_64/
+	sudo ./labjack_ljm_installer.run
+
+cd ~
+
+wget https://raw.githubusercontent.com/warihsuryono/python/master/sensor_reader.py
+wget https://raw.githubusercontent.com/warihsuryono/python/master/sensor_reader.sh
+wget https://raw.githubusercontent.com/warihsuryono/python/master/sensor_demo.py
+wget https://raw.githubusercontent.com/warihsuryono/python/master/sensor_demo.sh
+wget https://raw.githubusercontent.com/warihsuryono/python/master/aqm_show.py
+wget https://raw.githubusercontent.com/warihsuryono/python/master/aqm_show.sh
+wget https://raw.githubusercontent.com/warihsuryono/python/master/sensor_reader.desktop
+wget https://raw.githubusercontent.com/warihsuryono/python/master/aqm.desktop
+wget https://raw.githubusercontent.com/warihsuryono/python/master/launch_aqm.desktop
+wget https://raw.githubusercontent.com/warihsuryono/python/master/launch_sensor_demo.desktop
+wget https://raw.githubusercontent.com/warihsuryono/python/master/launch_sensor_reader.desktop
+mv sensor_reader.desktop ~/.config/autostart/sensor_reader.desktop 
+mv aqm.desktop ~/.config/autostart/aqm.desktop
+cp launch_aqm.desktop ~/Desktop/launch_aqm.desktop
+cp launch_sensor_demo.desktop ~/Desktop/launch_sensor_demo.desktop
+cp launch_sensor_reader.desktop ~/Desktop/launch_sensor_reader.desktop
+chmod +x ~/Desktop/launch_aqm.desktop
+chmod +x ~/Desktop/launch_sensor_demo.desktop
+chmod +x ~/Desktop/launch_sensor_reader.desktop
+sudo reboot
