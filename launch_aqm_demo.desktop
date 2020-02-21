@@ -2,8 +2,8 @@
 
 [Desktop Entry]
 Encoding=UTF-8
-Name=AQM
-Comment=AQM
+Name=AQM Demo
+Comment=AQM Demo
 Icon=gnome-info
 Exec=sh /home/admin/aqm_py/aqm_show_demo.sh
 Terminal=true
