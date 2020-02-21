@@ -4,6 +4,7 @@ import time
 import mysql.connector
 from labjack import ljm
 import serial
+import os
 
 from mysql.connector.constants import ClientFlag
 from pyvantagepro import VantagePro2
@@ -145,7 +146,9 @@ mycursor.execute("TRUNCATE TABLE serial_ports")
 mydb.commit()
 for port in serial_ports():
     print("Adding port " + port)
-    mycursor.execute("INSERT INTO serial_ports (port) VALUES ('" + port +"')")
+    stream = os.popen('dmesg | grep ' + str(port).replace('/dev/',''))
+    port_desc = stream.read()
+    mycursor.execute("INSERT INTO serial_ports (port,description) VALUES ('" + port +"','" + port_desc +"')")
     mydb.commit()
     
 while True:
