@@ -1,12 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=sensor_reader
-Comment=sensor_reader
+Name=AQM
+Comment=AQM
 Icon=gnome-info
-Exec=sh /home/admin/aqm_py/sensor_reader.sh
+Exec=sh /home/admin/aqm_py/aqm_show_demo.sh
 Terminal=true
 Type=Application
 Categories=
 
 X-GNOME-Autostart-enabled=true
-X-GNOME-Autostart-Delay=3
+X-GNOME-Autostart-Delay=20

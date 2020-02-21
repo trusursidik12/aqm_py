@@ -6,5 +6,5 @@ Name=AQM
 Comment=AQM
 Icon=gnome-info
 Exec=sh /home/admin/aqm_py/aqm_show.sh
-Terminal=false
+Terminal=true
 Type=Application

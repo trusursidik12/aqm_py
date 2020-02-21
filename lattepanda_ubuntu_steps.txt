@@ -20,15 +20,18 @@ install teamviewer*.deb
 	register
 	
 sudo apt-get update
+sudo apt-get upgrade
 sudo apt-get install vim
 sudo apt-get install git
+sudo apt-get install python3.5
 sudo apt install python-pip
+sudo apt install python3-pip
 pip install --upgrade pip
 pip install mysql-connector-python
 pip install labjack-ljm
 pip install pyserial
 pip install pyvantagepro
-pip install pywebview
+pip3 install pywebview
 
 install lampp
 	sudo apt-get install -y apache2
@@ -63,12 +66,9 @@ Install Labjack
 
 cd ~
 git clone https://github.com/trusursidik12/aqm_py.git
-cp ~/aqm_py/aqm_pysensor_reader.desktop ~/.config/autostart/sensor_reader.desktop 
 cp ~/aqm_py/aqm.desktop ~/.config/autostart/aqm.desktop
 cp ~/aqm_py/launch_aqm.desktop ~/Desktop/launch_aqm.desktop
-cp ~/aqm_py/launch_sensor_demo.desktop ~/Desktop/launch_sensor_demo.desktop
-cp ~/aqm_py/launch_sensor_reader.desktop ~/Desktop/launch_sensor_reader.desktop
+cp ~/aqm_py/launch_aqm_demo.desktop ~/Desktop/launch_aqm_demo.desktop
 chmod +x ~/Desktop/launch_aqm.desktop
-chmod +x ~/Desktop/launch_sensor_demo.desktop
-chmod +x ~/Desktop/launch_sensor_reader.desktop
+chmod +x ~/Desktop/launch_aqm_demo.desktop
 sudo reboot

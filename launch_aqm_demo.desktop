@@ -2,9 +2,9 @@
 
 [Desktop Entry]
 Encoding=UTF-8
-Name=Sensor Reader
-Comment=Sensor Reader
+Name=AQM
+Comment=AQM
 Icon=gnome-info
-Exec=sh /home/admin/aqm_py/sensor_reader.sh
+Exec=sh /home/admin/aqm_py/aqm_show_demo.sh
 Terminal=true
 Type=Application
