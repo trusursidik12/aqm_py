@@ -5,6 +5,6 @@ Encoding=UTF-8
 Name=Sensor Demo
 Comment=Sensor Demo
 Icon=gnome-info
-Exec=sh /home/admin/sensor_demo.sh
+Exec=sh /home/admin/aqm_py/sensor_demo.sh
 Terminal=true
 Type=Application

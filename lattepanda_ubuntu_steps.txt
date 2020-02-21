@@ -62,23 +62,12 @@ Install Labjack
 	sudo ./labjack_ljm_installer.run
 
 cd ~
-
-wget https://raw.githubusercontent.com/warihsuryono/python/master/sensor_reader.py
-wget https://raw.githubusercontent.com/warihsuryono/python/master/sensor_reader.sh
-wget https://raw.githubusercontent.com/warihsuryono/python/master/sensor_demo.py
-wget https://raw.githubusercontent.com/warihsuryono/python/master/sensor_demo.sh
-wget https://raw.githubusercontent.com/warihsuryono/python/master/aqm_show.py
-wget https://raw.githubusercontent.com/warihsuryono/python/master/aqm_show.sh
-wget https://raw.githubusercontent.com/warihsuryono/python/master/sensor_reader.desktop
-wget https://raw.githubusercontent.com/warihsuryono/python/master/aqm.desktop
-wget https://raw.githubusercontent.com/warihsuryono/python/master/launch_aqm.desktop
-wget https://raw.githubusercontent.com/warihsuryono/python/master/launch_sensor_demo.desktop
-wget https://raw.githubusercontent.com/warihsuryono/python/master/launch_sensor_reader.desktop
-mv sensor_reader.desktop ~/.config/autostart/sensor_reader.desktop 
-mv aqm.desktop ~/.config/autostart/aqm.desktop
-cp launch_aqm.desktop ~/Desktop/launch_aqm.desktop
-cp launch_sensor_demo.desktop ~/Desktop/launch_sensor_demo.desktop
-cp launch_sensor_reader.desktop ~/Desktop/launch_sensor_reader.desktop
+git clone https://github.com/trusursidik12/aqm_py.git
+cp ~/aqm_py/aqm_pysensor_reader.desktop ~/.config/autostart/sensor_reader.desktop 
+cp ~/aqm_py/aqm.desktop ~/.config/autostart/aqm.desktop
+cp ~/aqm_py/launch_aqm.desktop ~/Desktop/launch_aqm.desktop
+cp ~/aqm_py/launch_sensor_demo.desktop ~/Desktop/launch_sensor_demo.desktop
+cp ~/aqm_py/launch_sensor_reader.desktop ~/Desktop/launch_sensor_reader.desktop
 chmod +x ~/Desktop/launch_aqm.desktop
 chmod +x ~/Desktop/launch_sensor_demo.desktop
 chmod +x ~/Desktop/launch_sensor_reader.desktop

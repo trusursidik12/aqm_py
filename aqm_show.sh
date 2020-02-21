@@ -1,2 +1,2 @@
 #!/bin/bash
-python aqm_show.py
+python ~/aqm_py/aqm_show.py

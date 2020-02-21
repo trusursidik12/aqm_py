@@ -1,2 +1,2 @@
 #!/bin/bash
-python sensor_demo.py
+python ~/aqm_py/sensor_demo.py
