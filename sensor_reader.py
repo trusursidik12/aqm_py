@@ -1,13 +1,14 @@
 from __future__ import print_function
+from labjack import ljm
+from glob import glob
+from mysql.connector.constants import ClientFlag
+from pyvantagepro import VantagePro2
 import sys
 import time
 import mysql.connector
-from labjack import ljm
 import serial
 import os
 
-from mysql.connector.constants import ClientFlag
-from pyvantagepro import VantagePro2
 
 def serial_ports():
     if sys.platform.startswith('win'):
