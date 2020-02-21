@@ -26,11 +26,11 @@ sudo apt-get install git
 sudo apt-get install python3.5
 sudo apt install python-pip
 sudo apt install python3-pip
-pip install --upgrade pip
-pip install mysql-connector-python
-pip install labjack-ljm
-pip install pyserial
-pip install pyvantagepro
+pip3 install --upgrade pip
+pip3 install mysql-connector-python
+pip3 install labjack-ljm
+pip3 install pyserial
+pip3 install pyvantagepro
 pip3 install pywebview
 
 install lampp
