@@ -8,6 +8,26 @@ import serial
 from mysql.connector.constants import ClientFlag
 from pyvantagepro import VantagePro2
 
+def serial_ports():
+    if sys.platform.startswith('win'):
+        ports = ['COM%s' % (i + 1) for i in range(256)]
+    elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+        ports = glob.glob('/dev/tty[A-Za-z]*')
+    elif sys.platform.startswith('darwin'):
+        ports = glob.glob('/dev/tty.*')
+    else:
+        raise EnvironmentError('Unsupported platform')
+
+    result = []
+    for port in ports:
+        try:
+            s = serial.Serial(port)
+            s.close()
+            result.append(port)
+        except (OSError, serial.SerialException):
+            pass
+    return result
+
 AIN0 = 0
 AIN1 = 0
 AIN2 = 0
@@ -120,7 +140,13 @@ try:
         
 except:
     print("    [X] ARDUINO not connected")
-    
+
+mycursor.execute("TRUNCATE TABLE serial_ports")
+mydb.commit()
+for port in serial_ports():
+    print("Adding port " + port)
+    mycursor.execute("INSERT INTO serial_ports (port) VALUES ('" + port +"')")
+    mydb.commit()
     
 while True:
     try:
