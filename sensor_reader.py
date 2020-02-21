@@ -1,6 +1,5 @@
 from __future__ import print_function
 from labjack import ljm
-from glob import glob
 from mysql.connector.constants import ClientFlag
 from pyvantagepro import VantagePro2
 import sys
@@ -8,6 +7,7 @@ import time
 import mysql.connector
 import serial
 import os
+import glob
 
 
 def serial_ports():
