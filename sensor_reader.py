@@ -147,8 +147,7 @@ mycursor.execute("TRUNCATE TABLE serial_ports")
 mydb.commit()
 for port in serial_ports():
     print("Adding port " + port)
-    p = subprocess.Popen('dmesg | grep ' + str(port).replace('/dev/',''), stdout=subprocess.PIPE, shell=True)
-    print("exec : " + 'dmesg | grep ' + str(port).replace('/dev/','') + ' | grep attached')
+    p = subprocess.Popen('dmesg | grep ' + str(port).replace('/dev/','') + ' | grep attached', stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
     p_status = p.wait()
     try:
