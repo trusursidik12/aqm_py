@@ -151,7 +151,10 @@ for port in serial_ports():
     print("exec : " + 'dmesg | grep ' + str(port).replace('/dev/','') + ' | grep attached')
     (output, err) = p.communicate()
     p_status = p.wait()
-    port_desc = output.decode("utf-8").split(":")[1]
+    try:
+        port_desc = output.decode("utf-8").split(":")[1]
+    except:
+        port_desc = ''
     print(port_desc)
     mycursor.execute("INSERT INTO serial_ports (port,description) VALUES ('" + port +"','" + port_desc +"')")
     mydb.commit()
