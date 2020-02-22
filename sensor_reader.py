@@ -6,7 +6,7 @@ import sys
 import time
 import mysql.connector
 import serial
-import os
+import subprocess
 import glob
 
 
@@ -147,8 +147,10 @@ mycursor.execute("TRUNCATE TABLE serial_ports")
 mydb.commit()
 for port in serial_ports():
     print("Adding port " + port)
-    stream = os.popen('dmesg | grep ' + str(port).replace('/dev/',''))
-    port_desc = stream.read()
+    p = subprocess.Popen('dmesg | grep ' + str(port).replace('/dev/',''), stdout=subprocess.PIPE, shell=True)
+    (output, err) = p.communicate()
+    p_status = p.wait()
+    port_desc = output.decode("utf-8") 
     mycursor.execute("INSERT INTO serial_ports (port,description) VALUES ('" + port +"','" + port_desc +"')")
     mydb.commit()
     
