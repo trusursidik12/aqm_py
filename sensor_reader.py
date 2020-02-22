@@ -147,13 +147,13 @@ mycursor.execute("TRUNCATE TABLE serial_ports")
 mydb.commit()
 for port in serial_ports():
     print("Adding port " + port)
-    p = subprocess.Popen('dmesg | grep ' + str(port).replace('/dev/','') + ' | grep attached', stdout=subprocess.PIPE, shell=True)
+    p = subprocess.Popen('dmesg | grep ' + str(port).replace('/dev/','') + ' | tail -1', stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
     p_status = p.wait()
     try:
         port_desc = output.decode("utf-8").split(":")[1].split(" now attached")[0]
     except:
-        port_desc = ''
+        port_desc = output.decode("utf-8")
     print(port_desc)
     mycursor.execute("INSERT INTO serial_ports (port,description) VALUES ('" + port +"','" + port_desc +"')")
     mydb.commit()
