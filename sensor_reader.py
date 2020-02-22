@@ -148,10 +148,10 @@ mydb.commit()
 for port in serial_ports():
     print("Adding port " + port)
     p = subprocess.Popen('dmesg | grep ' + str(port).replace('/dev/',''), stdout=subprocess.PIPE, shell=True)
-    print("exec : " + 'dmesg | grep ' + str(port).replace('/dev/',''))
+    print("exec : " + 'dmesg | grep ' + str(port).replace('/dev/','') + ' | grep attached')
     (output, err) = p.communicate()
     p_status = p.wait()
-    port_desc = output.decode("utf-8") 
+    port_desc = output.decode("utf-8").split(":")[1]
     print(port_desc)
     mycursor.execute("INSERT INTO serial_ports (port,description) VALUES ('" + port +"','" + port_desc +"')")
     mydb.commit()
