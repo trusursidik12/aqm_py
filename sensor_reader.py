@@ -151,7 +151,7 @@ for port in serial_ports():
     (output, err) = p.communicate()
     p_status = p.wait()
     try:
-        port_desc = output.decode("utf-8").split(":")[1].split(" now attached")[0]
+        port_desc = output.decode("utf-8").split(" now attached")[0].split(":")[1].
     except:
         port_desc = output.decode("utf-8")
     print(port_desc)
