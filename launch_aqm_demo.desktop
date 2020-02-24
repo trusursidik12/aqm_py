@@ -4,7 +4,7 @@
 Encoding=UTF-8
 Name=AQM Demo
 Comment=AQM Demo
-Icon=gnome-info
+Icon=/var/www/html/aqmmaster/assets/dist/img/trusur_logo3.png
 Exec=sh /home/admin/aqm_py/aqm_show_demo.sh
 Terminal=true
 Type=Application
