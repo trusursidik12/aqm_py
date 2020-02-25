@@ -21,9 +21,7 @@ install teamviewer*.deb
 	
 sudo apt-get update
 sudo apt-get upgrade
-sudo apt-get install vim
 sudo apt-get install git
-sudo apt-get install python3.5
 sudo apt install python-pip
 sudo apt install python3-pip
 pip3 install --upgrade pip
@@ -66,6 +64,7 @@ Install Labjack
 
 cd ~
 git clone https://github.com/trusursidik12/aqm_py.git
+mkdir ~/.config/autostart/
 cp ~/aqm_py/aqm.desktop ~/.config/autostart/aqm.desktop
 cp ~/aqm_py/launch_aqm.desktop ~/Desktop/launch_aqm.desktop
 cp ~/aqm_py/launch_aqm_demo.desktop ~/Desktop/launch_aqm_demo.desktop
