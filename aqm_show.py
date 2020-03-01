@@ -40,10 +40,10 @@ class Browser(QWebView):
     def __init__(self):
         # QWebView
         self.view = QWebView.__init__(self)
-        #self.view.setPage(MyBrowser())
+        self.view.setPage(MyBrowser())
         self.setWindowTitle('Loading...')
         self.titleChanged.connect(self.adjustTitle)
-        #super(Browser).connect(self.ui.webView,QtCore.SIGNAL("titleChanged (const QString&amp;)"), self.adjustTitle)
+        super(Browser).connect(self.ui.webView,QtCore.SIGNAL("titleChanged (const QString&amp;)"), self.adjustTitle)
 
     def load(self,url):
         self.setUrl(QUrl(url))
@@ -51,12 +51,12 @@ class Browser(QWebView):
     def adjustTitle(self):
         self.setWindowTitle(self.title())
     
-    def disableJS(self):
-        settings = QWebSettings.globalSettings()
-        settings.setAttribute(QWebSettings.JavascriptEnabled, False)
+    # def disableJS(self):
+        # settings = QWebSettings.globalSettings()
+        # settings.setAttribute(QWebSettings.JavascriptEnabled, False)
 
-# app = QApplication()
+app = QApplication(sys.argv)
 view = Browser()
-view.showMaximized()
+# view.showMaximized()
 view.load("http://127.0.0.1/aqmmaster")
-# app.exec_()
+app.exec_()
