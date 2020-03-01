@@ -24,9 +24,9 @@ if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
     view = QtWebEngineWidgets.QWebEngineView()
-    # view.settings().setAttribute(QWebEngineSettings.PluginsEnabled,True)
     view.settings().setAttribute(QtWebEngineWidgets.QWebEngineSettings.JavascriptEnabled,True)
-    # view.page().fullScreenRequested.connect(QWebEngineFullScreenReq‌​uest.accept) 
+    view.settings().setAttribute(QtWebEngineWidgets.QWebEngineSettings.FullScreenSuppo‌​rtEnabled,True)
+    view.page().fullScreenRequested.connect(QtWebEngineWidgets.QWebEngineFullScreenRequest.accept) 
     page = WebEnginePage(view)
     view.setPage(page)
     view.setWindowFlags(QtCore.Qt.FramelessWindowHint)
