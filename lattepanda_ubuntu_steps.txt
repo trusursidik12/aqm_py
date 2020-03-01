@@ -71,3 +71,21 @@ cp ~/aqm_py/launch_aqm_demo.desktop ~/Desktop/launch_aqm_demo.desktop
 chmod +x ~/Desktop/launch_aqm.desktop
 chmod +x ~/Desktop/launch_aqm_demo.desktop
 sudo reboot
+
+========================================================
+sudo timedatectl set-timezone Asia/Jakarta
+	Asia/Makassar
+	Asia/Jayapura
+cd ~/aqm_py
+git pull
+cd /var/www/html/aqmmaster
+git pull
+mysql -u root -p < new_database.sql
+sudo apt install arduino
+sudo arduino
+	set leonardo at /dev/ttyACM0
+	compile
+	
+
+	
+
