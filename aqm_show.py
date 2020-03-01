@@ -40,7 +40,7 @@ class Browser(QWebView):
     def __init__(self):
         # QWebView
         self.view = QWebView.__init__(self)
-        self.view.setPage(MyBrowser())
+        # self.view.setPage(MyBrowser())
         self.setWindowTitle('Loading...')
         self.titleChanged.connect(self.adjustTitle)
         super(Browser).connect(self.ui.webView,QtCore.SIGNAL("titleChanged (const QString&amp;)"), self.adjustTitle)
