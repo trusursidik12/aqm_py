@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-
-# import webview
-# webview.create_window('AQM', 'http://127.0.0.1/aqmmaster',frameless=True,fullscreen=True)
-# webview.start()
-
 from PyQt5 import QtWebEngineWidgets, QtWidgets, QtCore
 
 class WebEnginePage(QtWebEngineWidgets.QWebEnginePage):
@@ -27,7 +21,6 @@ if __name__ == '__main__':
     view = QtWebEngineWidgets.QWebEngineView()
     view.settings().setAttribute(QtWebEngineWidgets.QWebEngineSettings.JavascriptEnabled,True)
     view.settings().setAttribute(QtWebEngineWidgets.QWebEngineSettings.FullScreenSupportEnabled,True)
-    # view.page().fullScreenRequested.connect(QtWebEngineWidgets.QWebEngineFullScreenRequest.accept) 
     page = WebEnginePage(view)
     view.setPage(page)
     view.setWindowFlags(QtCore.Qt.FramelessWindowHint)
