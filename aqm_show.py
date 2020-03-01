@@ -24,6 +24,8 @@ if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
     view = QtWebEngineWidgets.QWebEngineView()
+    view.settings().setAttribute(QWebEngineSettings.FullScreenSuppo‌​rtEnabled, True)
+    view.page().fullScreenRequested.connect(QWebEngineFullScreenReq‌​uest.accept) 
     page = WebEnginePage(view)
     view.setPage(page)
     view.setWindowFlags(QtCore.Qt.FramelessWindowHint)
