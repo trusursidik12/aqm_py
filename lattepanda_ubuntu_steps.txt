@@ -73,6 +73,7 @@ chmod +x ~/Desktop/launch_aqm_demo.desktop
 sudo reboot
 
 ========================================================
+
 sudo timedatectl set-timezone Asia/Jakarta
 	Asia/Makassar
 	Asia/Jayapura
