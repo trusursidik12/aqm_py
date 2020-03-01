@@ -58,5 +58,5 @@ class Browser(QWebView):
 app = QApplication(sys.argv)
 view = Browser()
 # view.showMaximized()
-view.load("http://127.0.0.1/aqmmaster")
+view.load("http://127.0.0.1/")
 app.exec_()
