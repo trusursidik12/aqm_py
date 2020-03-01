@@ -23,7 +23,7 @@ class WebEnginePage(QtWebEngineWidgets.QWebEnginePage):
 if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    view = QtWebEngineWidgets.QWebEngineView()
+    view = QWebEngineView()
     view.settings().setAttribute(QWebEngineSettings.JavascriptEnabl‌​ed, True)
     # view.page().fullScreenRequested.connect(QWebEngineFullScreenReq‌​uest.accept) 
     page = WebEnginePage(view)
