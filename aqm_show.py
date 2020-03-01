@@ -25,7 +25,7 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     view = QtWebEngineWidgets.QWebEngineView()
     # view.settings().setAttribute(QWebEngineSettings.PluginsEnabled,True)
-    view.settings().setAttribute(QWebEngineSettings.JavascriptEnabl‌​ed,True)
+    view.settings().setAttribute(QtWebEngineWidgets.QWebEngineSettings.JavascriptEnabled,True)
     # view.page().fullScreenRequested.connect(QWebEngineFullScreenReq‌​uest.accept) 
     page = WebEnginePage(view)
     view.setPage(page)
