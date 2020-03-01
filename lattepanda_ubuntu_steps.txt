@@ -73,7 +73,9 @@ chmod +x ~/Desktop/launch_aqm_demo.desktop
 sudo reboot
 
 ========================================================
-pip install PyQt5==5.11.3
+pip install PyQt5
+pip install PyQtWebEngine
+pip3 install PyQtWebEngine
 
 
 sudo timedatectl set-timezone Asia/Jakarta
