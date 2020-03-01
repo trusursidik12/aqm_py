@@ -55,7 +55,7 @@ class Browser(QWebView):
         settings = QWebSettings.globalSettings()
         settings.setAttribute(QWebSettings.JavascriptEnabled, False)
 
-app = QApplication(sys.argv)
+app = QApplication()
 view = Browser()
 view.showMaximized()
 view.load("http://127.0.0.1/aqmmaster")
