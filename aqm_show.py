@@ -43,7 +43,7 @@ class Browser(QWebView):
         # self.view.setPage(MyBrowser())
         self.setWindowTitle('Loading...')
         self.titleChanged.connect(self.adjustTitle)
-        super(Browser).connect(self.ui.webView,QtCore.SIGNAL("titleChanged (const QString&amp;)"), self.adjustTitle)
+        # super(Browser).connect(self.ui.webView,QtCore.SIGNAL("titleChanged (const QString&amp;)"), self.adjustTitle)
 
     def load(self,url):
         self.setUrl(QUrl(url))
