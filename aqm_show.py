@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import QApplication
 
 app = QApplication(sys.argv)
 web = QWebEngineView()
+web.settings().setAttribute(QWebEngineSettings.JavascriptEnabled, True)
 web.load(QUrl("http://127.0.0.1/aqmmaster"))
 web.showMaximized()
 sys.exit(app.exec_())
