@@ -20,7 +20,7 @@ if __name__ == '__main__':
     view = QtWebEngineWidgets.QWebEngineView()
     view.settings().setAttribute(QtWebEngineWidgets.QWebEngineSettings.JavascriptEnabled,True)
     view.settings().setAttribute(QtWebEngineWidgets.QWebEngineSettings.FullScreenSupportEnabled,True)
-    view.page().fullScreenRequested.connect(QWebEngineFullScreenReq‌​uest.accept) 
+    view.page().fullScreenRequested.connect(QWebEngineFullScreenRequest.accept) 
     page = WebEnginePage(view)
     # page.fullScreenRequested.connect(QtWebEngineWidgets.QWebEngineFullScreenRequest.accept)
     view.setPage(page)
