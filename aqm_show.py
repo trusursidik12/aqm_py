@@ -3,7 +3,6 @@ from PyQt5 import QtWebEngineWidgets, QtWidgets, QtCore
 class WebEnginePage(QtWebEngineWidgets.QWebEnginePage):
     def __init__(self, *args, **kwargs):
         QtWebEngineWidgets.QWebEnginePage.__init__(self, *args, **kwargs)
-        # self.fullScreenRequested.connect(QtWebEngineWidgets.QWebEngineFullScreenRequest.accept)
         self.profile().downloadRequested.connect(self.on_downloadRequested)
 
     @QtCore.pyqtSlot(QtWebEngineWidgets.QWebEngineDownloadItem)
@@ -21,8 +20,10 @@ if __name__ == '__main__':
     view = QtWebEngineWidgets.QWebEngineView()
     view.settings().setAttribute(QtWebEngineWidgets.QWebEngineSettings.JavascriptEnabled,True)
     view.settings().setAttribute(QtWebEngineWidgets.QWebEngineSettings.FullScreenSupportEnabled,True)
+    view.page().fullScreenRequested.connect(QWebEngineFullScreenReq‌​uest.accept) 
     page = WebEnginePage(view)
-    view.setPage(page.fullScreenRequested.connect(QtWebEngineWidgets.QWebEngineFullScreenRequest.accept))
+    # page.fullScreenRequested.connect(QtWebEngineWidgets.QWebEngineFullScreenRequest.accept)
+    view.setPage(page)
     view.setWindowFlags(QtCore.Qt.FramelessWindowHint)
     view.load(QtCore.QUrl("http://127.0.0.1/aqmmaster"))
     view.showMaximized()
