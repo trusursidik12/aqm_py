@@ -22,10 +22,9 @@ if __name__ == '__main__':
     view.settings().setAttribute(QtWebEngineWidgets.QWebEngineSettings.FullScreenSupportEnabled,True)
     view.page().fullScreenRequested.connect(QtWebEngineWidgets.QWebEngineFullScreenRequest.accept) 
     page = WebEnginePage(view)
-    # page.fullScreenRequested.connect(QtWebEngineWidgets.QWebEngineFullScreenRequest.accept)
     view.setPage(page)
     view.setWindowFlags(QtCore.Qt.FramelessWindowHint)
     view.load(QtCore.QUrl("http://127.0.0.1/aqmmaster"))
-    view.showMaximized()
+    view.showFullScreen()
     sys.exit(app.exec_())
 
