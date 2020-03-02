@@ -76,6 +76,7 @@ sudo reboot
 pip install PyQt5
 pip install PyQtWebEngine
 pip3 install PyQtWebEngine
+sudo apt install arduino
 
 
 sudo timedatectl set-timezone Asia/Jakarta
@@ -85,8 +86,7 @@ cd ~/aqm_py
 git pull
 cd /var/www/html/aqmmaster
 git pull
-mysql -u root -p < new_database.sql
-sudo apt install arduino
+mysql -u root -p < alter_db.sql
 sudo arduino
 	set leonardo at /dev/ttyACM0
 	compile
