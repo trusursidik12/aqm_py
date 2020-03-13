@@ -73,6 +73,8 @@ chmod +x ~/Desktop/launch_aqm_demo.desktop
 sudo reboot
 
 ========================================================
+All setting -> details -> removeable media -> do nothing & never promt
+
 pip install PyQt5
 pip install PyQtWebEngine
 pip3 install PyQtWebEngine
@@ -84,13 +86,15 @@ sudo timedatectl set-timezone Asia/Jakarta
 	Asia/Jayapura
 cd ~/aqm_py
 git pull
+cp ~/aqm_py/launch_datetime.desktop ~/Desktop/launch_datetime.desktop
+cp ~/aqm_py/launch_onboard.desktop ~/Desktop/launch_onboard.desktop
+chmod +x ~/Desktop/launch_datetime.desktop
+chmod +x ~/Desktop/launch_onboard.desktop
+
 cd /var/www/html/aqmmaster
 git pull
 mysql -u root -p < alter_db.sql
 sudo arduino
 	set leonardo at /dev/ttyACM0
 	compile
-	
-
-	
 

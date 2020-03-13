@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=Set Date Time
+Comment=Set Date Time
+Icon=/var/www/html/aqmmaster/assets/dist/img/trusur_logo3.png
+Exec=unity-control-center datetime
+Terminal=false
+Type=Application
