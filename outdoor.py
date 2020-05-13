@@ -8,6 +8,7 @@ import serial
 import requests
 import json
 import glob
+import subprocess
 
 
 def serial_ports():
