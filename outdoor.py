@@ -2,6 +2,7 @@ from __future__ import print_function
 from mysql.connector.constants import ClientFlag
 import sys
 import time
+import datetime
 import mysql.connector
 import serial
 import requests
@@ -30,6 +31,20 @@ def serial_ports():
 
 is_Arduino = False
 
+def bulan(mm):
+    if(mm == "01"): return "Jan"
+    if(mm == "02"): return "Feb"
+    if(mm == "03"): return "Mar"
+    if(mm == "04"): return "Apr"
+    if(mm == "05"): return "Mei"
+    if(mm == "06"): return "Jun"
+    if(mm == "07"): return "Jul"
+    if(mm == "08"): return "Agt"
+    if(mm == "09"): return "Sep"
+    if(mm == "10"): return "Okt"
+    if(mm == "11"): return "Nov"
+    if(mm == "12"): return "Des"
+
 try:
     mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="trusur_aqm")
     mycursor = mydb.cursor()
@@ -51,15 +66,18 @@ try:
     rec = mycursor.fetchone()
     for row in rec: serial_rate = rec[0]
     
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'sta_id'")
+    rec = mycursor.fetchone()
+    for row in rec: id_stasiun = rec[0]
+    
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'sta_nama'")
+    rec = mycursor.fetchone()
+    for row in rec: stasiun_name = rec[0]
+    
     if serial_port != "":
         Arduino = serial.Serial(serial_port, serial_rate)
         is_Arduino = True
-        print("[V] ARDUINO CONNECTED")
-        mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'sta_id'")
-        rec = mycursor.fetchone()
-        for row in rec: id_stasiun = rec[0]
-        
-        
+        print("[V] ARDUINO CONNECTED") 
     else:  
         print("    [X] ARDUINO not connected")
         
@@ -82,73 +100,90 @@ for port in serial_ports():
     print(port_desc)
     mycursor.execute("INSERT INTO serial_ports (port,description) VALUES ('" + port +"','" + port_desc +"')")
     mydb.commit()
+    
+lastexec = ""
+firsttime = True;
   
 while True:
     try:
-        url = "http://localhost/ispumapapi/api/aqmoutdoor?trusur_api_key=VHJ1c3VyVW5nZ3VsVGVrbnVzYV9wVA==&id_stasiun=" + id_stasiun
-        print(url)
-        response = json.loads(requests.get(url).text)
-        mycursor.execute("TRUNCATE TABLE aqm_data")
-        mydb.commit()        
-        query = "INSERT INTO aqm_data (id_stasiun,waktu,pm10,so2,co,o3,no2,ws,wd,humidity,temperature,pressure,sr,rain_intensity) VALUES ('"+response["id_stasiun"]+"','"+response["datetime"]+"','"+str(response["pm10"])+"','"+str(response["so2"])+"','"+str(response["co"])+"','"+str(response["o3"])+"','"+str(response["no2"])+"','"+str(response["wind_speed"])+"','"+str(response["wind_direction"])+"','"+str(response["humidity"])+"','"+str(response["temperature"])+"','"+str(response["pressure"])+"','"+str(response["solar_radiation"])+"','"+str(response["rain_rate"])+"')"
-        mycursor.execute(query)
-        mydb.commit()
+        now = datetime.datetime.now()
+        nowM = str(now.strftime("%M"))
+        if(int(now.strftime("%S"))%15 == 0): print (now.strftime("%Y-%m-%d %H:%M:%S"))
         
-        if is_Arduino:
-            try:
-                mycursor.execute("SELECT id_stasiun,waktu,pm10,so2,co,o3,no2,ws,wd,humidity,temperature,pressure,sr,rain_intensity FROM aqm_data ORDER BY id DESC LIMIT 1")
-                rec = mycursor.fetchone()
-                # TEXT1
-                text1_command = "1"
-                for x in [2, 3, 4, 5, 6]:
-                    if rec[x] <= 50: text1_command += "0";
-                    elif rec[x] <= 100: text1_command +=  "1";
-                    elif rec[x] <= 199: text1_command +=  "2";
-                    elif rec[x] <= 299: text1_command +=  "3";
-                    else: text1_command +=  "4";
+        if (firsttime or nowM == "00" or nowM == "30") and now.strftime("%Y-%m-%d %H:%M") != lastexec :
+            firsttime = False
+            print (now.strftime("%Y-%m-%d %H:%M:%S"))
+            
+            url = "http://ispumaps.id/ispumapapi/api/aqmoutdoor?trusur_api_key=VHJ1c3VyVW5nZ3VsVGVrbnVzYV9wVA==&id_stasiun=" + id_stasiun
+            print(url)
+            response = json.loads(requests.get(url).text)
+            if(response["id_stasiun"] != ""):
+                mycursor.execute("TRUNCATE TABLE aqm_data")
+                mydb.commit()        
+                query = "INSERT INTO aqm_data (id_stasiun,waktu,pm10,so2,co,o3,no2,ws,wd,humidity,temperature,pressure,sr,rain_intensity) VALUES ('"+response["id_stasiun"]+"','"+response["waktu"]+"','"+str(response["pm10_val"])+"','"+str(response["so2_val"])+"','"+str(response["co_val"])+"','"+str(response["o3_val"])+"','"+str(response["no2_val"])+"','"+str(response["wind_speed"])+"','"+str(response["wind_direction"])+"','"+str(response["humidity"])+"','"+str(response["temperature"])+"','"+str(response["pressure"])+"','"+str(response["solar_radiation"])+"','"+str(response["rain_rate"])+"')"
+                mycursor.execute(query)
+                mydb.commit()
+                print(query)
+                mycursor.execute("TRUNCATE TABLE aqm_ispu")
+                mydb.commit()        
+                query = "INSERT INTO aqm_ispu (id_stasiun,waktu,pm10,so2,co,o3,no2) VALUES ('"+response["id_stasiun"]+"','"+response["waktu"]+"','"+str(response["pm10"])+"','"+str(response["so2"])+"','"+str(response["co"])+"','"+str(response["o3"])+"','"+str(response["no2"])+"')"
+                mycursor.execute(query)
+                mydb.commit()
+                print(query)
                 
-                text1_command += " "
-                print(text1_command)
-                time.sleep(3)
-                Arduino.write(text1_command.encode());
+                if is_Arduino:
+                    try:
+                        mycursor.execute("SELECT id_stasiun,waktu,pm10,so2,co,o3,no2 FROM aqm_ispu ORDER BY id DESC LIMIT 1")
+                        rec = mycursor.fetchone()
+                        # TEXT1
+                        text1_command = "1"
+                        for x in [2, 3, 4, 5, 6]:
+                            if rec[x] <= 50: text1_command += "0";
+                            elif rec[x] <= 100: text1_command +=  "1";
+                            elif rec[x] <= 199: text1_command +=  "2";
+                            elif rec[x] <= 299: text1_command +=  "3";
+                            else: text1_command +=  "4";
+                        
+                        text1_command += " "
+                        print("text1_command : " + text1_command)
+                        time.sleep(3)
+                        Arduino.write(text1_command.encode());
+                        
+                        # TEXT2
+                        text2_command = "2"+str(int(round(rec[2])))+";"+str(int(round(rec[3])))+";"+str(int(round(rec[4])))+";"+str(int(round(rec[5])))+";"+str(int(round(rec[6])))+"] "
+                        print("text2_command : " + text2_command)
+                        time.sleep(5)
+                        Arduino.write(text2_command.encode());
+                        
+                        mycursor.execute("SELECT id_stasiun,waktu,pm10,so2,co,o3,no2,ws,wd,humidity,temperature,pressure,sr,rain_intensity FROM aqm_data ORDER BY id DESC LIMIT 1")
+                        rec = mycursor.fetchone()
+                        # TEXT3
+                            # 3SIMPANG TIGA;31 Mar 2020 14:20;11;82;235;0;0;3233.78;1010.8;8.05;338]
+                            
+                        
+                        if response["waktu"] == "":
+                            waktu = rec[1]
+                        else:
+                            waktu = response["waktu"]
+                            
+                        d = datetime.datetime.strptime(waktu, '%Y-%m-%d %H:%M:%S')
+                        mm = str(datetime.date.strftime(d, "%m"))
+                        
+                        tanggaljam = datetime.date.strftime(d, "%d " + bulan(mm) + " %Y %H:%M")
+                        
+                        text3_command = "3"+stasiun_name+";"+tanggaljam+";"+str(int(round(rec[2])))+";"+str(int(round(rec[3])))+";"+str(int(round(rec[4])))+";"+str(int(round(rec[5])))+";"+str(int(round(rec[6])))+";"+str(rec[10])+";"+str(rec[11])+";"+str(rec[7])+";"+str(rec[8])+"] "
+                        print("text3_command : " + text3_command)
+                        time.sleep(10)
+                        Arduino.write(text3_command.encode());
+                    except Exception as e: 
+                        print(e)
                 
-                # TEXT2
-                text2_command = "2"+str(rec[2])+";"+str(rec[3])+";"+str(rec[4])+";"+str(rec[5])+";"+str(rec[6])+"] "
-                print(text2_command)
-                time.sleep(5)
-                Arduino.write(text2_command.encode());
-                
-                # TEXT3
-                    # 31BATAM;31 Mar 2020 14:20;11;82;235;0;0]
-                    # 3233.78;1010.8;8.05;338]  SUHU:{suhu}C TEK:{tek}mBar WS: {ws}m/s WD:{wd}
-                    
-                if response["id_stasiun"] == "":
-                    stasiun_name = rec[0]
-                else:
-                    stasiun_name = response["id_stasiun"]
-                
-                if response["datetime"] == "":
-                    waktu = rec[1]
-                else:
-                    waktu = response["datetime"]                
-                
-                text3_command = "31"+stasiun_name+";"+waktu+";"+str(rec[2])+";"+str(rec[3])+";"+str(rec[4])+";"+str(rec[5])+";"+str(rec[6])+"] "
-                print(text3_command)
-                time.sleep(10)
-                Arduino.write(text3_command.encode());
-                
-                text3_command = "32"+str(rec[10])+";"+str(rec[11])+";"+str(rec[7])+";"+str(rec[8])+"] "
-                print(text3_command)
-                time.sleep(30)
-                Arduino.write(text3_command.encode());
-            except Exception as e: 
-                print(e)
+                lastexec = now.strftime("%Y-%m-%d %H:%M")
+                print("====================================================================================================");
         
-        
-        print("====================");
         
     except Exception as e: 
         print(e)
     
-    time.sleep(600) #every 10 minutes 
+    time.sleep(1)
     
