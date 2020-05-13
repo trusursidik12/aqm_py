@@ -150,7 +150,17 @@ while True:
                         Arduino.write(text1_command.encode());
                         
                         # TEXT2
-                        text2_command = "2"+str(int(round(rec[2])))+";"+str(int(round(rec[3])))+";"+str(int(round(rec[4])))+";"+str(int(round(rec[5])))+";"+str(int(round(rec[6])))+"] "
+                        bar_pm10 = int(round(rec[2]))
+                        bar_so2 = int(round(rec[3]))
+                        bar_co = int(round(rec[4]))
+                        bar_o3 = int(round(rec[5]))
+                        bar_no2 = int(round(rec[6]))
+                        if bar_pm10 > 500 : bar_pm10 = 500
+                        if bar_so2 > 500 : bar_so2 = 500
+                        if bar_co > 500 : bar_co = 500
+                        if bar_o3 > 500 : bar_o3 = 500
+                        if bar_no2 > 500 : bar_no2 = 500
+                        text2_command = "2"+str()+";"+str(bar_so2)+";"+str(bar_co)+";"+str(bar_o3)+";"+str(bar_no2)+"] "
                         print("text2_command : " + text2_command)
                         time.sleep(5)
                         Arduino.write(text2_command.encode());
