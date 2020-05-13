@@ -7,6 +7,7 @@ import mysql.connector
 import serial
 import requests
 import json
+import glob
 
 
 def serial_ports():
