@@ -42,6 +42,7 @@ is_labjack = False
 is_COM_PM10 = False
 is_COM_PM25 = False
 is_COM_WS = False
+is_COM_AIRMAR = False
 is_Arduino = False
 
 try:
@@ -121,6 +122,25 @@ except:
     print("    [X] COM_WS not connected")
     
 try:
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_airmar'")
+    rec = mycursor.fetchone()
+    for row in rec: serial_port = rec[0]
+    
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_airmar'")
+    rec = mycursor.fetchone()
+    for row in rec: serial_rate = rec[0]
+    
+    if serial_port != "":
+        COM_AIRMAR = serial.Serial(serial_port, serial_rate)
+        is_COM_AIRMAR = True
+        print("[V] COM_AIRMAR CONNECTED")
+    else:
+        print("    [X] COM_AIRMAR not connected")
+        
+except:
+    print("    [X] COM_AIRMAR not connected")
+    
+try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'controller'")
     rec = mycursor.fetchone()
     for row in rec: serial_port = rec[0]
@@ -193,6 +213,42 @@ while True:
             try:
                 ws_data = COM_WS.get_current_data()
                 WS = ws_data.to_csv(';',False)
+            except Exception as e: 
+                print(e)
+                WS = ""
+                
+        if is_COM_AIRMAR:
+            try:
+                i = 0
+                ws_data = ""
+                while i <= 12:
+                    ws_data = ws_data + str(COM_AIRMAR.readline());
+                    i += 1
+                
+                WIMDA = ws_data.split("$WIMDA,")[1];
+                WIMDA = WIMDA.split("\\r\\n")[0];
+                
+                barometer = WIMDA.split(",")[0];
+                if barometer == "": barometer = "0.0";
+                
+                temp = WIMDA.split(",")[4];
+                if temp == "": temp = "0.0";
+                temp = str((9/5 * float(temp)) + 32);
+                
+                humidity = WIMDA.split(",")[8];
+                if humidity == "": humidity = "0.0";
+                
+                windspeed = WIMDA.split(",")[18];
+                if windspeed == "": windspeed = "0.0";
+                
+                winddir = WIMDA.split(",")[12];
+                if winddir == "": winddir = "0.0";
+                
+                rainrate = "0.0";
+                solarrad = "0.0";
+                
+                WS = ";0;" + barometer + ";" + temp + ";" + humidity + ";" + temp + ";" + windspeed + ";" + windspeed + ";" + winddir + ";" + humidity + ";" + rainrate + ";0;" + solarrad + ";0.0;0;" + rainrate + ";";
+                
             except Exception as e: 
                 print(e)
                 WS = ""
