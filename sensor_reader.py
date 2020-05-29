@@ -179,6 +179,11 @@ try:
         
 except:
     print("    [X] ARDUINO not connected")
+
+AIN0_less = 9999999999999
+AIN1_less = 9999999999999
+AIN2_less = 9999999999999
+AIN3_less = 9999999999999
     
 while True:
     try:
@@ -188,10 +193,6 @@ while True:
                 AIN1 = ljm.eReadName(labjack, "AIN1")
                 AIN2 = ljm.eReadName(labjack, "AIN2")
                 AIN3 = ljm.eReadName(labjack, "AIN3")
-                AIN0_less = 9999999999999
-                AIN1_less = 9999999999999
-                AIN2_less = 9999999999999
-                AIN3_less = 9999999999999
                 if AIN0_less > AIN0: AIN0_less = AIN0;
                 if AIN1_less > AIN1: AIN1_less = AIN1;
                 if AIN2_less > AIN2: AIN2_less = AIN2;
