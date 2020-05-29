@@ -285,8 +285,14 @@ while True:
                 if lat != "" and lon != "":
                     lat = str(float(lat) / 100);
                     lon = str(float(lon) / 100);
+                    lat1 = lat.split(".")[0];
+                    lat2 = str(float("0." + lat.split(".")[1]) / 60);
+                    lat = lat1 + "." + lat2;
+                    lon1 = lon.split(".")[0];
+                    lon2 = str(float("0." + lon.split(".")[1]) / 60);
+                    lat = lon1 + "." + lon2;
                 
-                WS = ";0;" + barometer + ";" + temp + ";" + humidity + ";" + temp + ";" + windspeed + ";" + windspeed + ";" + winddir + ";" + humidity + ";" + rainrate + ";0;" + solarrad + ";0.0;0;" + rainrate + ";" + lat + " " + ns  + ";" + lon + " " + ew ;
+                WS = ";0;" + barometer + ";" + temp + ";" + humidity + ";" + temp + ";" + windspeed + ";" + windspeed + ";" + winddir + ";" + humidity + ";" + rainrate + ";0;" + solarrad + ";0.0;0;" + rainrate + ";" + lat + ";" + lon;
                 
             except Exception as e: 
                 print(e)
