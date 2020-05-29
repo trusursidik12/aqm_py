@@ -266,7 +266,7 @@ while True:
                 
                 windspeed = WIMWV.split(",")[2];
                 if windspeed == "": windspeed = "0.0";
-                windspeed = str(1.852 * float(windspeed));
+                windspeed = f'{(1.852 * float(windspeed)):9.1f}';
                 
                 winddir = WIMWV.split(",")[0];
                 if winddir == "": winddir = "0.0";
