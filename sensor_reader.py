@@ -254,6 +254,9 @@ while True:
                 WIMWV = ws_data.split("$WIMWV,")[1];
                 WIMWV = WIMWV.split("\\r\\n")[0];
                 
+                GPGGA = ws_data.split("$GPGGA,")[1];
+                GPGGA = GPGGA.split("\\r\\n")[0];
+                
                 barometer = WIMDA.split(",")[0];
                 if barometer == "": barometer = "0.0";
                 
@@ -274,7 +277,16 @@ while True:
                 rainrate = "0.0";
                 solarrad = "0.0";
                 
-                WS = ";0;" + barometer + ";" + temp + ";" + humidity + ";" + temp + ";" + windspeed + ";" + windspeed + ";" + winddir + ";" + humidity + ";" + rainrate + ";0;" + solarrad + ";0.0;0;" + rainrate + ";";
+                lat = GPGGA.split(",")[1];
+                ns = GPGGA.split(",")[2];
+                lon = GPGGA.split(",")[3];
+                ew = GPGGA.split(",")[4];
+                
+                if lat != "" and lon != "":
+                    lat = str(float(lat) / 100);
+                    lon = str(float(lon) / 100);
+                
+                WS = ";0;" + barometer + ";" + temp + ";" + humidity + ";" + temp + ";" + windspeed + ";" + windspeed + ";" + winddir + ";" + humidity + ";" + rainrate + ";0;" + solarrad + ";0.0;0;" + rainrate + ";" + lat + " " + ns  + ";" + lon + " " + ew ;
                 
             except Exception as e: 
                 print(e)
