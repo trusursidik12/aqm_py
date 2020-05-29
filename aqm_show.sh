@@ -1,6 +1,9 @@
 #!/bin/bash
 echo "Reading devices... Please wait!!"
 sleep 20s
+echo admin | sudo modprobe ftdi_sio &
+echo admin | sudo chmod 666 /sys/bus/usb-serial/drivers/ftdi_sio/new_id &
+echo admin | sudo echo 0403 cc60 >/sys/bus/usb-serial/drivers/ftdi_sio/new_id &
 ls /dev/ttyUSB*
 echo "wait for localhost...!!"
 sleep 20s
