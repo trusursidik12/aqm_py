@@ -286,10 +286,10 @@ while True:
                     lat = str(float(lat) / 100);
                     lon = str(float(lon) / 100);
                     lat1 = lat.split(".")[0];
-                    lat2 = str(float("0." + lat.split(".")[1]) / 60);
+                    lat2 = str(float("0." + lat.split(".")[1]) / 60).replace("0.00","");
                     lat = lat1 + "." + lat2;
                     lon1 = lon.split(".")[0];
-                    lon2 = str(float("0." + lon.split(".")[1]) / 60);
+                    lon2 = str(float("0." + lon.split(".")[1]) / 60).replace("0.00","");
                     lon = lon1 + "." + lon2;
                     
                     if ns == "S": lat = "-" + lat;
