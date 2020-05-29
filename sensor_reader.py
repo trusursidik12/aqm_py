@@ -196,6 +196,10 @@ while True:
                 if AIN1_less > AIN1: AIN1_less = AIN1;
                 if AIN2_less > AIN2: AIN2_less = AIN2;
                 if AIN3_less > AIN3: AIN3_less = AIN3;
+                AIN0_range = 0.04 - AIN0_less;
+                AIN1_range = 0.04 - AIN1_less
+                AIN2_range = 0.04 - AIN2_less
+                AIN3_range = 0.04 - AIN3_less
                 
             except Exception as e: 
                 print(e)
@@ -208,6 +212,10 @@ while True:
                 AIN1_less = 0
                 AIN2_less = 0
                 AIN3_less = 0
+                AIN0_range = 0
+                AIN1_range = 0
+                AIN2_range = 0
+                AIN3_range = 0
         
         if is_COM_PM10:
             try:
@@ -288,6 +296,7 @@ while True:
         
         print("AIN0 = %f ; AIN1 = %f ; AIN2 = %f ; AIN3 = %f ; PM10 = %s;  PM25 = %s ; WS = %s ; cur_pump_state = %s" % (AIN0,AIN1,AIN2,AIN3,PM10,PM25,WS,cur_pump_state))
         print("MIN ==> AIN0 = %f ; AIN1 = %f ; AIN2 = %f ; AIN3 = %f " % (AIN0_less,AIN1_less,AIN2_less,AIN3_less))
+        print("RANGE ==> AIN0 = %f ; AIN1 = %f ; AIN2 = %f ; AIN3 = %f " % (AIN0_range,AIN1_range,AIN2_range,AIN3_range))
         print("=========================================================================================================================");
         
     except Exception as e: 
