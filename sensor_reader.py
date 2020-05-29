@@ -298,10 +298,10 @@ while True:
                 WS = ";0;" + barometer + ";" + temp + ";" + humidity + ";" + temp + ";" + windspeed + ";" + windspeed + ";" + winddir + ";" + humidity + ";" + rainrate + ";0;" + solarrad + ";0.0;0;" + rainrate + ";" + lat + ";" + lon;
                     
                 sql = "UPDATE aqm_configuration SET content='" + lat + "' WHERE data = 'sta_lat'";
-                mycursor.execute(sql, val)
+                mycursor.execute(sql)
                 mydb.commit()
                 sql = "UPDATE aqm_configuration SET content='" + lon + "' WHERE data = 'sta_lon'";
-                mycursor.execute(sql, val)
+                mycursor.execute(sql)
                 mydb.commit()
                 
             except Exception as e: 
