@@ -97,7 +97,3 @@ mysql -u root -p < alter_db.sql
 sudo arduino
 	set leonardo at /dev/ttyACM0
 	compile
-
-sudo modprobe ftdi_sio
-sudo chmod 666 /sys/bus/usb-serial/drivers/ftdi_sio/new_id
-sudo echo 0403 cc60 >/sys/bus/usb-serial/drivers/ftdi_sio/new_id
