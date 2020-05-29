@@ -291,6 +291,9 @@ while True:
                     lon1 = lon.split(".")[0];
                     lon2 = str(float("0." + lon.split(".")[1]) / 60);
                     lon = lon1 + "." + lon2;
+                    
+                    if ns == "S": lat = "-" + lat;
+                    if ew == "W": lon = "-" + lon;
                 
                 WS = ";0;" + barometer + ";" + temp + ";" + humidity + ";" + temp + ";" + windspeed + ";" + windspeed + ";" + winddir + ";" + humidity + ";" + rainrate + ";0;" + solarrad + ";0.0;0;" + rainrate + ";" + lat + ";" + lon;
                 
