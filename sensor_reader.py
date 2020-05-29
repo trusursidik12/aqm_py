@@ -251,6 +251,9 @@ while True:
                 WIMDA = ws_data.split("$WIMDA,")[1];
                 WIMDA = WIMDA.split("\\r\\n")[0];
                 
+                WIMWV = ws_data.split("$WIMWV,")[1];
+                WIMWV = WIMWV.split("\\r\\n")[0];
+                
                 barometer = WIMDA.split(",")[0];
                 if barometer == "": barometer = "0.0";
                 
@@ -261,10 +264,10 @@ while True:
                 humidity = WIMDA.split(",")[8];
                 if humidity == "": humidity = "0.0";
                 
-                windspeed = WIMDA.split(",")[18];
+                windspeed = WIMWV.split(",")[2];
                 if windspeed == "": windspeed = "0.0";
                 
-                winddir = WIMDA.split(",")[12];
+                winddir = WIMWV.split(",")[0];
                 if winddir == "": winddir = "0.0";
                 
                 rainrate = "0.0";
