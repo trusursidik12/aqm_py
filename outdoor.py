@@ -162,7 +162,7 @@ while True:
                         if bar_co > 500 : bar_co = 500
                         if bar_o3 > 500 : bar_o3 = 500
                         if bar_no2 > 500 : bar_no2 = 500
-                        text2_command = "2"+str()+";"+str(bar_so2)+";"+str(bar_co)+";"+str(bar_o3)+";"+str(bar_no2)+"] "
+                        text2_command = "2;"+str(bar_pm10)+";"+str(bar_so2)+";"+str(bar_co)+";"+str(bar_o3)+";"+str(bar_no2)+"] "
                         print("text2_command : " + text2_command)
                         time.sleep(5)
                         Arduino.write(text2_command.encode());
@@ -170,7 +170,7 @@ while True:
                         mycursor.execute("SELECT id_stasiun,waktu,pm10,so2,co,o3,no2,ws,wd,humidity,temperature,pressure,sr,rain_intensity FROM aqm_data ORDER BY id DESC LIMIT 1")
                         rec = mycursor.fetchone()
                         # TEXT3
-                            # 3SIMPANG TIGA;31 Mar 2020 14:20;11;82;235;0;0;3233.78;1010.8;8.05;338]
+                            # 3SIMPANG TIGA;31 Mar 2020 14:20;11;82;235;0;0;33.78;1010.8;8.05;338]
                             
                         
                         if response["waktu"] == "":
