@@ -59,6 +59,23 @@ try:
 except Exception as e: 
     print(e)
     
+mycursor.execute("TRUNCATE TABLE serial_ports")
+mydb.commit()
+for port in serial_ports():
+    print("Adding port " + port)
+    p = subprocess.Popen('dmesg | grep ' + str(port).replace('/dev/','') + ' | tail -1', stdout=subprocess.PIPE, shell=True)
+    (output, err) = p.communicate()
+    p_status = p.wait()
+    port_desc = output.decode("utf-8")
+    if "now attached" in port_desc:
+        try:
+            port_desc = port_desc.split(":")[1].split(" now attached")[0]
+        except:
+            port_desc = port_desc
+    print(port_desc)
+    mycursor.execute("INSERT INTO serial_ports (port,description) VALUES ('" + port +"','" + port_desc +"')")
+    mydb.commit()
+    
 try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'controller'")
     rec = mycursor.fetchone()
@@ -85,23 +102,6 @@ try:
         
 except:
     print("    [X] ARDUINO not connected")
-
-mycursor.execute("TRUNCATE TABLE serial_ports")
-mydb.commit()
-for port in serial_ports():
-    print("Adding port " + port)
-    p = subprocess.Popen('dmesg | grep ' + str(port).replace('/dev/','') + ' | tail -1', stdout=subprocess.PIPE, shell=True)
-    (output, err) = p.communicate()
-    p_status = p.wait()
-    port_desc = output.decode("utf-8")
-    if "now attached" in port_desc:
-        try:
-            port_desc = port_desc.split(":")[1].split(" now attached")[0]
-        except:
-            port_desc = port_desc
-    print(port_desc)
-    mycursor.execute("INSERT INTO serial_ports (port,description) VALUES ('" + port +"','" + port_desc +"')")
-    mydb.commit()
     
 lastexec = ""
 firsttime = True;
