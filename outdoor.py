@@ -120,16 +120,9 @@ while True:
             print(url)
             response = json.loads(requests.get(url).text)
             if(response["id_stasiun"] != ""):
-                nowM0 = str(now.strftime("%M"))
-                nowM0 = nowM0[0] + "0"
-                waktu = response["waktu"]    
-                d = datetime.datetime.strptime(waktu, '%Y-%m-%d %H:%M:%S')
-                mm = str(datetime.date.strftime(d, "%m"))
-                tanggaljam = datetime.date.strftime(d, "%d " + bulan(mm) + " %Y %H:" + nowM0)
-            
                 mycursor.execute("TRUNCATE TABLE aqm_data")
                 mydb.commit()        
-                query = "INSERT INTO aqm_data (id_stasiun,waktu,pm10,so2,co,o3,no2,ws,wd,humidity,temperature,pressure,sr,rain_intensity) VALUES ('"+response["id_stasiun"]+"','"+tanggaljam+":00','"+str(response["pm10_val"])+"','"+str(response["so2_val"])+"','"+str(response["co_val"])+"','"+str(response["o3_val"])+"','"+str(response["no2_val"])+"','"+str(response["wind_speed"])+"','"+str(response["wind_direction"])+"','"+str(response["humidity"])+"','"+str(response["temperature"])+"','"+str(response["pressure"])+"','"+str(response["solar_radiation"])+"','"+str(response["rain_rate"])+"')"
+                query = "INSERT INTO aqm_data (id_stasiun,waktu,pm10,so2,co,o3,no2,ws,wd,humidity,temperature,pressure,sr,rain_intensity) VALUES ('"+response["id_stasiun"]+"','"+response["waktu"]+"','"+str(response["pm10_val"])+"','"+str(response["so2_val"])+"','"+str(response["co_val"])+"','"+str(response["o3_val"])+"','"+str(response["no2_val"])+"','"+str(response["wind_speed"])+"','"+str(response["wind_direction"])+"','"+str(response["humidity"])+"','"+str(response["temperature"])+"','"+str(response["pressure"])+"','"+str(response["solar_radiation"])+"','"+str(response["rain_rate"])+"')"
                 mycursor.execute(query)
                 mydb.commit()
                 print(query)
@@ -139,7 +132,12 @@ while True:
                 mycursor.execute(query)
                 mydb.commit()
                 
-                
+                nowM0 = str(now.strftime("%M"))
+                nowM0 = nowM0[0] + "0"
+                waktu = response["waktu"]    
+                d = datetime.datetime.strptime(waktu, '%Y-%m-%d %H:%M:%S')
+                mm = str(datetime.date.strftime(d, "%m"))
+                tanggaljam = datetime.date.strftime(d, "%d " + bulan(mm) + " %Y %H:" + nowM0)
                 
                 print(query)
                 
