@@ -133,65 +133,65 @@ while True:
                 mydb.commit()
                 print(query)
                 
-                if is_Arduino:
-                    try:
-                        mycursor.execute("SELECT id_stasiun,waktu,pm10,so2,co,o3,no2 FROM aqm_ispu ORDER BY id DESC LIMIT 1")
-                        rec = mycursor.fetchone()
-                        # TEXT1
-                        text1_command = "1"
-                        for x in [2, 3, 4, 5, 6]:
-                            if rec[x] <= 50: text1_command += "0";
-                            elif rec[x] <= 100: text1_command +=  "1";
-                            elif rec[x] <= 199: text1_command +=  "2";
-                            elif rec[x] <= 299: text1_command +=  "3";
-                            else: text1_command +=  "4";
+            if is_Arduino:
+                try:
+                    mycursor.execute("SELECT id_stasiun,waktu,pm10,so2,co,o3,no2 FROM aqm_ispu ORDER BY id DESC LIMIT 1")
+                    rec = mycursor.fetchone()
+                    # TEXT1
+                    text1_command = "1"
+                    for x in [2, 3, 4, 5, 6]:
+                        if rec[x] <= 50: text1_command += "0";
+                        elif rec[x] <= 100: text1_command +=  "1";
+                        elif rec[x] <= 199: text1_command +=  "2";
+                        elif rec[x] <= 299: text1_command +=  "3";
+                        else: text1_command +=  "4";
+                    
+                    text1_command += " "
+                    print("text1_command : " + text1_command)
+                    time.sleep(3)
+                    Arduino.write(text1_command.encode());
+                    
+                    # TEXT2
+                    bar_pm10 = int(round(rec[2]))
+                    bar_so2 = int(round(rec[3]))
+                    bar_co = int(round(rec[4]))
+                    bar_o3 = int(round(rec[5]))
+                    bar_no2 = int(round(rec[6]))
+                    if bar_pm10 > 500 : bar_pm10 = 500
+                    if bar_so2 > 500 : bar_so2 = 500
+                    if bar_co > 500 : bar_co = 500
+                    if bar_o3 > 500 : bar_o3 = 500
+                    if bar_no2 > 500 : bar_no2 = 500
+                    text2_command = "2;"+str(bar_pm10)+";"+str(bar_so2)+";"+str(bar_co)+";"+str(bar_o3)+";"+str(bar_no2)+"] "
+                    print("text2_command : " + text2_command)
+                    time.sleep(5)
+                    Arduino.write(text2_command.encode());
+                    
+                    mycursor.execute("SELECT id_stasiun,waktu,pm10,so2,co,o3,no2,ws,wd,humidity,temperature,pressure,sr,rain_intensity FROM aqm_data ORDER BY id DESC LIMIT 1")
+                    rec = mycursor.fetchone()
+                    # TEXT3
+                        # 3SIMPANG TIGA;31 Mar 2020 14:20;11;82;235;0;0;33.78;1010.8;8.05;338]
                         
-                        text1_command += " "
-                        print("text1_command : " + text1_command)
-                        time.sleep(3)
-                        Arduino.write(text1_command.encode());
+                    
+                    if response["waktu"] == "":
+                        waktu = rec[1]
+                    else:
+                        waktu = response["waktu"]
                         
-                        # TEXT2
-                        bar_pm10 = int(round(rec[2]))
-                        bar_so2 = int(round(rec[3]))
-                        bar_co = int(round(rec[4]))
-                        bar_o3 = int(round(rec[5]))
-                        bar_no2 = int(round(rec[6]))
-                        if bar_pm10 > 500 : bar_pm10 = 500
-                        if bar_so2 > 500 : bar_so2 = 500
-                        if bar_co > 500 : bar_co = 500
-                        if bar_o3 > 500 : bar_o3 = 500
-                        if bar_no2 > 500 : bar_no2 = 500
-                        text2_command = "2;"+str(bar_pm10)+";"+str(bar_so2)+";"+str(bar_co)+";"+str(bar_o3)+";"+str(bar_no2)+"] "
-                        print("text2_command : " + text2_command)
-                        time.sleep(5)
-                        Arduino.write(text2_command.encode());
-                        
-                        mycursor.execute("SELECT id_stasiun,waktu,pm10,so2,co,o3,no2,ws,wd,humidity,temperature,pressure,sr,rain_intensity FROM aqm_data ORDER BY id DESC LIMIT 1")
-                        rec = mycursor.fetchone()
-                        # TEXT3
-                            # 3SIMPANG TIGA;31 Mar 2020 14:20;11;82;235;0;0;33.78;1010.8;8.05;338]
-                            
-                        
-                        if response["waktu"] == "":
-                            waktu = rec[1]
-                        else:
-                            waktu = response["waktu"]
-                            
-                        d = datetime.datetime.strptime(waktu, '%Y-%m-%d %H:%M:%S')
-                        mm = str(datetime.date.strftime(d, "%m"))
-                        
-                        tanggaljam = datetime.date.strftime(d, "%d " + bulan(mm) + " %Y %H:%M")
-                        
-                        text3_command = "3"+stasiun_name+";"+tanggaljam+";"+str(int(round(rec[2])))+";"+str(int(round(rec[3])))+";"+str(int(round(rec[4])))+";"+str(int(round(rec[5])))+";"+str(int(round(rec[6])))+";"+str(rec[10])+";"+str(rec[11])+";"+str(rec[7])+";"+str(rec[8])+"] "
-                        print("text3_command : " + text3_command)
-                        time.sleep(10)
-                        Arduino.write(text3_command.encode());
-                    except Exception as e: 
-                        print(e)
+                    d = datetime.datetime.strptime(waktu, '%Y-%m-%d %H:%M:%S')
+                    mm = str(datetime.date.strftime(d, "%m"))
+                    
+                    tanggaljam = datetime.date.strftime(d, "%d " + bulan(mm) + " %Y %H:%M")
+                    
+                    text3_command = "3"+stasiun_name+";"+tanggaljam+";"+str(int(round(rec[2])))+";"+str(int(round(rec[3])))+";"+str(int(round(rec[4])))+";"+str(int(round(rec[5])))+";"+str(int(round(rec[6])))+";"+str(rec[10])+";"+str(rec[11])+";"+str(rec[7])+";"+str(rec[8])+"] "
+                    print("text3_command : " + text3_command)
+                    time.sleep(10)
+                    Arduino.write(text3_command.encode());
+                except Exception as e: 
+                    print(e)
                 
-                lastexec = now.strftime("%Y-%m-%d %H:%M")
-                print("====================================================================================================");
+            lastexec = now.strftime("%Y-%m-%d %H:%M")
+            print("====================================================================================================");
         
         
     except Exception as e: 
