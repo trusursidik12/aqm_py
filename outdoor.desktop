@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=OUTDOOR
+Comment=OUTDOOR
+Icon=gnome-info
+Exec=sh /home/admin/aqm_py/outdoor_show.sh
+Terminal=true
+Type=Application
+Categories=
+
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=20

@@ -97,3 +97,9 @@ mysql -u root -p < alter_db.sql
 sudo arduino
 	set leonardo at /dev/ttyACM0
 	compile
+	
+	
+OUTDOOR:
+========
+cp ~/aqm_py/outdoor.desktop ~/.config/autostart/outdoor.desktop
+cp ~/aqm_py/outdoor_aqm.desktop ~/Desktop/outdoor_aqm.desktop
