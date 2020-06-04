@@ -102,4 +102,4 @@ sudo arduino
 OUTDOOR:
 ========
 cp ~/aqm_py/outdoor.desktop ~/.config/autostart/outdoor.desktop
-cp ~/aqm_py/outdoor_aqm.desktop ~/Desktop/outdoor_aqm.desktop
+cp ~/aqm_py/launch_outdoor.desktop ~/Desktop/launch_outdoor.desktop
