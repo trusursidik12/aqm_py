@@ -112,7 +112,7 @@ while True:
         nowM = str(now.strftime("%M"))
         if(int(now.strftime("%S"))%15 == 0): print (now.strftime("%Y-%m-%d %H:%M:%S"))
         
-        if (firsttime or nowM == "01" or nowM == "31") and now.strftime("%Y-%m-%d %H:%M") != lastexec :
+        if (firsttime or nowM == "01" or nowM == "11" or nowM == "21" or nowM == "31" or nowM == "41" or nowM == "51") and now.strftime("%Y-%m-%d %H:%M") != lastexec :
             firsttime = False
             print (now.strftime("%Y-%m-%d %H:%M:%S"))
             
