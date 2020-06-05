@@ -65,8 +65,11 @@ try:
     if mycursor.rowcount <= 0:    
         mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('baud_hc','9600')")
         mydb.commit()
-    mycursor.execute("ALTER TABLE `aqm_sensor_values` ADD COLUMN IF NOT EXISTS `HC` double AFTER `AIN3`")
-    mydb.commit()
+    try:
+        mycursor.execute("ALTER TABLE `aqm_sensor_values` ADD COLUMN IF NOT EXISTS `HC` double AFTER `AIN3`")
+        mydb.commit()
+    except Exception as e2:
+        print("")
     print("[V] Database CONNECTED")
 except Exception as e: 
     print(e)
