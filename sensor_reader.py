@@ -34,6 +34,7 @@ AIN0 = 0
 AIN1 = 0
 AIN2 = 0
 AIN3 = 0
+HC = ""
 PM10 = ""
 PM25 = ""
 WS = ""
@@ -41,6 +42,7 @@ cur_pump_state = "0"
 is_labjack = False
 is_COM_PM10 = False
 is_COM_PM25 = False
+is_COM_HC = False
 is_COM_WS = False
 is_COM_AIRMAR = False
 is_Arduino = False
@@ -53,6 +55,18 @@ try:
     if mycursor.rowcount <= 0:    
         mycursor.execute("INSERT INTO aqm_sensor_values (id) VALUES (1)")
         mydb.commit()
+    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='com_hc'")
+    mycursor.fetchall()
+    if mycursor.rowcount <= 0:    
+        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('com_hc','COM5')")
+        mydb.commit()
+    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='baud_hc'")
+    mycursor.fetchall()
+    if mycursor.rowcount <= 0:    
+        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('baud_hc','9600')")
+        mydb.commit()
+    mycursor.execute("ALTER TABLE `aqm_sensor_values` ADD COLUMN IF NOT EXISTS `HC` double AFTER `AIN3`")
+    mydb.commit()
     print("[V] Database CONNECTED")
 except Exception as e: 
     print(e)
@@ -80,6 +94,25 @@ try:
     print("[V] Labjack CONNECTED")
 except:
     print("    [X] Labjack not connected")
+    
+try:
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_hc'")
+    rec = mycursor.fetchone()
+    for row in rec: serial_port = rec[0]
+    
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_hc'")
+    rec = mycursor.fetchone()
+    for row in rec: serial_rate = rec[0]
+    
+    if serial_port != "":
+        COM_HC = serial.Serial(serial_port, serial_rate)
+        is_COM_HC = True
+        print("[V] COM_HC CONNECTED")
+    else:
+        print("    [X] COM_HC not connected")
+        
+except:
+    print("    [X] COM_HC not connected")
     
 try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm10'")
@@ -218,6 +251,15 @@ while True:
                 AIN2_range = 0
                 AIN3_range = 0
         
+        if is_COM_HC:
+            try:
+                HC = str(COM_HC.readline());
+                HC = HC.split("\\r\\n")[0];
+                HC = HC.split("b'")[1];
+            except Exception as e: 
+                print(e)
+                HC = ""
+        
         if is_COM_PM10:
             try:
                 PM10 = str(COM_PM10.readline());
@@ -322,12 +364,12 @@ while True:
             except Exception as e: 
                 print(e)
         
-        sql = "UPDATE aqm_sensor_values SET AIN0 = %s, AIN1 = %s, AIN2 = %s, AIN3 = %s, PM25 = %s, PM10 = %s, WS = %s WHERE id = 1"
-        val = (AIN0,AIN1,AIN2,AIN3,PM25,PM10,WS)
+        sql = "UPDATE aqm_sensor_values SET AIN0 = %s, AIN1 = %s, AIN2 = %s, AIN3 = %s, HC = %s, PM25 = %s, PM10 = %s, WS = %s WHERE id = 1"
+        val = (AIN0,AIN1,AIN2,AIN3,HC,PM25,PM10,WS)
         mycursor.execute(sql, val)
         mydb.commit()
         
-        print("AIN0 = %f ; AIN1 = %f ; AIN2 = %f ; AIN3 = %f ; PM10 = %s;  PM25 = %s ; WS = %s ; cur_pump_state = %s" % (AIN0,AIN1,AIN2,AIN3,PM10,PM25,WS,cur_pump_state))
+        print("AIN0 = %f ; AIN1 = %f ; AIN2 = %f ; AIN3 = %f ; HC = %s; PM10 = %s;  PM25 = %s ; WS = %s ; cur_pump_state = %s" % (AIN0,AIN1,AIN2,AIN3,HC,PM10,PM25,WS,cur_pump_state))
         print("MIN ==> AIN0 = %f ; AIN1 = %f ; AIN2 = %f ; AIN3 = %f " % (AIN0_less,AIN1_less,AIN2_less,AIN3_less))
         print("RANGE ==> AIN0 = %f ; AIN1 = %f ; AIN2 = %f ; AIN3 = %f " % (AIN0_range,AIN1_range,AIN2_range,AIN3_range))
         print("=========================================================================================================================");
