@@ -113,7 +113,6 @@ while True:
         if(int(now.strftime("%S"))%15 == 0): print (now.strftime("%Y-%m-%d %H:%M:%S"))
         
         if (firsttime or nowM == "01" or nowM == "11" or nowM == "21" or nowM == "31" or nowM == "41" or nowM == "51") and now.strftime("%Y-%m-%d %H:%M") != lastexec :
-            firsttime = False
             print (now.strftime("%Y-%m-%d %H:%M:%S"))
             
             url = "http://ispumaps.id/ispumapapi/api/aqmoutdoor?trusur_api_key=VHJ1c3VyVW5nZ3VsVGVrbnVzYV9wVA==&id_stasiun=" + id_stasiun
@@ -141,39 +140,50 @@ while True:
                 
                 print(query)
                 
+                
+            is_Arduino = False
+            if serial_port != "":
+                Arduino = serial.Serial(serial_port, serial_rate)
+                is_Arduino = True
+                print("[V] ARDUINO CONNECTED") 
+                time.sleep(2)
+            else:  
+                print("    [X] ARDUINO not connected")
+                
             if is_Arduino:
                 try:
-                    mycursor.execute("SELECT id_stasiun,waktu,pm10,so2,co,o3,no2 FROM aqm_ispu ORDER BY id DESC LIMIT 1")
-                    rec = mycursor.fetchone()
-                    # TEXT1
-                    text1_command = "1"
-                    for x in [2, 3, 4, 5, 6]:
-                        if rec[x] <= 50: text1_command += "0";
-                        elif rec[x] <= 100: text1_command +=  "1";
-                        elif rec[x] <= 199: text1_command +=  "2";
-                        elif rec[x] <= 299: text1_command +=  "3";
-                        else: text1_command +=  "4";
-                    
-                    text1_command += " "
-                    print("text1_command : " + text1_command)
-                    time.sleep(3)
-                    Arduino.write(text1_command.encode());
-                    
-                    # TEXT2
-                    bar_pm10 = int(round(rec[2]))
-                    bar_so2 = int(round(rec[3]))
-                    bar_co = int(round(rec[4]))
-                    bar_o3 = int(round(rec[5]))
-                    bar_no2 = int(round(rec[6]))
-                    if bar_pm10 > 500 : bar_pm10 = 500
-                    if bar_so2 > 500 : bar_so2 = 500
-                    if bar_co > 500 : bar_co = 500
-                    if bar_o3 > 500 : bar_o3 = 500
-                    if bar_no2 > 500 : bar_no2 = 500
-                    text2_command = "2;"+str(bar_pm10)+";"+str(bar_so2)+";"+str(bar_co)+";"+str(bar_o3)+";"+str(bar_no2)+"] "
-                    print("text2_command : " + text2_command)
-                    time.sleep(5)
-                    Arduino.write(text2_command.encode());
+                    if (firsttime or nowM == "01"):
+                        mycursor.execute("SELECT id_stasiun,waktu,pm10,so2,co,o3,no2 FROM aqm_ispu ORDER BY id DESC LIMIT 1")
+                        rec = mycursor.fetchone()
+                        # TEXT1
+                        text1_command = "1"
+                        for x in [2, 3, 4, 5, 6]:
+                            if rec[x] <= 50: text1_command += "0";
+                            elif rec[x] <= 100: text1_command +=  "1";
+                            elif rec[x] <= 199: text1_command +=  "2";
+                            elif rec[x] <= 299: text1_command +=  "3";
+                            else: text1_command +=  "4";
+                        
+                        text1_command += " "
+                        print("text1_command : " + text1_command)
+                        time.sleep(3)
+                        Arduino.write(text1_command.encode());
+                        
+                        # TEXT2
+                        bar_pm10 = int(round(rec[2]))
+                        bar_so2 = int(round(rec[3]))
+                        bar_co = int(round(rec[4]))
+                        bar_o3 = int(round(rec[5]))
+                        bar_no2 = int(round(rec[6]))
+                        if bar_pm10 > 500 : bar_pm10 = 500
+                        if bar_so2 > 500 : bar_so2 = 500
+                        if bar_co > 500 : bar_co = 500
+                        if bar_o3 > 500 : bar_o3 = 500
+                        if bar_no2 > 500 : bar_no2 = 500
+                        text2_command = "2;"+str(bar_pm10)+";"+str(bar_so2)+";"+str(bar_co)+";"+str(bar_o3)+";"+str(bar_no2)+"] "
+                        print("text2_command : " + text2_command)
+                        time.sleep(5)
+                        Arduino.write(text2_command.encode());
                     
                     mycursor.execute("SELECT id_stasiun,waktu,pm10,so2,co,o3,no2,ws,wd,humidity,temperature,pressure,sr,rain_intensity FROM aqm_data ORDER BY id DESC LIMIT 1")
                     rec = mycursor.fetchone()
@@ -189,6 +199,7 @@ while True:
                 
             lastexec = now.strftime("%Y-%m-%d %H:%M")
             print("====================================================================================================");
+            firsttime = False
         
         
     except Exception as e: 
