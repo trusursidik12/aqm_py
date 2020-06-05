@@ -34,7 +34,7 @@ AIN0 = 0
 AIN1 = 0
 AIN2 = 0
 AIN3 = 0
-HC = ""
+HC = "0"
 PM10 = ""
 PM25 = ""
 WS = ""
@@ -261,7 +261,7 @@ while True:
                 HC = HC.split("b'")[1];
             except Exception as e: 
                 print(e)
-                HC = ""
+                HC = "0"
         
         if is_COM_PM10:
             try:
