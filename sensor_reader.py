@@ -66,7 +66,7 @@ try:
         mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('baud_hc','9600')")
         mydb.commit()
     try:
-        mycursor.execute("ALTER TABLE `aqm_sensor_values` ADD COLUMN IF NOT EXISTS `HC` double AFTER `AIN3`")
+        mycursor.execute("ALTER TABLE `aqm_sensor_values` ADD COLUMN `HC` double AFTER `AIN3`")
         mydb.commit()
     except Exception as e2:
         print("")
