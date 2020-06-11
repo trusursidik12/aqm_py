@@ -139,7 +139,11 @@ while True:
                 tanggaljam = datetime.date.strftime(d, "%d " + bulan(mm) + " %Y %H:" + nowM0)
                 
                 print(query)
-                
+            
+            try:
+                Arduino.close();
+            except Exception as e1: 
+                print(e1)
                 
             is_Arduino = False
             if serial_port != "":
