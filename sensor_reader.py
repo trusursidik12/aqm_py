@@ -175,11 +175,11 @@ try:
             try:
                 COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS,serial_rate_WS))
                 is_COM_WS = True
-                print("[V] COM_WS CONNECTED")
+                print("[V] COM_WS CONNECTED with " + serial_port_WS)
             except:                
                 COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS2,serial_rate_WS))
                 is_COM_WS = True
-                print("[V] COM_WS CONNECTED")
+                print("[V] COM_WS CONNECTED with " + serial_port_WS2)
         else:
             COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS,serial_rate_WS))
             is_COM_WS = True
@@ -260,7 +260,6 @@ while True:
                 AIN1 = 0
                 AIN2 = 0
                 AIN3 = 0
-                AIN3 = ljm.eReadName(labjack, "AIN3")
                 AIN0_less = 0
                 AIN1_less = 0
                 AIN2_less = 0
@@ -300,15 +299,15 @@ while True:
             except Exception as e: 
                 try:
                     try:
-                        print("Retry COM_WS CONNECTING ..")
+                        print("Retry COM_WS CONNECTING " + serial_port_WS + " ..")
                         COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS,serial_rate_WS))
-                        print("[V] COM_WS CONNECTED")
+                        print("[V] COM_WS CONNECTED with " + serial_port_WS)
                         ws_data = COM_WS.get_current_data()
                         WS = ws_data.to_csv(';',False)
                     except:                
-                        print("Retry COM_WS CONNECTING ..")
+                        print("Retry COM_WS CONNECTING " + serial_port_WS2 + " ..")
                         COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS2,serial_rate_WS))
-                        print("[V] COM_WS CONNECTED")
+                        print("[V] COM_WS CONNECTED with " + serial_port_WS2)
                         ws_data = COM_WS.get_current_data()
                         WS = ws_data.to_csv(';',False)
                 except Exception as e:                    
