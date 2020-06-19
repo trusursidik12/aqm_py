@@ -46,6 +46,10 @@ is_COM_HC = False
 is_COM_WS = False
 is_COM_AIRMAR = False
 is_Arduino = False
+serial_port_WS = ""
+serial_rate_WS = ""
+serial_port_WS2 = ""
+
 
 try:
     mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="trusur_aqm")
@@ -158,16 +162,28 @@ except:
 try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ws'")
     rec = mycursor.fetchone()
-    for row in rec: serial_port = rec[0]
+    for row in rec: serial_port_WS = rec[0]
     
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_ws'")
     rec = mycursor.fetchone()
-    for row in rec: serial_rate = rec[0]
+    for row in rec: serial_rate_WS = rec[0]
     
-    if serial_port != "":
-        COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port,serial_rate))
-        is_COM_WS = True
-        print("[V] COM_WS CONNECTED")
+    if serial_port_WS != "":
+        if ";" in serial_port_WS:
+            serial_port_WS2 = serial_port_WS.split(';')[1];
+            serial_port_WS = serial_port_WS.split(';')[0];
+            try:
+                COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS,serial_rate_WS))
+                is_COM_WS = True
+                print("[V] COM_WS CONNECTED")
+            except:                
+                COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS2,serial_rate_WS))
+                is_COM_WS = True
+                print("[V] COM_WS CONNECTED")
+        else:
+            COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS,serial_rate_WS))
+            is_COM_WS = True
+            print("[V] COM_WS CONNECTED")
     else:
         print("    [X] COM_WS not connected")
     
@@ -282,8 +298,22 @@ while True:
                 ws_data = COM_WS.get_current_data()
                 WS = ws_data.to_csv(';',False)
             except Exception as e: 
-                print(e)
-                WS = ""
+                try:
+                    try:
+                        print("Retry COM_WS CONNECTING ..")
+                        COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS,serial_rate_WS))
+                        print("[V] COM_WS CONNECTED")
+                        ws_data = COM_WS.get_current_data()
+                        WS = ws_data.to_csv(';',False)
+                    except:                
+                        print("Retry COM_WS CONNECTING ..")
+                        COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS2,serial_rate_WS))
+                        print("[V] COM_WS CONNECTED")
+                        ws_data = COM_WS.get_current_data()
+                        WS = ws_data.to_csv(';',False)
+                except Exception as e:                    
+                    print(e)
+                    WS = ""
                 
         if is_COM_AIRMAR:
             try:
