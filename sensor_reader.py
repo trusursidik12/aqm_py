@@ -38,6 +38,7 @@ HC = "0"
 PM10 = ""
 PM25 = ""
 WS = ""
+pump_speed = 0;
 cur_pump_state = "0"
 is_labjack = False
 is_COM_PM10 = False
@@ -46,6 +47,7 @@ is_COM_HC = False
 is_COM_WS = False
 is_COM_AIRMAR = False
 is_Arduino = False
+is_Pump_pwm = False
 serial_port_WS = ""
 serial_rate_WS = ""
 serial_port_WS2 = ""
@@ -69,6 +71,23 @@ try:
     if mycursor.rowcount <= 0:    
         mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('baud_hc','9600')")
         mydb.commit()
+        
+    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='com_pump_pwm'")
+    mycursor.fetchall()
+    if mycursor.rowcount <= 0:    
+        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('com_pump_pwm','')")
+        mydb.commit()
+    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='baud_pump_pwm'")
+    mycursor.fetchall()
+    if mycursor.rowcount <= 0:    
+        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('baud_pump_pwm','9600')")
+        mydb.commit()
+    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='pump_speed'")
+    mycursor.fetchall()
+    if mycursor.rowcount <= 0:    
+        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('pump_speed','80')")
+        mydb.commit()
+        
     try:
         mycursor.execute("ALTER TABLE `aqm_sensor_values` ADD COLUMN `HC` double AFTER `AIN3`")
         mydb.commit()
@@ -208,6 +227,34 @@ try:
         
 except:
     print("    [X] COM_AIRMAR not connected")
+    
+try:
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pump_pwm'")
+    rec = mycursor.fetchone()
+    for row in rec: serial_port = rec[0]
+    
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_pump_pwm'")
+    rec = mycursor.fetchone()
+    for row in rec: serial_rate = rec[0]
+    
+    if serial_port != "":
+        Pump_pwm = serial.Serial(serial_port, serial_rate)
+        is_Pump_pwm = True
+        print("[V] PUMP PWM CONNECTED")
+        
+        mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'pump_speed'")
+        rec = mycursor.fetchone()
+        for row in rec: pump_speed = rec[0]
+        
+        mycursor.execute("UPDATE aqm_configuration SET content = 0 WHERE data = 'pump_state'")
+        mydb.commit()
+        mycursor.execute("UPDATE aqm_configuration SET content = NOW() WHERE data = 'pump_last'")
+        mydb.commit()
+    else:  
+        print("    [X] PUMP PWM not connected")
+        
+except:
+    print("    [X] PUMP PWM not connected")
     
 try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'controller'")
@@ -382,6 +429,18 @@ while True:
                 print(e)
                 WS = ""
             
+        if is_Pump_pwm:
+            try:
+                mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'pump_state'")
+                rec = mycursor.fetchone()
+                for row in rec: pump_state = rec[0]
+                if pump_state != cur_pump_state:
+                    cur_pump_state = pump_state
+                    speed = (cur_pump_state * 100) + pump_speed;
+                    Pump_pwm.write(speed.encode());
+            except Exception as e: 
+                print(e)
+        
         if is_Arduino:
             try:
                 mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'pump_state'")
@@ -409,4 +468,4 @@ while True:
     except Exception as e: 
         print(e)
 
-    time.sleep(1) 
+    time.sleep(50) 
