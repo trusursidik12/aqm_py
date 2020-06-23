@@ -245,7 +245,7 @@ try:
         mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'pump_speed'")
         rec = mycursor.fetchone()
         for row in rec: pump_speed = int(rec[0])
-        Pump_pwm.write(pump_speed.encode());
+        Pump_pwm.write(str(pump_speed).encode());
         
         mycursor.execute("UPDATE aqm_configuration SET content = 0 WHERE data = 'pump_state'")
         mydb.commit()
@@ -439,7 +439,7 @@ while True:
                 print("speed : " + str(speed))
                 if pump_state != cur_pump_state:
                     cur_pump_state = pump_state
-                    Pump_pwm.write(speed.encode());
+                    Pump_pwm.write(str(speed).encode());
             except Exception as e: 
                 print(e)
         
