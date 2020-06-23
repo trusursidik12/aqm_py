@@ -436,7 +436,7 @@ while True:
                 rec = mycursor.fetchone()
                 for row in rec: pump_state = int(rec[0])
                 speed = (pump_state * 100) + pump_speed;
-                print("speed : " + speed)
+                print("speed : " + str(speed))
                 if pump_state != cur_pump_state:
                     cur_pump_state = pump_state
                     Pump_pwm.write(speed.encode());
