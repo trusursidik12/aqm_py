@@ -437,6 +437,7 @@ while True:
                 if pump_state != cur_pump_state:
                     cur_pump_state = pump_state
                     speed = (cur_pump_state * 100) + pump_speed;
+                    print("speed : " + speed)
                     Pump_pwm.write(speed.encode());
             except Exception as e: 
                 print(e)
