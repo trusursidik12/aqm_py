@@ -87,12 +87,49 @@ try:
     if mycursor.rowcount <= 0:    
         mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('pump_speed','80')")
         mydb.commit()
+    
+    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='data_interval'")
+    mycursor.fetchall()
+    if mycursor.rowcount <= 0:    
+        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('data_interval','30')")
+        mydb.commit()
+    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='graph_interval'")
+    mycursor.fetchall()
+    if mycursor.rowcount <= 0:    
+        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('graph_interval','0')")
+        mydb.commit() 
+    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='is_sampling'")
+    mycursor.fetchall()
+    if mycursor.rowcount <= 0:    
+        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('is_sampling','0')")
+        mydb.commit()
+    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='sampler_operator_name'")
+    mycursor.fetchall()
+    if mycursor.rowcount <= 0:    
+        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('sampler_operator_name','')")
+        mydb.commit()
+    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='id_sampling'")
+    mycursor.fetchall()
+    if mycursor.rowcount <= 0:    
+        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('id_sampling','')")
+        mydb.commit()
         
     try:
         mycursor.execute("ALTER TABLE `aqm_sensor_values` ADD COLUMN `HC` double AFTER `AIN3`")
         mydb.commit()
     except Exception as e2:
         print("")
+    try:
+        mycursor.execute("ALTER TABLE `aqm_data` ADD COLUMN `sampler_operator_name` VARCHAR(50) NOT NULL default '' AFTER `sent2`")
+        mydb.commit()
+    except Exception as e2:
+        print("")
+    try:
+        mycursor.execute("ALTER TABLE `aqm_data` ADD COLUMN `id_sampling` VARCHAR(20) NOT NULL default '' AFTER `sampler_operator_name`")
+        mydb.commit()
+    except Exception as e2:
+        print("")
+    
     print("[V] Database CONNECTED")
 except Exception as e: 
     print(e)
