@@ -113,6 +113,11 @@ try:
     if mycursor.rowcount <= 0:    
         mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('id_sampling','')")
         mydb.commit()
+    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='start_sampling'")
+    mycursor.fetchall()
+    if mycursor.rowcount <= 0:    
+        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('start_sampling','')")
+        mydb.commit()
         
     try:
         mycursor.execute("ALTER TABLE `aqm_sensor_values` ADD COLUMN `HC` double AFTER `AIN3`")
