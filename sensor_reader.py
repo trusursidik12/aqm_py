@@ -119,6 +119,8 @@ try:
         mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('start_sampling','')")
         mydb.commit()
         
+    mycursor.execute("UPDATE aqm_configuration set content='0' WHERE data='start_sampling'")
+        
     try:
         mycursor.execute("ALTER TABLE `aqm_sensor_values` ADD COLUMN `HC` double AFTER `AIN3`")
         mydb.commit()
