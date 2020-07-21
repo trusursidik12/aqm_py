@@ -137,6 +137,12 @@ try:
     except Exception as e2:
         print("")
     
+    try:
+        mycursor.execute("ALTER TABLE `aqm_data` CHANGE `id_sampling` `id_sampling` VARCHAR(200) NOT NULL DEFAULT ''")
+        mydb.commit()
+    except Exception as e2:
+        print("")
+    
     print("[V] Database CONNECTED")
 except Exception as e: 
     print(e)
