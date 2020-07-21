@@ -104,3 +104,11 @@ OUTDOOR:
 cp ~/aqm_py/outdoor.desktop ~/.config/autostart/outdoor.desktop
 cp ~/aqm_py/launch_outdoor.desktop ~/Desktop/launch_outdoor.desktop
 chmod +x ~/Desktop/launch_outdoor.desktop
+
+
+DOTNET:
+=======
+sudo apt-get update; \
+sudo apt-get install -y apt-transport-https && \
+sudo apt-get update && \
+sudo apt-get install -y dotnet-sdk-3.1
