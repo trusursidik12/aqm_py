@@ -1,5 +1,4 @@
 from __future__ import print_function
-from labjack import ljm
 from mysql.connector.constants import ClientFlag
 from pyvantagepro import VantagePro2
 import sys
@@ -8,6 +7,32 @@ import mysql.connector
 import serial
 import subprocess
 import glob
+
+AIN0 = 0
+AIN1 = 0
+AIN2 = 0
+AIN3 = 0
+AIN4 = 0
+AIN5 = 0
+AIN6 = 0
+AIN7 = 0
+HC = "0"
+PM10 = ""
+PM25 = ""
+WS = ""
+pump_speed = 0;
+cur_pump_state = "0"
+is_COM_PM10 = False
+is_COM_PM25 = False
+is_COM_HC = False
+is_COM_WS = False
+is_COM_AIRMAR = False
+is_Arduino = False
+is_Pump_pwm = False
+serial_port_WS = ""
+serial_rate_WS = ""
+serial_port_WS2 = ""
+used_ports = []
 
 
 def serial_ports():
@@ -29,33 +54,6 @@ def serial_ports():
         except (OSError, serial.SerialException):
             pass
     return result
-
-AIN0 = 0
-AIN1 = 0
-AIN2 = 0
-AIN3 = 0
-AIN4 = 0
-AIN5 = 0
-AIN6 = 0
-AIN7 = 0
-HC = "0"
-PM10 = ""
-PM25 = ""
-WS = ""
-pump_speed = 0;
-cur_pump_state = "0"
-is_labjack = False
-is_COM_PM10 = False
-is_COM_PM25 = False
-is_COM_HC = False
-is_COM_WS = False
-is_COM_AIRMAR = False
-is_Arduino = False
-is_Pump_pwm = False
-serial_port_WS = ""
-serial_rate_WS = ""
-serial_port_WS2 = ""
-
 
 try:
     mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="trusur_aqm")
@@ -86,51 +84,6 @@ for port in serial_ports():
     print(port_desc)
     mycursor.execute("INSERT INTO serial_ports (port,description) VALUES ('" + port +"','" + port_desc +"')")
     mydb.commit()
-    
-try:
-    labjack = ljm.openS("ANY", "ANY", "ANY")
-    is_labjack = True
-    print("[V] Labjack CONNECTED")
-except:
-    print("    [X] Labjack not connected")
-    
-try:
-    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm10'")
-    rec = mycursor.fetchone()
-    for row in rec: serial_port = rec[0]
-    
-    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_pm10'")
-    rec = mycursor.fetchone()
-    for row in rec: serial_rate = rec[0]
-    
-    if serial_port != "":
-        COM_PM10 = serial.Serial(serial_port, serial_rate)
-        is_COM_PM10 = True
-        print("[V] COM_PM10 CONNECTED")
-    else:
-        print("    [X] COM_PM10 not connected")
-        
-except:
-    print("    [X] COM_PM10 not connected")
-    
-try:
-    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm25'")
-    rec = mycursor.fetchone()
-    for row in rec: serial_port = rec[0]
-    
-    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_pm25'")
-    rec = mycursor.fetchone()
-    for row in rec: serial_rate = rec[0]
-    
-    if serial_port != "":
-        COM_PM25 = serial.Serial(serial_port, serial_rate)
-        is_COM_PM25 = True
-        print("[V] COM_PM25 CONNECTED")
-    else:
-        print("    [X] COM_PM25 not connected")
-        
-except:
-    print("    [X] COM_PM25 not connected")
     
 try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ws'")
@@ -269,63 +222,107 @@ AIN4_range = 0
 AIN5_range = 0
 AIN6_range = 0
 AIN7_range = 0
+
+if sys.platform.startswith('win'):
+    command = "labjack_reader.py"
+else:
+    command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py &"
+
+subprocess.Popen(command, shell=True)
+
+mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm10'")
+rec = mycursor.fetchone()
+if(rec[0] != None and rec[0] != ""):
+    if sys.platform.startswith('win'):
+        command = "pm_reader.py 10"
+    else:
+        command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 10 &"
+
+    subprocess.Popen(command, shell=True)
+    
+mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm25'")
+rec = mycursor.fetchone()
+if(rec[0] != None and rec[0] != ""):
+    if sys.platform.startswith('win'):
+        command = "pm_reader.py 25"
+    else:
+        command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 25 &"
+
+    subprocess.Popen(command, shell=True)
+
+time.sleep(5)
     
 while True:
     try:
-        if is_labjack:
-            try:
-                AIN0 = ljm.eReadName(labjack, "AIN0")
-                AIN1 = ljm.eReadName(labjack, "AIN1")
-                AIN2 = ljm.eReadName(labjack, "AIN2")
-                AIN3 = ljm.eReadName(labjack, "AIN3")
-                AIN4 = ljm.eReadName(labjack, "AIN4")
-                AIN5 = ljm.eReadName(labjack, "AIN5")
-                AIN6 = ljm.eReadName(labjack, "AIN6")
-                AIN7 = ljm.eReadName(labjack, "AIN7")
-                if AIN0_less > AIN0: AIN0_less = AIN0;
-                if AIN1_less > AIN1: AIN1_less = AIN1;
-                if AIN2_less > AIN2: AIN2_less = AIN2;
-                if AIN3_less > AIN3: AIN3_less = AIN3;
-                if AIN4_less > AIN4: AIN4_less = AIN4;
-                if AIN5_less > AIN5: AIN5_less = AIN4;
-                if AIN6_less > AIN6: AIN6_less = AIN6;
-                if AIN7_less > AIN7: AIN7_less = AIN7;
-                AIN0_range = 0.04 - AIN0_less;
-                AIN1_range = 0.04 - AIN1_less
-                AIN2_range = 0.04 - AIN2_less
-                AIN3_range = 0.04 - AIN3_less
-                AIN4_range = 0.04 - AIN4_less
-                AIN5_range = 0.04 - AIN5_less
-                AIN6_range = 0.04 - AIN6_less
-                AIN7_range = 0.04 - AIN7_less
-                
-            except Exception as e: 
-                print(e)
-                AIN0 = 0
-                AIN1 = 0
-                AIN2 = 0
-                AIN3 = 0
-                AIN4 = 0
-                AIN5 = 0
-                AIN6 = 0
-                AIN7 = 0
-                AIN0_less = 0
-                AIN1_less = 0
-                AIN2_less = 0
-                AIN3_less = 0
-                AIN4_less = 0
-                AIN5_less = 0
-                AIN6_less = 0
-                AIN7_less = 0
-                AIN0_range = 0
-                AIN1_range = 0
-                AIN2_range = 0
-                AIN3_range = 0
-                AIN4_range = 0
-                AIN5_range = 0
-                AIN6_range = 0
-                AIN7_range = 0
-        
+        try:
+            mycursor.execute("SELECT AIN0,AIN1,AIN2,AIN3,AIN4,AIN5,AIN6,AIN7 FROM aqm_sensor_values WHERE id = '1'")
+            rec = mycursor.fetchone()
+            AIN0 = float(rec[0])
+            AIN1 = float(rec[1])
+            AIN2 = float(rec[2])
+            AIN3 = float(rec[3])
+            AIN4 = float(rec[4])
+            AIN5 = float(rec[5])
+            AIN6 = float(rec[6])
+            AIN7 = float(rec[7])
+            if AIN0_less > AIN0: AIN0_less = AIN0;
+            if AIN1_less > AIN1: AIN1_less = AIN1;
+            if AIN2_less > AIN2: AIN2_less = AIN2;
+            if AIN3_less > AIN3: AIN3_less = AIN3;
+            if AIN4_less > AIN4: AIN4_less = AIN4;
+            if AIN5_less > AIN5: AIN5_less = AIN4;
+            if AIN6_less > AIN6: AIN6_less = AIN6;
+            if AIN7_less > AIN7: AIN7_less = AIN7;
+            AIN0_range = 0.04 - AIN0_less;
+            AIN1_range = 0.04 - AIN1_less
+            AIN2_range = 0.04 - AIN2_less
+            AIN3_range = 0.04 - AIN3_less
+            AIN4_range = 0.04 - AIN4_less
+            AIN5_range = 0.04 - AIN5_less
+            AIN6_range = 0.04 - AIN6_less
+            AIN7_range = 0.04 - AIN7_less
+            
+        except Exception as e: 
+            print(e)
+            AIN0 = 0
+            AIN1 = 0
+            AIN2 = 0
+            AIN3 = 0
+            AIN4 = 0
+            AIN5 = 0
+            AIN6 = 0
+            AIN7 = 0
+            AIN0_less = 0
+            AIN1_less = 0
+            AIN2_less = 0
+            AIN3_less = 0
+            AIN4_less = 0
+            AIN5_less = 0
+            AIN6_less = 0
+            AIN7_less = 0
+            AIN0_range = 0
+            AIN1_range = 0
+            AIN2_range = 0
+            AIN3_range = 0
+            AIN4_range = 0
+            AIN5_range = 0
+            AIN6_range = 0
+            AIN7_range = 0
+            
+        try :
+            mycursor.execute("SELECT PM10 FROM aqm_sensor_values WHERE id = '1'")
+            rec = mycursor.fetchone()
+            PM10 = rec[0]
+        except Exception as e:
+            PM10 = "b'000.000,0.0,+0.0,0,0,00,*0\\r\\n'"
+            
+        try :
+            mycursor.execute("SELECT PM25 FROM aqm_sensor_values WHERE id = '1'")
+            rec = mycursor.fetchone()
+            PM25 = rec[0]
+        except Exception as e:
+            PM25 = "b'000.000,0.0,+0.0,0,0,00,*0\\r\\n'"
+            
         if is_COM_HC:
             try:
                 HC = str(COM_HC.readline());
@@ -334,20 +331,6 @@ while True:
             except Exception as e: 
                 print(e)
                 HC = "0"
-        
-        if is_COM_PM10:
-            try:
-                PM10 = str(COM_PM10.readline());
-            except Exception as e: 
-                print(e)
-                PM10 = ""
-            
-        if is_COM_PM25:
-            try:
-                PM25 = str(COM_PM25.readline());
-            except Exception as e: 
-                print(e)
-                PM25 = ""
             
         if is_COM_WS:
             try:
@@ -471,8 +454,8 @@ while True:
         mycursor.execute(sql, val)
         mydb.commit()
         
-        print("PM10 = %s" % (PM10))
-        print("PM25 = %s" % (PM25))
+        print("PM10 = %s" % (PM10.replace("\r\n","")))
+        print("PM25 = %s" % (PM25.replace("\r\n","")))
         print("WS = %s" % (WS[0:75]))
         print("HC = %s" % (HC))
         print("cur_pump_state = %s" % (cur_pump_state))
@@ -491,5 +474,5 @@ while True:
         
     except Exception as e: 
         print(e)
-
-    time.sleep(1) 
+        
+    time.sleep(1)
