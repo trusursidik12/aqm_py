@@ -58,7 +58,7 @@ def serial_ports():
 try:
     mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="trusur_aqm")
     mycursor = mydb.cursor()
-    mycursor.execute("SELECT id FROM aqm_sensor_values WHERE id=1")
+    mycursor.execute("DELETE FROM aqm_sensor_values WHERE id=1")
     mycursor.fetchall()
     if mycursor.rowcount <= 0:    
         mycursor.execute("INSERT INTO aqm_sensor_values (id) VALUES (1)")
@@ -254,9 +254,9 @@ mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_hc'")
 rec = mycursor.fetchone()
 if(rec[0] != None and rec[0] != ""):
     if sys.platform.startswith('win'):
-        command = "pm_hc.py"
+        command = "hc_reader.py"
     else:
-        command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_hc.py &"
+        command = "echo admin | sudo -S python3.5 ~/aqm_py/hc_reader.py &"
 
     subprocess.Popen(command, shell=True)
 
