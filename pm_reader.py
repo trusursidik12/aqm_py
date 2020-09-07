@@ -12,11 +12,6 @@ is_PM_connect = False
 try:
     mydb = mysql.connector.connect(host=db[0],user=db[1],passwd=db[2],database=db[3])
     mycursor = mydb.cursor()
-    mycursor.execute("SELECT id FROM aqm_sensor_values WHERE id=1")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_sensor_values (id) VALUES (1)")
-        mydb.commit()
     
     print("[V] PM" + sys.argv[1] + " Database CONNECTED")
 except Exception as e: 
