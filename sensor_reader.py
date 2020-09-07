@@ -249,6 +249,16 @@ if(rec[0] != None and rec[0] != ""):
         command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 25 &"
 
     subprocess.Popen(command, shell=True)
+    
+mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_hc'")
+rec = mycursor.fetchone()
+if(rec[0] != None and rec[0] != ""):
+    if sys.platform.startswith('win'):
+        command = "pm_hc.py"
+    else:
+        command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_hc.py &"
+
+    subprocess.Popen(command, shell=True)
 
 time.sleep(5)
     
@@ -323,14 +333,12 @@ while True:
         except Exception as e:
             PM25 = "b'000.000,0.0,+0.0,0,0,00,*0\\r\\n'"
             
-        if is_COM_HC:
-            try:
-                HC = str(COM_HC.readline());
-                HC = HC.split("\\r\\n")[0];
-                HC = HC.split("b'")[1];
-            except Exception as e: 
-                print(e)
-                HC = "0"
+        try :
+            mycursor.execute("SELECT HC FROM aqm_sensor_values WHERE id = '1'")
+            rec = mycursor.fetchone()
+            HC = rec[0]
+        except Exception as e:
+            HC = "0"
             
         if is_COM_WS:
             try:
