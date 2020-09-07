@@ -476,9 +476,9 @@ while True:
         print("WS = %s" % (WS[0:75]))
         print("HC = %s" % (HC))
         print("cur_pump_state = %s" % (cur_pump_state))
-        print("---------------------------------------------------------------------------------");
+        print("--------------------------------------------------------------------------------");
         print("AIN \t|\t VOLTAGE \t|\t MIN \t\t|\t RANGE \t\t|")
-        print("---------------------------------------------------------------------------------");
+        print("--------------------------------------------------------------------------------");
         print("AIN0 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN0,AIN0_less,AIN0_range))
         print("AIN1 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN1,AIN1_less,AIN1_range))
         print("AIN2 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN2,AIN2_less,AIN2_range))
@@ -487,7 +487,7 @@ while True:
         print("AIN5 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN5,AIN5_less,AIN5_range))
         print("AIN6 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN6,AIN6_less,AIN6_range))
         print("AIN7 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN7,AIN7_less,AIN7_range))
-        print("=================================================================================");
+        print("================================================================================");
         
     except Exception as e: 
         print(e)
