@@ -34,6 +34,10 @@ AIN0 = 0
 AIN1 = 0
 AIN2 = 0
 AIN3 = 0
+AIN4 = 0
+AIN5 = 0
+AIN6 = 0
+AIN7 = 0
 HC = "0"
 PM10 = ""
 PM25 = ""
@@ -61,87 +65,6 @@ try:
     if mycursor.rowcount <= 0:    
         mycursor.execute("INSERT INTO aqm_sensor_values (id) VALUES (1)")
         mydb.commit()
-    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='com_hc'")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('com_hc','COM5')")
-        mydb.commit()
-    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='baud_hc'")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('baud_hc','9600')")
-        mydb.commit()
-        
-    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='com_pump_pwm'")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('com_pump_pwm','')")
-        mydb.commit()
-    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='baud_pump_pwm'")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('baud_pump_pwm','9600')")
-        mydb.commit()
-    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='pump_speed'")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('pump_speed','80')")
-        mydb.commit()
-    
-    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='data_interval'")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('data_interval','30')")
-        mydb.commit()
-    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='graph_interval'")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('graph_interval','0')")
-        mydb.commit() 
-    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='is_sampling'")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('is_sampling','0')")
-        mydb.commit()
-    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='sampler_operator_name'")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('sampler_operator_name','')")
-        mydb.commit()
-    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='id_sampling'")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('id_sampling','')")
-        mydb.commit()
-    mycursor.execute("SELECT id FROM aqm_configuration WHERE data='start_sampling'")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_configuration (data,content) VALUES ('start_sampling','')")
-        mydb.commit()
-        
-    mycursor.execute("UPDATE aqm_configuration set content='0' WHERE data='start_sampling'")
-        
-    try:
-        mycursor.execute("ALTER TABLE `aqm_sensor_values` ADD COLUMN `HC` double AFTER `AIN3`")
-        mydb.commit()
-    except Exception as e2:
-        print("")
-    try:
-        mycursor.execute("ALTER TABLE `aqm_data` ADD COLUMN `sampler_operator_name` VARCHAR(50) NOT NULL default '' AFTER `sent2`")
-        mydb.commit()
-    except Exception as e2:
-        print("")
-    try:
-        mycursor.execute("ALTER TABLE `aqm_data` ADD COLUMN `id_sampling` VARCHAR(20) NOT NULL default '' AFTER `sampler_operator_name`")
-        mydb.commit()
-    except Exception as e2:
-        print("")
-    
-    try:
-        mycursor.execute("ALTER TABLE `aqm_data` CHANGE `id_sampling` `id_sampling` VARCHAR(200) NOT NULL DEFAULT ''")
-        mydb.commit()
-    except Exception as e2:
-        print("")
     
     print("[V] Database CONNECTED")
 except Exception as e: 
@@ -170,25 +93,6 @@ try:
     print("[V] Labjack CONNECTED")
 except:
     print("    [X] Labjack not connected")
-    
-try:
-    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_hc'")
-    rec = mycursor.fetchone()
-    for row in rec: serial_port = rec[0]
-    
-    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_hc'")
-    rec = mycursor.fetchone()
-    for row in rec: serial_rate = rec[0]
-    
-    if serial_port != "":
-        COM_HC = serial.Serial(serial_port, serial_rate)
-        is_COM_HC = True
-        print("[V] COM_HC CONNECTED")
-    else:
-        print("    [X] COM_HC not connected")
-        
-except:
-    print("    [X] COM_HC not connected")
     
 try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm10'")
@@ -279,6 +183,25 @@ except:
     print("    [X] COM_AIRMAR not connected")
     
 try:
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_hc'")
+    rec = mycursor.fetchone()
+    for row in rec: serial_port = rec[0]
+    
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_hc'")
+    rec = mycursor.fetchone()
+    for row in rec: serial_rate = rec[0]
+    
+    if serial_port != "":
+        COM_HC = serial.Serial(serial_port, serial_rate)
+        is_COM_HC = True
+        print("[V] COM_HC CONNECTED")
+    else:
+        print("    [X] COM_HC not connected")
+        
+except:
+    print("    [X] COM_HC not connected")
+    
+try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pump_pwm'")
     rec = mycursor.fetchone()
     for row in rec: serial_port = rec[0]
@@ -334,6 +257,18 @@ AIN0_less = 9999999999999
 AIN1_less = 9999999999999
 AIN2_less = 9999999999999
 AIN3_less = 9999999999999
+AIN4_less = 9999999999999
+AIN5_less = 9999999999999
+AIN6_less = 9999999999999
+AIN7_less = 9999999999999
+AIN0_range = 0
+AIN1_range = 0
+AIN2_range = 0
+AIN3_range = 0
+AIN4_range = 0
+AIN5_range = 0
+AIN6_range = 0
+AIN7_range = 0
     
 while True:
     try:
@@ -343,14 +278,26 @@ while True:
                 AIN1 = ljm.eReadName(labjack, "AIN1")
                 AIN2 = ljm.eReadName(labjack, "AIN2")
                 AIN3 = ljm.eReadName(labjack, "AIN3")
+                AIN4 = ljm.eReadName(labjack, "AIN4")
+                AIN5 = ljm.eReadName(labjack, "AIN5")
+                AIN6 = ljm.eReadName(labjack, "AIN6")
+                AIN7 = ljm.eReadName(labjack, "AIN7")
                 if AIN0_less > AIN0: AIN0_less = AIN0;
                 if AIN1_less > AIN1: AIN1_less = AIN1;
                 if AIN2_less > AIN2: AIN2_less = AIN2;
                 if AIN3_less > AIN3: AIN3_less = AIN3;
+                if AIN4_less > AIN4: AIN4_less = AIN4;
+                if AIN5_less > AIN5: AIN5_less = AIN4;
+                if AIN6_less > AIN6: AIN6_less = AIN6;
+                if AIN7_less > AIN7: AIN7_less = AIN7;
                 AIN0_range = 0.04 - AIN0_less;
                 AIN1_range = 0.04 - AIN1_less
                 AIN2_range = 0.04 - AIN2_less
                 AIN3_range = 0.04 - AIN3_less
+                AIN4_range = 0.04 - AIN4_less
+                AIN5_range = 0.04 - AIN5_less
+                AIN6_range = 0.04 - AIN6_less
+                AIN7_range = 0.04 - AIN7_less
                 
             except Exception as e: 
                 print(e)
@@ -358,14 +305,26 @@ while True:
                 AIN1 = 0
                 AIN2 = 0
                 AIN3 = 0
+                AIN4 = 0
+                AIN5 = 0
+                AIN6 = 0
+                AIN7 = 0
                 AIN0_less = 0
                 AIN1_less = 0
                 AIN2_less = 0
                 AIN3_less = 0
+                AIN4_less = 0
+                AIN5_less = 0
+                AIN6_less = 0
+                AIN7_less = 0
                 AIN0_range = 0
                 AIN1_range = 0
                 AIN2_range = 0
                 AIN3_range = 0
+                AIN4_range = 0
+                AIN5_range = 0
+                AIN6_range = 0
+                AIN7_range = 0
         
         if is_COM_HC:
             try:
@@ -507,15 +466,28 @@ while True:
             except Exception as e: 
                 print(e)
         
-        sql = "UPDATE aqm_sensor_values SET AIN0 = %s, AIN1 = %s, AIN2 = %s, AIN3 = %s, HC = %s, PM25 = %s, PM10 = %s, WS = %s WHERE id = 1"
-        val = (AIN0,AIN1,AIN2,AIN3,HC,PM25,PM10,WS)
+        sql = "UPDATE aqm_sensor_values SET AIN0 = %s, AIN1 = %s, AIN2 = %s, AIN3 = %s, AIN4 = %s, AIN5 = %s, AIN6 = %s, AIN7 = %s, HC = %s, PM25 = %s, PM10 = %s, WS = %s WHERE id = 1"
+        val = (AIN0,AIN1,AIN2,AIN3,AIN4,AIN5,AIN6,AIN7,HC,PM25,PM10,WS)
         mycursor.execute(sql, val)
         mydb.commit()
         
-        print("AIN0 = %f ; AIN1 = %f ; AIN2 = %f ; AIN3 = %f ; HC = %s; PM10 = %s;  PM25 = %s ; WS = %s ; cur_pump_state = %s" % (AIN0,AIN1,AIN2,AIN3,HC,PM10,PM25,WS,cur_pump_state))
-        print("MIN ==> AIN0 = %f ; AIN1 = %f ; AIN2 = %f ; AIN3 = %f " % (AIN0_less,AIN1_less,AIN2_less,AIN3_less))
-        print("RANGE ==> AIN0 = %f ; AIN1 = %f ; AIN2 = %f ; AIN3 = %f " % (AIN0_range,AIN1_range,AIN2_range,AIN3_range))
-        print("=========================================================================================================================");
+        print("PM10 = %s" % (PM10))
+        print("PM25 = %s" % (PM25))
+        print("WS = %s" % (WS))
+        print("HC = %s" % (HC))
+        print("cur_pump_state = %s" % (cur_pump_state))
+        print("---------------------------------------------------------------------------------");
+        print("AIN \t|\t VOLTAGE \t|\t MIN \t\t|\t RANGE \t\t|")
+        print("---------------------------------------------------------------------------------");
+        print("AIN0 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN0,AIN0_less,AIN0_range))
+        print("AIN1 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN1,AIN1_less,AIN1_range))
+        print("AIN2 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN2,AIN2_less,AIN2_range))
+        print("AIN3 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN3,AIN3_less,AIN3_range))
+        print("AIN4 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN4,AIN4_less,AIN4_range))
+        print("AIN5 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN5,AIN5_less,AIN5_range))
+        print("AIN6 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN6,AIN6_less,AIN6_range))
+        print("AIN7 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN7,AIN7_less,AIN7_range))
+        print("=================================================================================");
         
     except Exception as e: 
         print(e)
