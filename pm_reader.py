@@ -5,12 +5,10 @@ from mysql.connector.constants import ClientFlag
 import mysql.connector
 import time
 
-db = open("db.txt", "r").read().split("|")
-
 is_PM_connect = False
 
 try:
-    mydb = mysql.connector.connect(host=db[0],user=db[1],passwd=db[2],database=db[3])
+    mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="trusur_aqm")
     mycursor = mydb.cursor()
     
     print("[V] PM" + sys.argv[1] + " Database CONNECTED")

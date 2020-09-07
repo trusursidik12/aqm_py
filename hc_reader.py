@@ -5,12 +5,10 @@ from mysql.connector.constants import ClientFlag
 import mysql.connector
 import time
 
-db = open("db.txt", "r").read().split("|")
-
 is_HC_connect = False
 
 try:
-    mydb = mysql.connector.connect(host=db[0],user=db[1],passwd=db[2],database=db[3])
+    mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="trusur_aqm")
     mycursor = mydb.cursor()
     mycursor.execute("SELECT id FROM aqm_sensor_values WHERE id=1")
     mycursor.fetchall()
