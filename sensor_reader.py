@@ -136,25 +136,6 @@ except:
     print("    [X] COM_AIRMAR not connected")
     
 try:
-    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_hc'")
-    rec = mycursor.fetchone()
-    for row in rec: serial_port = rec[0]
-    
-    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_hc'")
-    rec = mycursor.fetchone()
-    for row in rec: serial_rate = rec[0]
-    
-    if serial_port != "":
-        COM_HC = serial.Serial(serial_port, serial_rate)
-        is_COM_HC = True
-        print("[V] COM_HC CONNECTED")
-    else:
-        print("    [X] COM_HC not connected")
-        
-except:
-    print("    [X] COM_HC not connected")
-    
-try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pump_pwm'")
     rec = mycursor.fetchone()
     for row in rec: serial_port = rec[0]
