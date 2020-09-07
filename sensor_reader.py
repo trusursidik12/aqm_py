@@ -473,7 +473,7 @@ while True:
         
         print("PM10 = %s" % (PM10))
         print("PM25 = %s" % (PM25))
-        print("WS = %s" % (WS))
+        print("WS = %s" % (WS[0:75]))
         print("HC = %s" % (HC))
         print("cur_pump_state = %s" % (cur_pump_state))
         print("---------------------------------------------------------------------------------");

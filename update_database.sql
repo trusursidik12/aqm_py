@@ -33,9 +33,9 @@ CREATE TABLE `aqm_sensor_values` (
   `AIN6` double DEFAULT '0',
   `AIN7` double DEFAULT '0',
   `HC` double DEFAULT '0',
-  `PM25` varchar(255) DEFAULT '0',
-  `PM10` varchar(255) DEFAULT '0',
-  `WS` text DEFAULT '0',
+  `PM25` varchar(255) DEFAULT '',
+  `PM10` varchar(255) DEFAULT '',
+  `WS` text DEFAULT NULL,
   `xtimestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
