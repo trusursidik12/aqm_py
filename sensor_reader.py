@@ -178,7 +178,7 @@ try:
     if sys.platform.startswith('win'):
         command = "labjack_reader.py"
     else:
-        command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py &"
+        command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py"
 
     subprocess.Popen(command, shell=True)
 except:
@@ -191,7 +191,7 @@ try:
         if sys.platform.startswith('win'):
             command = "pm_reader.py 10"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 10 &"
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 10"
 
         subprocess.Popen(command, shell=True)
 except:
@@ -204,7 +204,7 @@ try:
         if sys.platform.startswith('win'):
             command = "pm_reader.py 25"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 25 &"
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 25"
 
         subprocess.Popen(command, shell=True)
 except:
@@ -217,7 +217,7 @@ try:
         if sys.platform.startswith('win'):
             command = "hc_reader.py"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/hc_reader.py &"
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/hc_reader.py"
 
         subprocess.Popen(command, shell=True)
 except:
@@ -230,7 +230,7 @@ try:
         if sys.platform.startswith('win'):
             command = "ws_davis_reader.py " + rec[0]
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_davis_reader.py " + rec[0] + " &"
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_davis_reader.py " + rec[0] + ""
 
         subprocess.Popen(command, shell=True)
 except:
@@ -243,7 +243,7 @@ try:
         if sys.platform.startswith('win'):
             command = "ws_airmar_reader.py " + rec[0]
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_airmar_reader.py " + rec[0] + " &"
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_airmar_reader.py " + rec[0] + ""
 
         subprocess.Popen(command, shell=True)
 except:
