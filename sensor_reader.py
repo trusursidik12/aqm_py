@@ -173,52 +173,82 @@ AIN5_range = 0
 AIN6_range = 0
 AIN7_range = 0
 
-if sys.platform.startswith('win'):
-    command = "labjack_reader.py"
-else:
-    command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py &"
 
-subprocess.Popen(command, shell=True)
-
-mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm10'")
-rec = mycursor.fetchone()
-if(rec[0] != None and rec[0] != ""):
+try:
     if sys.platform.startswith('win'):
-        command = "pm_reader.py 10"
+        command = "labjack_reader.py"
     else:
-        command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 10 &"
+        command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py"
 
     subprocess.Popen(command, shell=True)
-    
-mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm25'")
-rec = mycursor.fetchone()
-if(rec[0] != None and rec[0] != ""):
-    if sys.platform.startswith('win'):
-        command = "pm_reader.py 25"
-    else:
-        command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 25 &"
+except Exception as e:
+    print(e)
 
-    subprocess.Popen(command, shell=True)
-    
-mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_hc'")
-rec = mycursor.fetchone()
-if(rec[0] != None and rec[0] != ""):
-    if sys.platform.startswith('win'):
-        command = "hc_reader.py"
-    else:
-        command = "echo admin | sudo -S python3.5 ~/aqm_py/hc_reader.py &"
+try:
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm10'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        if sys.platform.startswith('win'):
+            command = "pm_reader.py 10"
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 10"
 
-    subprocess.Popen(command, shell=True)
-    
-mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ws'")
-rec = mycursor.fetchone()
-if(rec[0] != None and rec[0] != ""):
-    if sys.platform.startswith('win'):
-        command = "ws_davis_reader.py " + rec[0]
-    else:
-        command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_davis_reader.py " + rec[0] + " &"
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
 
-    subprocess.Popen(command, shell=True)
+try:    
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm25'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        if sys.platform.startswith('win'):
+            command = "pm_reader.py 25"
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 25"
+
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
+
+try:    
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_hc'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        if sys.platform.startswith('win'):
+            command = "hc_reader.py"
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/hc_reader.py"
+
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
+
+try:        
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ws'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        if sys.platform.startswith('win'):
+            command = "ws_davis_reader.py " + rec[0]
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_davis_reader.py " + rec[0] + ""
+
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
+
+try:        
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_airmar'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        if sys.platform.startswith('win'):
+            command = "ws_airmar_reader.py " + rec[0]
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_airmar_reader.py " + rec[0] + ""
+
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
+
 
 time.sleep(5)
     
@@ -300,27 +330,12 @@ while True:
         except Exception as e:
             HC = "0"
             
-        if is_COM_WS:
-            try:
-                ws_data = COM_WS.get_current_data()
-                WS = ws_data.to_csv(';',False)
-            except Exception as e: 
-                try:
-                    try:
-                        print("Retry COM_WS CONNECTING " + serial_port_WS + " ..")
-                        COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS,serial_rate_WS))
-                        print("[V] COM_WS CONNECTED with " + serial_port_WS)
-                        ws_data = COM_WS.get_current_data()
-                        WS = ws_data.to_csv(';',False)
-                    except:                
-                        print("Retry COM_WS CONNECTING " + serial_port_WS2 + " ..")
-                        COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS2,serial_rate_WS))
-                        print("[V] COM_WS CONNECTED with " + serial_port_WS2)
-                        ws_data = COM_WS.get_current_data()
-                        WS = ws_data.to_csv(';',False)
-                except Exception as e:                    
-                    print(e)
-                    WS = ""
+        try :
+            mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
+            rec = mycursor.fetchone()
+            WS = rec[0]
+        except Exception as e:
+            WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0";
                 
         if is_COM_AIRMAR:
             try:
@@ -416,11 +431,13 @@ while True:
                         Arduino.write(b'j');
             except Exception as e: 
                 print(e)
-        
+                
         sql = "UPDATE aqm_sensor_values SET AIN0 = %s, AIN1 = %s, AIN2 = %s, AIN3 = %s, AIN4 = %s, AIN5 = %s, AIN6 = %s, AIN7 = %s, HC = %s, PM25 = %s, PM10 = %s, WS = %s WHERE id = 1"
         val = (AIN0,AIN1,AIN2,AIN3,AIN4,AIN5,AIN6,AIN7,HC,PM25,PM10,WS)
         mycursor.execute(sql, val)
         mydb.commit()
+        
+        
         
         print("PM10 = %s" % (PM10.replace("\r\n","")))
         print("PM25 = %s" % (PM25.replace("\r\n","")))
