@@ -86,37 +86,6 @@ for port in serial_ports():
     mydb.commit()
     
 try:
-    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ws'")
-    rec = mycursor.fetchone()
-    for row in rec: serial_port_WS = rec[0]
-    
-    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_ws'")
-    rec = mycursor.fetchone()
-    for row in rec: serial_rate_WS = rec[0]
-    
-    if serial_port_WS != "":
-        if ";" in serial_port_WS:
-            serial_port_WS2 = serial_port_WS.split(';')[1];
-            serial_port_WS = serial_port_WS.split(';')[0];
-            try:
-                COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS,serial_rate_WS))
-                is_COM_WS = True
-                print("[V] COM_WS CONNECTED with " + serial_port_WS)
-            except:                
-                COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS2,serial_rate_WS))
-                is_COM_WS = True
-                print("[V] COM_WS CONNECTED with " + serial_port_WS2)
-        else:
-            COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS,serial_rate_WS))
-            is_COM_WS = True
-            print("[V] COM_WS CONNECTED")
-    else:
-        print("    [X] COM_WS not connected")
-    
-except:
-    print("    [X] COM_WS not connected")
-    
-try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_airmar'")
     rec = mycursor.fetchone()
     for row in rec: serial_port = rec[0]
@@ -240,6 +209,28 @@ if(rec[0] != None and rec[0] != ""):
         command = "echo admin | sudo -S python3.5 ~/aqm_py/hc_reader.py &"
 
     subprocess.Popen(command, shell=True)
+    
+mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ws'")
+rec = mycursor.fetchone()
+if(rec[0] != None and rec[0] != ""):
+    if sys.platform.startswith('win'):
+        command = "ws_davis_reader.py " + rec[0]
+    else:
+        command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_davis_reader.py " + rec[0] + " &"
+
+    subprocess.Popen(command, shell=True)
+
+time.sleep(5)
+    
+mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_airmar'")
+rec = mycursor.fetchone()
+if(rec[0] != None and rec[0] != ""):
+    if sys.platform.startswith('win'):
+        command = "ws_airmar_reader.py " + rec[0]
+    else:
+        command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_airmar_reader.py " + rec[0] + " &"
+
+    subprocess.Popen(command, shell=True)
 
 time.sleep(5)
     
@@ -321,27 +312,12 @@ while True:
         except Exception as e:
             HC = "0"
             
-        if is_COM_WS:
-            try:
-                ws_data = COM_WS.get_current_data()
-                WS = ws_data.to_csv(';',False)
-            except Exception as e: 
-                try:
-                    try:
-                        print("Retry COM_WS CONNECTING " + serial_port_WS + " ..")
-                        COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS,serial_rate_WS))
-                        print("[V] COM_WS CONNECTED with " + serial_port_WS)
-                        ws_data = COM_WS.get_current_data()
-                        WS = ws_data.to_csv(';',False)
-                    except:                
-                        print("Retry COM_WS CONNECTING " + serial_port_WS2 + " ..")
-                        COM_WS = VantagePro2.from_url("serial:%s:%s:8N1" % (serial_port_WS2,serial_rate_WS))
-                        print("[V] COM_WS CONNECTED with " + serial_port_WS2)
-                        ws_data = COM_WS.get_current_data()
-                        WS = ws_data.to_csv(';',False)
-                except Exception as e:                    
-                    print(e)
-                    WS = ""
+        try :
+            mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
+            rec = mycursor.fetchone()
+            WS = rec[0]
+        except Exception as e:
+            WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0";
                 
         if is_COM_AIRMAR:
             try:
@@ -410,6 +386,11 @@ while True:
             except Exception as e: 
                 print(e)
                 WS = ""
+                
+            sql = "UPDATE aqm_sensor_values SET WS = %s WHERE id = 1"
+            val = (WS)
+            mycursor.execute(sql, val)
+            mydb.commit()
             
         if is_Pump_pwm:
             try:
@@ -438,10 +419,7 @@ while True:
             except Exception as e: 
                 print(e)
         
-        sql = "UPDATE aqm_sensor_values SET AIN0 = %s, AIN1 = %s, AIN2 = %s, AIN3 = %s, AIN4 = %s, AIN5 = %s, AIN6 = %s, AIN7 = %s, HC = %s, PM25 = %s, PM10 = %s, WS = %s WHERE id = 1"
-        val = (AIN0,AIN1,AIN2,AIN3,AIN4,AIN5,AIN6,AIN7,HC,PM25,PM10,WS)
-        mycursor.execute(sql, val)
-        mydb.commit()
+        
         
         print("PM10 = %s" % (PM10.replace("\r\n","")))
         print("PM25 = %s" % (PM25.replace("\r\n","")))
