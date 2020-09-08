@@ -5,6 +5,8 @@ import mysql.connector
 import time
 import serial
 
+is_WS_connect = False
+
 try:
     mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="trusur_aqm")
     mycursor = mydb.cursor()
@@ -13,15 +15,48 @@ try:
 except Exception as e: 
     print("[X]  AIRMAR " + e)
     
+def connect_ws():
+    global is_WS_connect
+    try:
+        mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_airmar'")
+        rec = mycursor.fetchone()
+        for row in rec: serial_port = rec[0]
+        
+        mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_airmar'")
+        rec = mycursor.fetchone()
+        for row in rec: baudrate = rec[0]
+        
+        try:
+            COM_WS = serial.Serial(serial_port, baudrate)
+            i = 0
+            ws_data = ""
+            while i <= 12:
+                ws_data = ws_data + str(COM_WS.readline());
+                i += 1
+            
+            WIMDA = ws_data.split("$WIMDA,")[1];
+            WIMDA = WIMDA.split("\\r\\n")[0];
+            
+            if(WIMDA != ""):
+                is_WS_connect = True
+                return COM_WS
+            else:
+                is_WS_connect = False
+                return None
+                
+        except:
+            is_WS_connect = False
+            return None
+            
+    except Exception as e: 
+        return None
+    
 try:
     while True :
-        try:    
-            if len(sys.argv) > 2:
-                baudrate = sys.argv[2];
-            else :
-                baudrate = 4800;
-                
-            COM_WS = serial.Serial(sys.argv[1], baudrate)
+        try:
+            if(not is_WS_connect):
+                COM_WS = connect_ws()
+        
             i = 0
             ws_data = ""
             while i <= 12:
@@ -77,19 +112,25 @@ try:
                 
             WS = ";0;" + barometer + ";" + temp + ";" + humidity + ";" + temp + ";" + windspeed + ";" + windspeed + ";" + winddir + ";" + humidity + ";" + rainrate + ";0;" + solarrad + ";0.0;0;" + rainrate + ";" + lat + ";" + lon;
                 
+            sql = "UPDATE aqm_sensor_values SET WS = '" + WS + "' WHERE id = 1"
+            mycursor.execute(sql)
+            mydb.commit() 
+            
             sql = "UPDATE aqm_configuration SET content='" + lat + "' WHERE data = 'sta_lat'";
             mycursor.execute(sql)
             mydb.commit()
             sql = "UPDATE aqm_configuration SET content='" + lon + "' WHERE data = 'sta_lon'";
             mycursor.execute(sql)
+            mydb.commit()           
+            #print(WS)
+        except Exception as e2: 
+            is_WS_connect = False
+            print("Reconnect WS AIRMAR");
+            sql = "UPDATE aqm_sensor_values SET WS = ';0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0' WHERE id = 1"
+            mycursor.execute(sql)
             mydb.commit()
-        except:
-            WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0";
-            
-        sql = "UPDATE aqm_sensor_values SET WS = '" + WS + "' WHERE id = 1"
-        mycursor.execute(sql)
-        mydb.commit()
         
         time.sleep(1)
+        
 except Exception as e: 
     print(e)

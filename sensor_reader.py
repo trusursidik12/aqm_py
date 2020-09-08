@@ -228,9 +228,9 @@ try:
     rec = mycursor.fetchone()
     if(rec[0] != None and rec[0] != ""):
         if sys.platform.startswith('win'):
-            command = "ws_davis_reader.py " + rec[0]
+            command = "ws_davis_reader.py"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_davis_reader.py " + rec[0] + ""
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_davis_reader.py"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -241,9 +241,9 @@ try:
     rec = mycursor.fetchone()
     if(rec[0] != None and rec[0] != ""):
         if sys.platform.startswith('win'):
-            command = "ws_airmar_reader.py " + rec[0]
+            command = "ws_airmar_reader.py"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_airmar_reader.py " + rec[0] + ""
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_airmar_reader.py"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
