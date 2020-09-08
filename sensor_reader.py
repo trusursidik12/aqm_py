@@ -181,8 +181,8 @@ try:
         command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py"
 
     subprocess.Popen(command, shell=True)
-except:
-    print(command)
+except Exception as e:
+    print(e)
 
 try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm10'")
@@ -194,8 +194,8 @@ try:
             command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 10"
 
         subprocess.Popen(command, shell=True)
-except:
-    print(command)
+except Exception as e:
+    print(e)
 
 try:    
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm25'")
@@ -207,8 +207,8 @@ try:
             command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 25"
 
         subprocess.Popen(command, shell=True)
-except:
-    print(command)
+except Exception as e:
+    print(e)
 
 try:    
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_hc'")
@@ -220,8 +220,8 @@ try:
             command = "echo admin | sudo -S python3.5 ~/aqm_py/hc_reader.py"
 
         subprocess.Popen(command, shell=True)
-except:
-    print(command)
+except Exception as e:
+    print(e)
 
 try:        
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ws'")
@@ -233,8 +233,8 @@ try:
             command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_davis_reader.py " + rec[0] + ""
 
         subprocess.Popen(command, shell=True)
-except:
-    print(command)
+except Exception as e:
+    print(e)
 
 try:        
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_airmar'")
@@ -246,8 +246,8 @@ try:
             command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_airmar_reader.py " + rec[0] + ""
 
         subprocess.Popen(command, shell=True)
-except:
-    print(command)
+except Exception as e:
+    print(e)
 
 
 time.sleep(5)
