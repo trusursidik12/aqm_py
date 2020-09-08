@@ -473,7 +473,18 @@ while True:
                     mydb.commit()
                     time.sleep(10)
                     break
-                break
+                
+                try :
+                    mycursor.execute("SELECT PM10 FROM aqm_sensor_values WHERE id = '1'")
+                    rec = mycursor.fetchone()
+                    PM10 = rec[0]
+                except Exception as e:
+                    PM10 = "b'000.000,0.0,+0.0,0,0,00,*0\\r\\n'"
+                    
+                if(PM10[0:13] != "b'000.000,0.0"):
+                    i_retry_PM10 = 0
+                    retry_PM10.clear()
+                    break
                 
                 
         if(is_COM_PM25 and PM25[0:13] != "b'000.000,0.0"):
@@ -495,7 +506,18 @@ while True:
                     mydb.commit()
                     time.sleep(10)
                     break
-                break
+                
+                try :
+                    mycursor.execute("SELECT PM25 FROM aqm_sensor_values WHERE id = '1'")
+                    rec = mycursor.fetchone()
+                    PM25 = rec[0]
+                except Exception as e:
+                    PM25 = "b'000.000,0.0,+0.0,0,0,00,*0\\r\\n'"
+                    
+                if(PM25[0:13] != "b'000.000,0.0"):
+                    i_retry_PM25 = 0
+                    retry_PM25.clear()
+                    break
                 
                 
         if(is_COM_HC and HC > -1):
@@ -517,8 +539,18 @@ while True:
                     mydb.commit()
                     time.sleep(10)
                     break
-                break
                 
+                try :
+                    mycursor.execute("SELECT HC FROM aqm_sensor_values WHERE id = '1'")
+                    rec = mycursor.fetchone()
+                    HC = rec[0]
+                except Exception as e:
+                    HC = "-1"
+                    
+                if(HC > -1):
+                    i_retry_HC = 0
+                    retry_HC.clear()
+                    break
                 
         if(is_COM_WS and WS != ""):
             i_retry_WS = 0
