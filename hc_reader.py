@@ -10,11 +10,6 @@ is_HC_connect = False
 try:
     mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="trusur_aqm")
     mycursor = mydb.cursor()
-    mycursor.execute("SELECT id FROM aqm_sensor_values WHERE id=1")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_sensor_values (id) VALUES (1)")
-        mydb.commit()
     
     print("[V] HC Database CONNECTED")
 except Exception as e: 
@@ -64,7 +59,7 @@ try:
         except Exception as e2: 
             is_HC_connect = False
             print("Reconnect HC");
-            sql = "UPDATE aqm_sensor_values SET HC = '0' WHERE id = 1"
+            sql = "UPDATE aqm_sensor_values SET HC = '-1' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
         

@@ -29,10 +29,18 @@ is_COM_WS = False
 is_COM_AIRMAR = False
 is_Arduino = False
 is_Pump_pwm = False
-serial_port_WS = ""
-serial_rate_WS = ""
-serial_port_WS2 = ""
-used_ports = []
+
+i_retry_PM10 = 0
+i_retry_PM25 = 0
+i_retry_HC = 0
+i_retry_WS = 0
+i_retry_AIRMAR = 0
+
+retry_PM10 = []
+retry_PM25 = []
+retry_HC = []
+retry_WS = []
+retry_AIRMAR = []
 
 
 def serial_ports():
@@ -59,10 +67,8 @@ try:
     mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="trusur_aqm")
     mycursor = mydb.cursor()
     mycursor.execute("DELETE FROM aqm_sensor_values WHERE id=1")
-    mycursor.fetchall()
-    if mycursor.rowcount <= 0:    
-        mycursor.execute("INSERT INTO aqm_sensor_values (id) VALUES (1)")
-        mydb.commit()
+    mycursor.execute("INSERT INTO aqm_sensor_values (id) VALUES (1)")
+    mydb.commit()
     
     print("[V] Database CONNECTED")
 except Exception as e: 
@@ -188,6 +194,8 @@ try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm10'")
     rec = mycursor.fetchone()
     if(rec[0] != None and rec[0] != ""):
+        is_COM_PM10 = True
+        i_retry_PM10 = 0
         if sys.platform.startswith('win'):
             command = "pm_reader.py 10"
         else:
@@ -201,6 +209,8 @@ try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm25'")
     rec = mycursor.fetchone()
     if(rec[0] != None and rec[0] != ""):
+        is_COM_PM25 = True
+        i_retry_PM25 = 0
         if sys.platform.startswith('win'):
             command = "pm_reader.py 25"
         else:
@@ -214,6 +224,8 @@ try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_hc'")
     rec = mycursor.fetchone()
     if(rec[0] != None and rec[0] != ""):
+        is_COM_HC = True
+        i_retry_HC = 0
         if sys.platform.startswith('win'):
             command = "hc_reader.py"
         else:
@@ -227,6 +239,8 @@ try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ws'")
     rec = mycursor.fetchone()
     if(rec[0] != None and rec[0] != ""):
+        is_COM_WS = True
+        i_retry_WS = 0
         if sys.platform.startswith('win'):
             command = "ws_davis_reader.py"
         else:
@@ -240,6 +254,8 @@ try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_airmar'")
     rec = mycursor.fetchone()
     if(rec[0] != None and rec[0] != ""):
+        is_COM_AIRMAR = True
+        i_retry_AIRMAR = 0
         if sys.platform.startswith('win'):
             command = "ws_airmar_reader.py"
         else:
@@ -438,6 +454,94 @@ while True:
         mydb.commit()
         
         
+        if(is_COM_PM10 and PM10[0:13] != "b'000.000,0.0"):
+            i_retry_PM10 = 0
+            retry_PM10.clear()
+            
+        if(is_COM_PM10 and PM10[0:13] == "b'000.000,0.0" and i_retry_PM10 <= 5 ):
+            i_retry_PM10 = i_retry_PM10 + 1
+            
+        if(i_retry_PM10 > 5):
+            i_retry_PM10 = 0
+            print("Try Connecting PM10");
+            for port in serial_ports():
+                print("Try PORT PM10: " + port)
+                if port not in retry_PM10:
+                    retry_PM10.append(port)
+                    sql = "UPDATE aqm_configuration SET content = '" + port + "' WHERE data = 'com_pm10'"
+                    mycursor.execute(sql)
+                    mydb.commit()
+                    time.sleep(10)
+                    break
+                break
+                
+                
+        if(is_COM_PM25 and PM25[0:13] != "b'000.000,0.0"):
+            i_retry_PM25 = 0
+            retry_PM25.clear()
+            
+        if(is_COM_PM25 and PM25[0:13] == "b'000.000,0.0" and i_retry_PM25 <= 5 ):
+            i_retry_PM25 = i_retry_PM25 + 1
+            
+        if(i_retry_PM25 > 5):
+            i_retry_PM25 = 0
+            print("Try Connecting PM25");
+            for port in serial_ports():
+                print("Try PORT PM25: " + port)
+                if port not in retry_PM25:
+                    retry_PM25.append(port)
+                    sql = "UPDATE aqm_configuration SET content = '" + port + "' WHERE data = 'com_PM25'"
+                    mycursor.execute(sql)
+                    mydb.commit()
+                    time.sleep(10)
+                    break
+                break
+                
+                
+        if(is_COM_HC and HC > -1):
+            i_retry_HC = 0
+            retry_HC.clear()
+            
+        if(is_COM_HC and HC == -1 and i_retry_HC <= 5 ):
+            i_retry_HC = i_retry_HC + 1
+            
+        if(i_retry_HC > 5):
+            i_retry_HC = 0
+            print("Try Connecting HC");
+            for port in serial_ports():
+                print("Try PORT HC: " + port)
+                if port not in retry_HC:
+                    retry_HC.append(port)
+                    sql = "UPDATE aqm_configuration SET content = '" + port + "' WHERE data = 'com_HC'"
+                    mycursor.execute(sql)
+                    mydb.commit()
+                    time.sleep(10)
+                    break
+                break
+                
+                
+        if(is_COM_WS and WS != ""):
+            i_retry_WS = 0
+            retry_WS.clear()
+            
+        if(is_COM_WS and WS == "" and i_retry_WS <= 5 ):
+            i_retry_WS = i_retry_WS + 1
+            
+        if(i_retry_WS > 5):
+            i_retry_WS = 0
+            print("Try Connecting WS");
+            for port in serial_ports():
+                print("Try PORT WS: " + port)
+                if port not in retry_WS:
+                    retry_WS.append(port)
+                    sql = "UPDATE aqm_configuration SET content = '" + port + "' WHERE data = 'com_WS'"
+                    mycursor.execute(sql)
+                    mydb.commit()
+                    time.sleep(10)
+                    break
+                break
+                
+            
         
         print("PM10 = %s" % (PM10.replace("\r\n","")))
         print("PM25 = %s" % (PM25.replace("\r\n","")))
