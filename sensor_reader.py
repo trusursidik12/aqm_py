@@ -223,32 +223,6 @@ try:
 except Exception as e:
     print(e)
 
-try:        
-    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ws'")
-    rec = mycursor.fetchone()
-    if(rec[0] != None and rec[0] != ""):
-        if sys.platform.startswith('win'):
-            command = "ws_davis_reader.py " + rec[0]
-        else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_davis_reader.py " + rec[0] + ""
-
-        subprocess.Popen(command, shell=True)
-except Exception as e:
-    print(e)
-
-try:        
-    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_airmar'")
-    rec = mycursor.fetchone()
-    if(rec[0] != None and rec[0] != ""):
-        if sys.platform.startswith('win'):
-            command = "ws_airmar_reader.py " + rec[0]
-        else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_airmar_reader.py " + rec[0] + ""
-
-        subprocess.Popen(command, shell=True)
-except Exception as e:
-    print(e)
-
 
 time.sleep(5)
     
