@@ -552,11 +552,11 @@ while True:
                     retry_HC.clear()
                     break
                 
-        if(is_COM_WS and WS != ""):
+        if(is_COM_WS and WS != ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0"):
             i_retry_WS = 0
             retry_WS.clear()
             
-        if(is_COM_WS and WS == "" and i_retry_WS <= 5 ):
+        if(is_COM_WS and WS == ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0" and i_retry_WS <= 5 ):
             i_retry_WS = i_retry_WS + 1
             
         if(i_retry_WS > 5):
