@@ -48,12 +48,16 @@ try:
             if(PM.count(",") != 6):
                 PM = "b'000.000,0.0,+0.0,0,0,00,*0\\r\\n'"
                 
+            if((float(PM[2:9]) * 1000) > 700):
+                PM = "b'000.700," + PM[10:len(PM)]
+                
             sql = "UPDATE aqm_sensor_values SET PM" + sys.argv[1] + " = '" + PM.replace("'","''") + "' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
             
             #print(PM)
-        except Exception as e2: 
+        except Exception as e2:
+            print(e2)
             is_PM_connect = False
             print("Reconnect PM" + sys.argv[1]);
             sql = "UPDATE aqm_sensor_values SET PM" + sys.argv[1] + " = '" + "b''000.000,0.0,+0.0,0,0,00,*0\\r\\n''" + "' WHERE id = 1"
