@@ -588,7 +588,11 @@ while True:
         
         print("PM10 = %s" % (PM10.replace("\r\n","")))
         print("PM25 = %s" % (PM25.replace("\r\n","")))
-        print("WS = %s" % (WS[0:75]))
+        try:
+            print("WS = %s" % (WS[0:75]))
+        except Exception as e:
+            print("WS = 0")
+
         print("HC = %s" % (HC))
         print("cur_pump_state = %s" % (cur_pump_state))
         print("--------------------------------------------------------------------------------");
