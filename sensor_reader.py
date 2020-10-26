@@ -162,14 +162,14 @@ try:
 except:
     print("    [X] ARDUINO not connected")
 
-AIN1_less = 9999999
-AIN0_less = 9999999
-AIN2_less = 9999999
-AIN3_less = 9999999
-AIN4_less = 9999999
-AIN5_less = 9999999
-AIN6_less = 9999999
-AIN7_less = 9999999
+AIN1_less = 9999999999999
+AIN0_less = 9999999999999
+AIN2_less = 9999999999999
+AIN3_less = 9999999999999
+AIN4_less = 9999999999999
+AIN5_less = 9999999999999
+AIN6_less = 9999999999999
+AIN7_less = 9999999999999
 AIN0_range = 0
 AIN1_range = 0
 AIN2_range = 0
@@ -281,14 +281,30 @@ while True:
             AIN5 = float(rec[5])
             AIN6 = float(rec[6])
             AIN7 = float(rec[7])
-            if AIN0 < 0: AIN0 = 0
-            if AIN1 < 0: AIN1 = 0
-            if AIN2 < 0: AIN2 = 0
-            if AIN3 < 0: AIN3 = 0
-            if AIN4 < 0: AIN4 = 0
-            if AIN5 < 0: AIN5 = 0
-            if AIN6 < 0: AIN6 = 0
-            if AIN7 < 0: AIN7 = 0
+            if AIN0 < 0: 
+                AIN0 = 0
+                AIN0_less = 0
+            if AIN1 < 0: 
+                AIN1 = 0
+                AIN1_less = 0
+            if AIN2 < 0: 
+                AIN2 = 0
+                AIN2_less = 0
+            if AIN3 < 0: 
+                AIN3 = 0
+                AIN3_less = 0
+            if AIN4 < 0: 
+                AIN4 = 0
+                AIN4_less = 0
+            if AIN5 < 0: 
+                AIN5 = 0
+                AIN5_less = 0
+            if AIN6 < 0: 
+                AIN6 = 0
+                AIN6_less = 0
+            if AIN7 < 0: 
+                AIN7 = 0
+                AIN7_less = 0
             if AIN0_less > AIN0 and AIN0 > 0: AIN0_less = AIN0
             if AIN1_less > AIN1 and AIN1 > 0: AIN1_less = AIN1
             if AIN2_less > AIN2 and AIN2 > 0: AIN2_less = AIN2
