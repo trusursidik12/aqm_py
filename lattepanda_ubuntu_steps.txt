@@ -114,3 +114,11 @@ sudo apt-get update; \
 sudo apt-get install -y apt-transport-https && \
 sudo apt-get update && \
 sudo apt-get install -y dotnet-sdk-3.1
+
+
+MODBUS
+======
+###https://maker.pro/raspberry-pi/tutorial/a-custom-rs485-hat-to-use-modbus-with-raspberry-pi
+pip3 install --upgrade pip
+pip3 install pymodbus
+
