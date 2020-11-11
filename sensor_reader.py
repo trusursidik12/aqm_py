@@ -499,7 +499,7 @@ while True:
         # val = (AIN0,AIN1,AIN2,AIN3,AIN4,AIN5,AIN6,AIN7,HC,PM25,PM10,WS)
         # mycursor.execute(sql, val)
         # mycursor.execute("SELECT * FROM aqm_sensor_values WHERE id = '1'")
-        # mydb.commit()
+        mydb.commit()
         
         
         
