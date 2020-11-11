@@ -401,7 +401,7 @@ while True:
             rec = mycursor.fetchone()
             WS = rec[0]
         except Exception as e:
-            WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0;XXX";
+            WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0";
                 
         if is_COM_AIRMAR:
             try:
@@ -498,10 +498,10 @@ while True:
             except Exception as e: 
                 print(e)
                 
-        sql = "UPDATE aqm_sensor_values SET AIN0 = %s, AIN1 = %s, AIN2 = %s, AIN3 = %s, AIN4 = %s, AIN5 = %s, AIN6 = %s, AIN7 = %s, HC = %s, PM25 = %s, PM10 = %s, WS = %s WHERE id = 1"
-        val = (AIN0,AIN1,AIN2,AIN3,AIN4,AIN5,AIN6,AIN7,HC,PM25,PM10,WS)
-        mycursor.execute(sql, val)
-        mydb.commit()
+        # sql = "UPDATE aqm_sensor_values SET AIN0 = %s, AIN1 = %s, AIN2 = %s, AIN3 = %s, AIN4 = %s, AIN5 = %s, AIN6 = %s, AIN7 = %s, HC = %s, PM25 = %s, PM10 = %s, WS = %s WHERE id = 1"
+        # val = (AIN0,AIN1,AIN2,AIN3,AIN4,AIN5,AIN6,AIN7,HC,PM25,PM10,WS)
+        # mycursor.execute(sql, val)
+        # mydb.commit()
         
         
         if(is_COM_PM10 and PM10[0:13] != "b'000.000,0.0"):
