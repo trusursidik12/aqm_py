@@ -17,6 +17,7 @@ except Exception as e:
 VENDOR = 0x1941
 PRODUCT = 0x8021
 WIND_DIRS = [0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5]
+is_WS_connect = False
 
 def open_ws():
     global is_WS_connect
