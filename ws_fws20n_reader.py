@@ -23,14 +23,22 @@ def open_ws():
     usb_device = usb.core.find(idVendor=VENDOR, idProduct=PRODUCT)
     if usb_device is None:
         raise ValueError('Device not found')
+        is_WS_connect = False
+        return None
+    else:    
+        try:
+            usb_device.get_active_configuration()
 
-    usb_device.get_active_configuration()
+            if usb_device.is_kernel_driver_active(0):
+                usb_device.detach_kernel_driver(0)
 
-    if usb_device.is_kernel_driver_active(0):
-        usb_device.detach_kernel_driver(0)
-
-    is_WS_connect = True
-    return usb_device
+            is_WS_connect = True
+            time.sleep(3)
+            return usb_device
+        except Exception as e:
+            is_WS_connect = False
+            return None
+        
 
 
 def read_block(device, offset):
@@ -41,9 +49,6 @@ def read_block(device, offset):
     timeout = 1000  # Milliseconds
     retval = dev.ctrl_transfer(0x21, 0x09, 0x200, 0, tbuf, timeout)
     return dev.read(0x81, 32, timeout)
-
-#dev = open_ws()
-#dev.set_configuration()
 
 try:
     while True:
