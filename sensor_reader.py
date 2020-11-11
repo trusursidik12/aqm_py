@@ -67,15 +67,15 @@ def serial_ports():
 try:
     mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="trusur_aqm")
     mycursor = mydb.cursor()
-    mycursor.execute("DELETE FROM aqm_sensor_values WHERE id=1")
-    mycursor.execute("INSERT INTO aqm_sensor_values (id) VALUES (1)")
-    mydb.commit()
-    
     
     mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
     rec = mycursor.fetchone()
     WS = rec[0]
     print(WS)
+    
+    mycursor.execute("DELETE FROM aqm_sensor_values WHERE id=1")
+    mycursor.execute("INSERT INTO aqm_sensor_values (id) VALUES (1)")
+    mydb.commit()
     
     print("[V] Database CONNECTED")
 except Exception as e: 
