@@ -30,8 +30,7 @@ def open_ws():
         if usb_device.is_kernel_driver_active(0):
             usb_device.detach_kernel_driver(0)
 
-        is_WS_connect = True
-        time.sleep(3)
+        time.sleep(5)
         return usb_device
     except Exception as e:
         is_WS_connect = False
@@ -59,6 +58,8 @@ try:
 
             if (fixed_block[0] != 0x55):
                 raise ValueError('Bad data returned')
+            else:
+                is_WS_connect = True
 
             curpos = struct.unpack('H', fixed_block[30:32])[0]
             current_block = read_block(dev, curpos)
@@ -98,7 +99,7 @@ try:
             mydb.commit()
         except Exception as e2: 
             is_WS_connect = False
-            print("Reconnect WS FWS20N");
+            print("Reconnect WS FWS20N : " + e2);
             sql = "UPDATE aqm_sensor_values SET WS = ';0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
