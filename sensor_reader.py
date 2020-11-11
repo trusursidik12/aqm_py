@@ -641,11 +641,11 @@ while True:
         try :
             mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
             rec = mycursor.fetchone()
+            print(rec)
             WS = rec[0]
-        except Exception as e:
+        except Exception as ex:
+            print(ex)
             WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0"
-            
-        print(WS)
             
             
         print("PM10 = %s" % (PM10.replace("\r\n","")))
