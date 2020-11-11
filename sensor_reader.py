@@ -19,11 +19,13 @@ AIN7 = 0
 HC = "0"
 PM10 = ""
 PM25 = ""
+PM_SDS019 = ""
 WS = ""
 pump_speed = 0
 cur_pump_state = "0"
 is_COM_PM10 = False
 is_COM_PM25 = False
+is_COM_SDS019 = False
 is_COM_HC = False
 is_COM_WS = False
 is_COM_AIRMAR = False
@@ -32,12 +34,14 @@ is_Pump_pwm = False
 
 i_retry_PM10 = 0
 i_retry_PM25 = 0
+i_retry_SDS019 = 0
 i_retry_HC = 0
 i_retry_WS = 0
 i_retry_AIRMAR = 0
 
 retry_PM10 = []
 retry_PM25 = []
+retry_SDS019 = []
 retry_HC = []
 retry_WS = []
 retry_AIRMAR = []
@@ -215,6 +219,21 @@ try:
             command = "pm_reader.py 25"
         else:
             command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 25"
+
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
+    
+try:    
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm_sds019'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        is_COM_SDS019 = True
+        i_retry_SDS019 = 0
+        if sys.platform.startswith('win'):
+            command = "pm_sds019_reader.py"
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_sds019_reader.py"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:

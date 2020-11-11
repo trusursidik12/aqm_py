@@ -21,12 +21,12 @@ except Exception as e:
 def connect_pm():
     global is_PM_connect
     try:
-        mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm25'")
+        mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm_sds019'")
         rec = mycursor.fetchone()
         for row in rec:
             serial_port = rec[0]
 
-        mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_pm25'")
+        mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_pm_sds019'")
         rec = mycursor.fetchone()
         for row in rec:
             serial_rate = rec[0]

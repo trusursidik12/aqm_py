@@ -91,3 +91,8 @@ DELETE FROM aqm_params WHERE param_id='tsp';
 INSERT INTO aqm_params (param_id,caption,default_unit,molecular_mass,formula,is_view) VALUES ('tsp','TSP','ug/m3','0','round(explode(",",$PM25)[2]/1000,4)','1');
 ALTER TABLE aqm_data_log ADD COLUMN IF NOT EXISTS tsp DOUBLE NULL AFTER pm25;
 ALTER TABLE aqm_data ADD COLUMN IF NOT EXISTS tsp DOUBLE DEFAULT '0' AFTER pm25;
+
+DELETE FROM aqm_configuration WHERE data='com_pm_sds019';
+INSERT INTO aqm_configuration (data,content) VALUES ('com_pm_sds019','');
+DELETE FROM aqm_configuration WHERE data='baud_pm_sds019';
+INSERT INTO aqm_configuration (data,content) VALUES ('baud_pm_sds019','9600');
