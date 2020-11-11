@@ -610,32 +610,34 @@ while True:
             i_retry_WS = i_retry_WS + 1
             
         if(i_retry_WS > 5):
-            i_retry_WS = 0
-            print("Try Connecting WS");
-            for port in serial_ports():
-                print("Try PORT WS: " + port)
-                if port not in retry_WS:
-                    retry_WS.append(port)
-                    sql = "UPDATE aqm_configuration SET content = '" + port + "' WHERE data = 'com_WS'"
-                    mycursor.execute(sql)
-                    mydb.commit()
-                    time.sleep(10)
-                    break
-                
-                try :
-                    mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
-                    rec = mycursor.fetchone()
-                    WS = rec[0]
-                except Exception as e:
-                    WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0"
+            mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ws'")
+            rec = mycursor.fetchone()
+            if(rec[0] != "pce_fws20n"):
+                i_retry_WS = 0
+                print("Try Connecting WS");
+                for port in serial_ports():
+                    print("Try PORT WS: " + port)
+                    if port not in retry_WS:
+                        retry_WS.append(port)
+                        sql = "UPDATE aqm_configuration SET content = '" + port + "' WHERE data = 'com_WS'"
+                        mycursor.execute(sql)
+                        mydb.commit()
+                        time.sleep(10)
+                        break
                     
-                if(WS != ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0"):
-                    i_retry_WS = 0
-                    retry_WS.clear()
-                    break
-                
-            
-        
+                    try :
+                        mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
+                        rec = mycursor.fetchone()
+                        WS = rec[0]
+                    except Exception as e:
+                        WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0"
+                        
+                    if(WS != ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0"):
+                        i_retry_WS = 0
+                        retry_WS.clear()
+                        break
+                        
+                            
         print("PM10 = %s" % (PM10.replace("\r\n","")))
         print("PM25 = %s" % (PM25.replace("\r\n","")))
         try:
