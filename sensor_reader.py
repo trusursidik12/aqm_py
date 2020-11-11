@@ -645,6 +645,8 @@ while True:
         except Exception as e:
             WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0"
             
+        print(WS)
+            
             
         print("PM10 = %s" % (PM10.replace("\r\n","")))
         print("PM25 = %s" % (PM25.replace("\r\n","")))
