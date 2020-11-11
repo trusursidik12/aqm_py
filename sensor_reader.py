@@ -401,7 +401,7 @@ while True:
             rec = mycursor.fetchone()
             WS = rec[0]
         except Exception as e:
-            WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0";
+            WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0;XXX";
                 
         if is_COM_AIRMAR:
             try:
