@@ -399,6 +399,7 @@ while True:
         try :
             mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
             rec = mycursor.fetchone()
+            print(rec)
             WS = rec[0]
         except Exception as e:
             WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0";
@@ -504,150 +505,10 @@ while True:
         # mydb.commit()
         
         
-        if(is_COM_PM10 and PM10[0:13] != "b'000.000,0.0"):
-            i_retry_PM10 = 0
-            retry_PM10.clear()
-            
-        if(is_COM_PM10 and PM10[0:13] == "b'000.000,0.0" and i_retry_PM10 <= 5 ):
-            i_retry_PM10 = i_retry_PM10 + 1
-            
-        if(i_retry_PM10 > 5):
-            i_retry_PM10 = 0
-            print("Try Connecting PM10");
-            for port in serial_ports():
-                print("Try PORT PM10: " + port)
-                if port not in retry_PM10:
-                    retry_PM10.append(port)
-                    sql = "UPDATE aqm_configuration SET content = '" + port + "' WHERE data = 'com_pm10'"
-                    mycursor.execute(sql)
-                    mydb.commit()
-                    time.sleep(10)
-                    break
-                
-                try :
-                    mycursor.execute("SELECT PM10 FROM aqm_sensor_values WHERE id = '1'")
-                    rec = mycursor.fetchone()
-                    PM10 = rec[0]
-                except Exception as e:
-                    PM10 = "b'000.000,0.0,+0.0,0,0,00,*0\\r\\n'"
-                    
-                if(PM10[0:13] != "b'000.000,0.0"):
-                    i_retry_PM10 = 0
-                    retry_PM10.clear()
-                    break
-                
-                
-        if(is_COM_PM25 and PM25[0:13] != "b'000.000,0.0"):
-            i_retry_PM25 = 0
-            retry_PM25.clear()
-            
-        if(is_COM_PM25 and PM25[0:13] == "b'000.000,0.0" and i_retry_PM25 <= 5 ):
-            i_retry_PM25 = i_retry_PM25 + 1
-            
-        if(i_retry_PM25 > 5):
-            i_retry_PM25 = 0
-            print("Try Connecting PM25");
-            for port in serial_ports():
-                print("Try PORT PM25: " + port)
-                if port not in retry_PM25:
-                    retry_PM25.append(port)
-                    sql = "UPDATE aqm_configuration SET content = '" + port + "' WHERE data = 'com_PM25'"
-                    mycursor.execute(sql)
-                    mydb.commit()
-                    time.sleep(10)
-                    break
-                
-                try :
-                    mycursor.execute("SELECT PM25 FROM aqm_sensor_values WHERE id = '1'")
-                    rec = mycursor.fetchone()
-                    PM25 = rec[0]
-                except Exception as e:
-                    PM25 = "b'000.000,0.0,+0.0,0,0,00,*0\\r\\n'"
-                    
-                if(PM25[0:13] != "b'000.000,0.0"):
-                    i_retry_PM25 = 0
-                    retry_PM25.clear()
-                    break
-                
-                
-        if(is_COM_HC and HC > -1):
-            i_retry_HC = 0
-            retry_HC.clear()
-            
-        if(is_COM_HC and HC == -1 and i_retry_HC <= 5 ):
-            i_retry_HC = i_retry_HC + 1
-            
-        if(i_retry_HC > 5):
-            i_retry_HC = 0
-            print("Try Connecting HC");
-            for port in serial_ports():
-                print("Try PORT HC: " + port)
-                if port not in retry_HC:
-                    retry_HC.append(port)
-                    sql = "UPDATE aqm_configuration SET content = '" + port + "' WHERE data = 'com_HC'"
-                    mycursor.execute(sql)
-                    mydb.commit()
-                    time.sleep(10)
-                    break
-                
-                try :
-                    mycursor.execute("SELECT HC FROM aqm_sensor_values WHERE id = '1'")
-                    rec = mycursor.fetchone()
-                    HC = rec[0]
-                except Exception as e:
-                    HC = "-1"
-                    
-                if(HC > -1):
-                    i_retry_HC = 0
-                    retry_HC.clear()
-                    break
-                
-        if(is_COM_WS and WS != ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0"):
-            i_retry_WS = 0
-            retry_WS.clear()
-            
-        if(is_COM_WS and WS == ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0" and i_retry_WS <= 5 ):
-            i_retry_WS = i_retry_WS + 1
-            
-        if(i_retry_WS > 5):
-            mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ws'")
-            rec = mycursor.fetchone()
-            if(rec[0] != "pce_fws20n"):
-                i_retry_WS = 0
-                print("Try Connecting WS");
-                for port in serial_ports():
-                    print("Try PORT WS: " + port)
-                    if port not in retry_WS:
-                        retry_WS.append(port)
-                        sql = "UPDATE aqm_configuration SET content = '" + port + "' WHERE data = 'com_WS'"
-                        mycursor.execute(sql)
-                        mydb.commit()
-                        time.sleep(10)
-                        break
-                    
-                    try :
-                        mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
-                        rec = mycursor.fetchone()
-                        WS = rec[0]
-                    except Exception as e:
-                        WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0"
-                        
-                    if(WS != ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0"):
-                        i_retry_WS = 0
-                        retry_WS.clear()
-                        break
-                        
-                        
-        try :
-            mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
-            rec = mycursor.fetchone()
-            print(rec)
-            WS = rec[0]
-        except Exception as ex:
-            print(ex)
-            WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0"
-            
-            
+        ##======START RETRY ========================================================================================================
+        
+        ##======END RETRY ========================================================================================================
+        
         print("PM10 = %s" % (PM10.replace("\r\n","")))
         print("PM25 = %s" % (PM25.replace("\r\n","")))
         try:
