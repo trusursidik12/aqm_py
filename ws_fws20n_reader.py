@@ -23,21 +23,19 @@ def open_ws():
     usb_device = usb.core.find(idVendor=VENDOR, idProduct=PRODUCT)
     if usb_device is None:
         raise ValueError('Device not found')
+    
+    try:
+        usb_device.get_active_configuration()
+
+        if usb_device.is_kernel_driver_active(0):
+            usb_device.detach_kernel_driver(0)
+
+        is_WS_connect = True
+        time.sleep(3)
+        return usb_device
+    except Exception as e:
         is_WS_connect = False
         return None
-    else:    
-        try:
-            usb_device.get_active_configuration()
-
-            if usb_device.is_kernel_driver_active(0):
-                usb_device.detach_kernel_driver(0)
-
-            is_WS_connect = True
-            time.sleep(3)
-            return usb_device
-        except Exception as e:
-            is_WS_connect = False
-            return None
         
 
 
