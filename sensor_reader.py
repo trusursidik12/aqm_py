@@ -260,7 +260,7 @@ try:
     if(rec[0] != None and rec[0] != ""):
         is_COM_WS = True
         i_retry_WS = 0
-        if(rec[0] == "pce_ws20n"):
+        if(rec[0] == "pce_fws20n"):
             if sys.platform.startswith('win'):
                 command = "ws_fws20n_reader.py"
             else:
