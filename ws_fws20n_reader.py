@@ -99,7 +99,7 @@ try:
             mydb.commit()
         except Exception as e2: 
             is_WS_connect = False
-            print("Reconnect WS FWS20N : " + e2);
+            print("Reconnect WS FWS20N : " + str(e2));
             sql = "UPDATE aqm_sensor_values SET WS = ';0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
