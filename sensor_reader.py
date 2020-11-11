@@ -260,10 +260,17 @@ try:
     if(rec[0] != None and rec[0] != ""):
         is_COM_WS = True
         i_retry_WS = 0
-        if sys.platform.startswith('win'):
-            command = "ws_davis_reader.py"
+        if(rec[0] == "pce_ws20n"):
+            if sys.platform.startswith('win'):
+                command = "ws_fws20n_reader.py"
+            else:
+                command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_fws20n_reader.py"
+
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_davis_reader.py"
+            if sys.platform.startswith('win'):
+                command = "ws_davis_reader.py"
+            else:
+                command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_davis_reader.py"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
