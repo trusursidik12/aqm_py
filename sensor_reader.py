@@ -395,9 +395,9 @@ while True:
             
         try :
             mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
-            rec = mycursor.fetchone()
+            rec = mycursor.fetchall()
+            print(res)
             WS = rec[0]
-            print(WS)
         except Exception as e:
             print(e)
             WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0";
