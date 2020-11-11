@@ -122,3 +122,9 @@ MODBUS
 pip3 install --upgrade pip
 pip3 install pymodbus
 
+PCE-FWS20N
+==========
+###https://raw.githubusercontent.com/shaneHowearth/Dream-Link-WH1080-Weather-Station/master/weather.py
+pip3 install pyusb
+pip3 install pause
+
