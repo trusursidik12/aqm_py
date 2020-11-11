@@ -637,7 +637,15 @@ while True:
                         retry_WS.clear()
                         break
                         
-                            
+                        
+        try :
+            mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
+            rec = mycursor.fetchone()
+            WS = rec[0]
+        except Exception as e:
+            WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0"
+            
+            
         print("PM10 = %s" % (PM10.replace("\r\n","")))
         print("PM25 = %s" % (PM25.replace("\r\n","")))
         try:
