@@ -42,8 +42,8 @@ def read_block(device, offset):
     retval = dev.ctrl_transfer(0x21, 0x09, 0x200, 0, tbuf, timeout)
     return dev.read(0x81, 32, timeout)
 
-dev = open_ws()
-dev.set_configuration()
+#dev = open_ws()
+#dev.set_configuration()
 
 try:
     while True:
