@@ -48,6 +48,10 @@ dev.set_configuration()
 try:
     while True:
         try:
+            if (is_WS_connect == False):
+                dev = open_ws()
+                dev.set_configuration()
+
             fixed_block = read_block(dev, 0)
 
             if (fixed_block[0] != 0x55):
@@ -95,8 +99,6 @@ try:
             sql = "UPDATE aqm_sensor_values SET WS = ';0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
-            dev = open_ws()
-            dev.set_configuration()
 
         time.sleep(1)
 	
