@@ -399,6 +399,7 @@ while True:
         try :
             mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
             rec = mycursor.fetchone()
+            mydb.commit()
             print(rec)
             WS = rec[0]
         except Exception as e:
