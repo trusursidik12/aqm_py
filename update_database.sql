@@ -85,3 +85,9 @@ CREATE TABLE `serial_ports` (
   `is_used` TINYINT DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DELETE FROM aqm_params WHERE param_id='tsp';
+INSERT INTO aqm_params (param_id,caption,default_unit,molecular_mass,formula,is_view) VALUES ('tsp','TSP','ug/m3','0','round(explode(",",$PM25)[2]/1000,2)','1');
+ALTER TABLE aqm_data_log ADD COLUMN IF NOT EXISTS tsp DOUBLE NULL AFTER pm25;
+ALTER TABLE aqm_data ADD COLUMN IF NOT EXISTS tsp DOUBLE DEFAULT '0' AFTER pm25;
