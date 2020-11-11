@@ -66,13 +66,7 @@ def serial_ports():
 
 try:
     mydb = mysql.connector.connect(host="localhost",user="root",passwd="root",database="trusur_aqm")
-    mycursor = mydb.cursor()
-    
-    mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
-    rec = mycursor.fetchone()
-    WS = rec[0]
-    print(WS)
-    
+    mycursor = mydb.cursor()    
     mycursor.execute("DELETE FROM aqm_sensor_values WHERE id=1")
     mycursor.execute("INSERT INTO aqm_sensor_values (id) VALUES (1)")
     mydb.commit()
@@ -402,9 +396,10 @@ while True:
         try :
             mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
             rec = mycursor.fetchone()
-            print(rec)
             WS = rec[0]
+            print(WS)
         except Exception as e:
+            print(e)
             WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0";
                 
         if is_COM_AIRMAR:
@@ -534,7 +529,7 @@ while True:
         print("AIN7 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN7,AIN7_less,AIN7_range))
         print("================================================================================");
         
-    except Exception as e: 
-        print(e)
+    except Exception as e2: 
+        print(e2)
         
     time.sleep(1)
