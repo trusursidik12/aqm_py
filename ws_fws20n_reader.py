@@ -54,6 +54,7 @@ try:
             if (is_WS_connect == False):
                 dev = open_ws()
                 dev.set_configuration()
+                print(dev)
 
             fixed_block = read_block(dev, 0)
 
