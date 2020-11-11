@@ -1,5 +1,3 @@
-from __future__ import print_function
-from pyvantagepro import VantagePro2
 import sys
 import time
 import mysql.connector
