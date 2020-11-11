@@ -71,13 +71,11 @@ try:
     mycursor.execute("INSERT INTO aqm_sensor_values (id) VALUES (1)")
     mydb.commit()
     
-    try :
-        mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
-        rec = mycursor.fetchone()
-        print(rec)
-        WS = rec[0]
-    except Exception as e:
-        WS = ";0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0";
+    
+    mycursor.execute("SELECT WS FROM aqm_sensor_values WHERE id = '1'")
+    rec = mycursor.fetchone()
+    WS = rec[0]
+    print(WS)
     
     print("[V] Database CONNECTED")
 except Exception as e: 
