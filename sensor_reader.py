@@ -498,8 +498,8 @@ while True:
         # sql = "UPDATE aqm_sensor_values SET AIN0 = %s, AIN1 = %s, AIN2 = %s, AIN3 = %s, AIN4 = %s, AIN5 = %s, AIN6 = %s, AIN7 = %s, HC = %s, PM25 = %s, PM10 = %s, WS = %s WHERE id = 1"
         # val = (AIN0,AIN1,AIN2,AIN3,AIN4,AIN5,AIN6,AIN7,HC,PM25,PM10,WS)
         # mycursor.execute(sql, val)
-        mycursor.execute("SELECT * FROM aqm_sensor_values WHERE id = '1'")
-        mydb.commit()
+        # mycursor.execute("SELECT * FROM aqm_sensor_values WHERE id = '1'")
+        # mydb.commit()
         
         
         
