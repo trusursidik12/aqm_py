@@ -53,7 +53,7 @@ try:
             AIN = GASREADER.split(";")
                 
             sql = "UPDATE aqm_sensor_values SET AIN0 = %s, AIN1 = %s, AIN2 = %s, AIN3 = %s, AIN4 = %s, AIN5 = %s, AIN6 = %s, AIN7 = %s WHERE id = 1"
-            val = (str(AIN[0]),str(AIN[1]),str(AIN[2]),str(AIN[3]),str(AIN[4]),str(AIN[5]),str(AIN[6]),str(AIN[7]))
+            val = (AIN[0],AIN[1],AIN[2],AIN[3],AIN[4],AIN[5],AIN[6],AIN[7])
             mycursor.execute(sql, val)
             mydb.commit()
             
