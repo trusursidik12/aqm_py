@@ -51,12 +51,9 @@ try:
                 GASREADER = "0;0;0;0;0;0;0;0;\\r\\n'"
                 
             AIN = GASREADER.split(";")
-            print(AIN[0]);
-            print(float(AIN[0]));
                 
             sql = "UPDATE aqm_sensor_values SET AIN0 = %s, AIN1 = %s, AIN2 = %s, AIN3 = %s, AIN4 = %s, AIN5 = %s, AIN6 = %s, AIN7 = %s WHERE id = 1"
             val = (AIN[0],AIN[1],AIN[2],AIN[3],AIN[4],AIN[5],AIN[6],AIN[7])
-            print(val)
             mycursor.execute(sql, val)
             mydb.commit()
             
