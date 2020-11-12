@@ -92,7 +92,7 @@ try:
             total_rain = struct.unpack('H', current_block[13:15])[0]*0.3
             wind_speed = (wind + ((wind_extra & 0x0F) << 8)) * 0.36
 
-            WS = ";0;" + str(abs_pressure/33.8639) + ";" + str((indoor_temperature*9/5)+32) + ";" + str(indoor_humidity) + ";" + str((outdoor_temperature*9/5)+32) + ";" + str(round(wind_speed,2)) + ";" + str(round(wind_speed,2)) + ";" + str(WIND_DIRS[wind_dir]) + ";" + str(outdoor_humidity) + ";" + str(total_rain) + ";0;0;0.0;0;" + str(total_rain) + ";0;0"
+            WS = str(datetime.datetime.now()) + ";0;" + str(abs_pressure/33.8639) + ";" + str((indoor_temperature*9/5)+32) + ";" + str(indoor_humidity) + ";" + str((outdoor_temperature*9/5)+32) + ";" + str(round(wind_speed,2)) + ";" + str(round(wind_speed,2)) + ";" + str(WIND_DIRS[wind_dir]) + ";" + str(outdoor_humidity) + ";" + str(total_rain) + ";0;0;0.0;0;" + str(total_rain) + ";0;0"
 
             #print(WS)
             sql = "UPDATE aqm_sensor_values SET WS = '" + WS + "' WHERE id = 1"
