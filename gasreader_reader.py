@@ -46,7 +46,7 @@ try:
             if(not is_gasreader_connect):
                 COM_GASREADER = connect_gasreader()
         
-            GASREADER = str(COM_GASREADER.readline().encode("utf-8").decode("utf-8"))
+            GASREADER = str(COM_GASREADER.readline().decode("utf-8"))
             if(GASREADER.count(";") != 8):
                 GASREADER = "0;0;0;0;0;0;0;0;\\r\\n'"
                 
