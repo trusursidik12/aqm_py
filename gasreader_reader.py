@@ -51,13 +51,16 @@ try:
                 GASREADER = "b'0;0;0;0;0;0;0;0;\\r\\n'"
                 
             AIN = GASREADER.split(";")
+            print(AIN[0]);
+            print(float(AIN[0]));
                 
             sql = "UPDATE aqm_sensor_values SET AIN0 = %s, AIN1 = %s, AIN2 = %s, AIN3 = %s, AIN4 = %s, AIN5 = %s, AIN6 = %s, AIN7 = %s WHERE id = 1"
-            val = (AIN[0],AIN[1],AIN[2],AIN[3],AIN[4],AIN[5],AIN[6],AIN[7])
+            val = (float(AIN[0]),float(AIN[1]),float(AIN[2]),float(AIN[3]),float(AIN[4]),float(AIN[5]),float(AIN[6]),float(AIN[7]))
+            print(val)
             mycursor.execute(sql, val)
             mydb.commit()
             
-            # print(GASREADER)
+            print(GASREADER)
         except Exception as e2:
             print(e2)
             is_gasreader_connect = False
