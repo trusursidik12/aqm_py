@@ -105,7 +105,7 @@ try:
             mycursor.execute(sql)
             mydb.commit()
 
-        time.sleep(1)
+        time.sleep(30)
 	
 
 except Exception as e:
