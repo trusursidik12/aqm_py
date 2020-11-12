@@ -50,7 +50,7 @@ try:
             if(GASREADER.count(";") != 8):
                 GASREADER = "b'0;0;0;0;0;0;0;0;\\r\\n'"
                 
-            AIN = GASREADER.split(";")
+            AIN = GASREADER.decode("utf-8").split(";")
             print(AIN[0]);
             print(float(AIN[0]));
                 
