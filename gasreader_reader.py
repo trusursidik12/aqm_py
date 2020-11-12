@@ -57,11 +57,11 @@ try:
             mycursor.execute(sql, val)
             mydb.commit()
             
-            print(GASREADER)
+            # print(GASREADER)
         except Exception as e2:
             print(e2)
             is_gasreader_connect = False
-            print("Reconnect GASREADER");
+            print("Reconnect GASREADER : " + str(e2));
             sql = "UPDATE aqm_sensor_values SET AIN0 = '0', AIN1 = '0', AIN2 = '0', AIN3 = '0', AIN4 = '0', AIN5 = '0', AIN6 = '0', AIN7 = '0' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
