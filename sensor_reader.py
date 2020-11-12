@@ -20,6 +20,7 @@ PM_SDS019 = ""
 WS = ""
 pump_speed = 0
 cur_pump_state = "0"
+is_COM_GASREADER = False
 is_COM_PM10 = False
 is_COM_PM25 = False
 is_COM_SDS019 = False
@@ -29,6 +30,7 @@ is_COM_AIRMAR = False
 is_Arduino = False
 is_Pump_pwm = False
 
+i_retry_GASREADER = 0
 i_retry_PM10 = 0
 i_retry_PM25 = 0
 i_retry_SDS019 = 0
@@ -36,6 +38,7 @@ i_retry_HC = 0
 i_retry_WS = 0
 i_retry_AIRMAR = 0
 
+retry_GASREADER = []
 retry_PM10 = []
 retry_PM25 = []
 retry_SDS019 = []
@@ -182,10 +185,20 @@ AIN7_range = 0
 
 
 try:
-    if sys.platform.startswith('win'):
-        command = "labjack_reader.py"
-    else:
-        command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py"
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_gasreader'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        is_COM_GASREADER = True
+        i_retry_GASREADER = 0
+        if sys.platform.startswith('win'):
+            command = "gasreader_reader.py"
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/gasreader_reader.py"
+    else:    
+        if sys.platform.startswith('win'):
+            command = "labjack_reader.py"
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py"
 
     subprocess.Popen(command, shell=True)
 except Exception as e:

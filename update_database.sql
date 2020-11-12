@@ -96,3 +96,8 @@ DELETE FROM aqm_configuration WHERE data='com_pm_sds019';
 INSERT INTO aqm_configuration (data,content) VALUES ('com_pm_sds019','');
 DELETE FROM aqm_configuration WHERE data='baud_pm_sds019';
 INSERT INTO aqm_configuration (data,content) VALUES ('baud_pm_sds019','9600');
+
+DELETE FROM aqm_configuration WHERE data='com_gasreader';
+INSERT INTO aqm_configuration (data,content) VALUES ('com_gasreader','');
+DELETE FROM aqm_configuration WHERE data='baud_gasreader';
+INSERT INTO aqm_configuration (data,content) VALUES ('baud_gasreader','9600');
