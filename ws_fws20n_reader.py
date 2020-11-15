@@ -45,8 +45,8 @@ def read_block(device, offset):
     # Construct a binary message
     tbuf = struct.pack('BBBBBBBB', 0xA1, most_significant_bit, least_significant_bit, 32, 0xA1, most_significant_bit, least_significant_bit, 32)
     timeout = 1000  # Milliseconds
-    retval = dev.ctrl_transfer(0x21, 0x09, 0x200, 0, tbuf, timeout)
-    return dev.read(0x81, 32, timeout)
+    retval = device.ctrl_transfer(0x21, 0x09, 0x200, 0, tbuf, timeout)
+    return device.read(0x81, 32, timeout)
 
 try:
     while True:
