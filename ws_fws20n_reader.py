@@ -95,6 +95,11 @@ try:
             total_rain = struct.unpack('H', current_block[13:15])[0]*0.3
             wind_speed = (wind + ((wind_extra & 0x0F) << 8)) * 0.36
             
+            print("i_raindata : " + str(i_raindata))
+            print("rain : " + str(rain))
+            print("total_rain : " + str(total_rain))
+            print("lastrain : " + str(lastrain))
+            
             if(i_raindata > 1):
                 rain = total_rain - lastrain
             
@@ -104,12 +109,7 @@ try:
 
             WS = str(datetime.datetime.now()) + ";0;" + str(abs_pressure/33.8639) + ";" + str((indoor_temperature*9/5)+32) + ";" + str(indoor_humidity) + ";" + str((outdoor_temperature*9/5)+32) + ";" + str(round(wind_speed,2)) + ";" + str(round(wind_speed,2)) + ";" + str(WIND_DIRS[wind_dir]) + ";" + str(outdoor_humidity) + ";" + str(rain) + ";0;0;0.0;0;" + str(rain) + ";0;0"
 
-            print("fixed_block : " + str(fixed_block))
-            print("curpos : " + str(curpos))
-            print("current_block : " + str(current_block))
             print(WS)
-            print("============================================")
-            print("")
             sql = "UPDATE aqm_sensor_values SET WS = '" + WS + "' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
