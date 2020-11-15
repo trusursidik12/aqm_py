@@ -94,11 +94,19 @@ try:
 
             WS = str(datetime.datetime.now()) + ";0;" + str(abs_pressure/33.8639) + ";" + str((indoor_temperature*9/5)+32) + ";" + str(indoor_humidity) + ";" + str((outdoor_temperature*9/5)+32) + ";" + str(round(wind_speed,2)) + ";" + str(round(wind_speed,2)) + ";" + str(WIND_DIRS[wind_dir]) + ";" + str(outdoor_humidity) + ";" + str(total_rain) + ";0;0;0.0;0;" + str(total_rain) + ";0;0"
 
-            #print(WS)
+            print("fixed_block : " + str(fixed_block))
+            print("curpos : " + str(curpos))
+            print("current_block : " + str(current_block))
+            print(WS)
             sql = "UPDATE aqm_sensor_values SET WS = '" + WS + "' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
-        except Exception as e2: 
+        except Exception as e2:
+            try:
+                dev.reset()
+            except Exception as e3:
+                print("e3 : " + str(e3))
+            
             is_WS_connect = False
             print("Reconnect WS FWS20N : " + str(e2));
             sql = "UPDATE aqm_sensor_values SET WS = ';0;0;0;0;0;0;0;0;0;0;0;0;0.0;0;0;0;0' WHERE id = 1"
