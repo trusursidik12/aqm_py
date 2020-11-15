@@ -18,6 +18,9 @@ VENDOR = 0x1941
 PRODUCT = 0x8021
 WIND_DIRS = [0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5]
 is_WS_connect = False
+rain = 0
+lastrain = 0
+i_raindata = 0
 
 def open_ws():
     global is_WS_connect
@@ -91,8 +94,15 @@ try:
 
             total_rain = struct.unpack('H', current_block[13:15])[0]*0.3
             wind_speed = (wind + ((wind_extra & 0x0F) << 8)) * 0.36
+            
+            if(i_raindata > 1):
+                rain = total_rain - lastrain
+            
+            lastrain = total_rain;
+            if(i_raindata < 2):
+                i_raindata += 1
 
-            WS = str(datetime.datetime.now()) + ";0;" + str(abs_pressure/33.8639) + ";" + str((indoor_temperature*9/5)+32) + ";" + str(indoor_humidity) + ";" + str((outdoor_temperature*9/5)+32) + ";" + str(round(wind_speed,2)) + ";" + str(round(wind_speed,2)) + ";" + str(WIND_DIRS[wind_dir]) + ";" + str(outdoor_humidity) + ";" + str(total_rain) + ";0;0;0.0;0;" + str(total_rain) + ";0;0"
+            WS = str(datetime.datetime.now()) + ";0;" + str(abs_pressure/33.8639) + ";" + str((indoor_temperature*9/5)+32) + ";" + str(indoor_humidity) + ";" + str((outdoor_temperature*9/5)+32) + ";" + str(round(wind_speed,2)) + ";" + str(round(wind_speed,2)) + ";" + str(WIND_DIRS[wind_dir]) + ";" + str(outdoor_humidity) + ";" + str(rain) + ";0;0;0.0;0;" + str(rain) + ";0;0"
 
             print("fixed_block : " + str(fixed_block))
             print("curpos : " + str(curpos))
@@ -103,6 +113,8 @@ try:
             sql = "UPDATE aqm_sensor_values SET WS = '" + WS + "' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
+            
+                
         except Exception as e2:
             try:
                 dev.reset()
