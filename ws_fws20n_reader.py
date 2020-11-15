@@ -100,7 +100,7 @@ try:
             print("total_rain : " + str(total_rain))
             print("lastrain : " + str(lastrain))
             
-            if(i_raindata > 1):
+            if(i_raindata > 1 and total_rain != lastrain):
                 rain = total_rain - lastrain
             
             lastrain = total_rain;
