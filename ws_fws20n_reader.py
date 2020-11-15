@@ -98,12 +98,15 @@ try:
             print("curpos : " + str(curpos))
             print("current_block : " + str(current_block))
             print(WS)
+            print("============================================")
+            print("")
             sql = "UPDATE aqm_sensor_values SET WS = '" + WS + "' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
         except Exception as e2:
             try:
                 dev.reset()
+                print("device resseted")
             except Exception as e3:
                 print("e3 : " + str(e3))
             
@@ -113,7 +116,8 @@ try:
             mycursor.execute(sql)
             mydb.commit()
 
-        time.sleep(30)
+        # time.sleep(30)
+        time.sleep(1)
 	
 
 except Exception as e:
