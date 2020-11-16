@@ -57,12 +57,11 @@ def read_block(device, offset):
     return device.read(0x81, 32, timeout)
 
 try:
-    current_time = time_to_min(timenow.tm_hour, timenow.tm_min)
+    current_time = time_to_min(time.localtime().tm_hour, time.localtime().tm_min)
     last_time = current_time
     while True:
         try:
-            timenow = time.localtime()
-            current_time = time_to_min(timenow.tm_hour, timenow.tm_min)
+            current_time = time_to_min(time.localtime().tm_hour, time.localtime().tm_min)
             if(current_time < last_time):
                 last_time = 0
                 
