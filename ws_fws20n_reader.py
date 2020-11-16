@@ -23,6 +23,7 @@ lastrain = 0
 i_raindata = 0
 last_time = 0
 current_time = 0
+i_dev_reset = 0;
 
 def time_to_min(hour, minute):
     return hour*60+minute
@@ -112,11 +113,6 @@ try:
             total_rain = struct.unpack('H', current_block[13:15])[0]*0.3
             wind_speed = (wind + ((wind_extra & 0x0F) << 8)) * 0.36
             
-            print("i_raindata : " + str(i_raindata))
-            print("rain : " + str(rain))
-            print("total_rain : " + str(total_rain))
-            print("lastrain : " + str(lastrain))
-            
             if(i_raindata > 1 and total_rain != lastrain):
                 rain += total_rain - lastrain
             
@@ -127,6 +123,7 @@ try:
             WS = str(datetime.datetime.now()) + ";0;" + str(abs_pressure/33.8639) + ";" + str((indoor_temperature*9/5)+32) + ";" + str(indoor_humidity) + ";" + str((outdoor_temperature*9/5)+32) + ";" + str(round(wind_speed,2)) + ";" + str(round(wind_speed,2)) + ";" + str(WIND_DIRS[wind_dir]) + ";" + str(outdoor_humidity) + ";" + str(rain) + ";0;0;0.0;0;" + str(rain) + ";0;0"
 
             print(WS)
+            print("Dev Reset : " + str(i_dev_reset))
             sql = "UPDATE aqm_sensor_values SET WS = '" + WS + "' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
@@ -135,6 +132,7 @@ try:
         except Exception as e2:
             try:
                 dev.reset()
+                i_dev_reset += 1
                 print("device resseted")
             except Exception as e3:
                 print("e3 : " + str(e3))
