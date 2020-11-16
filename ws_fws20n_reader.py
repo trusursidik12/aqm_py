@@ -122,8 +122,7 @@ try:
 
             WS = str(datetime.datetime.now()) + ";0;" + str(abs_pressure/33.8639) + ";" + str((indoor_temperature*9/5)+32) + ";" + str(indoor_humidity) + ";" + str((outdoor_temperature*9/5)+32) + ";" + str(round(wind_speed,2)) + ";" + str(round(wind_speed,2)) + ";" + str(WIND_DIRS[wind_dir]) + ";" + str(outdoor_humidity) + ";" + str(rain) + ";0;0;0.0;0;" + str(rain) + ";0;0"
 
-            print(WS)
-            print("Dev Reset : " + str(i_dev_reset))
+            # print(WS)
             sql = "UPDATE aqm_sensor_values SET WS = '" + WS + "' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
@@ -133,7 +132,7 @@ try:
             try:
                 dev.reset()
                 i_dev_reset += 1
-                print("device resseted")
+                print("Dev Reset : " + str(i_dev_reset))
             except Exception as e3:
                 print("e3 : " + str(e3))
             
@@ -143,8 +142,7 @@ try:
             mycursor.execute(sql)
             mydb.commit()
 
-        # time.sleep(30)
-        time.sleep(1)
+        time.sleep(10)
 	
 
 except Exception as e:
