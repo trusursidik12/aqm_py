@@ -21,6 +21,11 @@ is_WS_connect = False
 rain = 0
 lastrain = 0
 i_raindata = 0
+last_time = 0
+current_time = 0
+
+def time_to_min(hour, minute):
+    return hour*60+minute
 
 def open_ws():
     global is_WS_connect
@@ -54,6 +59,16 @@ def read_block(device, offset):
 try:
     while True:
         try:
+            timenow = time.localtime()
+            current_time = time_to_min(timenow.tm_hour, timenow.tm_min)
+            if(current_time < last_time):
+                last_time = 0
+                
+            if((current_time - last_time) > 60):
+                rain = 0
+                lastrain = 0
+                i_raindata = 0
+        
             if (is_WS_connect == False):
                 dev = open_ws()
                 dev.set_configuration()
@@ -101,7 +116,7 @@ try:
             print("lastrain : " + str(lastrain))
             
             if(i_raindata > 1 and total_rain != lastrain):
-                rain = total_rain - lastrain
+                rain += total_rain - lastrain
             
             lastrain = total_rain;
             if(i_raindata < 2):
