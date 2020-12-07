@@ -33,16 +33,26 @@ def connect_ws():
             while i <= 12:
                 ws_data = ws_data + str(COM_WS.readline());
                 i += 1
-            
-            WIMDA = ws_data.split("$WIMDA,")[1];
-            WIMDA = WIMDA.split("\\r\\n")[0];
-            
-            if(WIMDA != ""):
-                is_WS_connect = True
-                return COM_WS
-            else:
-                is_WS_connect = False
-                return None
+            try:
+                WIMDA = ws_data.split("$WIMDA,")[1];
+                WIMDA = WIMDA.split("\\r\\n")[0];
+                
+                if(WIMDA != ""):
+                    is_WS_connect = True
+                    return COM_WS
+                else:
+                    is_WS_connect = False
+                    return None
+            except Exception as x:
+                GPGGA = ws_data.split("$GPGGA,")[1];
+                GPGGA = GPGGA.split("\\r\\n")[0];
+                
+                if(GPGGA != ""):
+                    is_WS_connect = True
+                    return COM_WS
+                else:
+                    is_WS_connect = False
+                    return None
                 
         except:
             is_WS_connect = False
@@ -63,31 +73,49 @@ try:
                 ws_data = ws_data + str(COM_WS.readline());
                 i += 1
             
-            WIMDA = ws_data.split("$WIMDA,")[1];
-            WIMDA = WIMDA.split("\\r\\n")[0];
+            try:
+                WIMDA = ws_data.split("$WIMDA,")[1];
+                WIMDA = WIMDA.split("\\r\\n")[0];
+            except Exception as x:
+                WIMDA = ""
             
-            WIMWV = ws_data.split("$WIMWV,")[1];
-            WIMWV = WIMWV.split("\\r\\n")[0];
+            try:
+                WIMWV = ws_data.split("$WIMWV,")[1];
+                WIMWV = WIMWV.split("\\r\\n")[0];
+            except Exception as x:
+                WIMWV = ""
+                
+            try:
+                GPGGA = ws_data.split("$GPGGA,")[1];
+                GPGGA = GPGGA.split("\\r\\n")[0];
+            except Exception as x:
+                GPGGA = ""
             
-            GPGGA = ws_data.split("$GPGGA,")[1];
-            GPGGA = GPGGA.split("\\r\\n")[0];
-            
-            barometer = WIMDA.split(",")[0];
-            if barometer == "": barometer = "0.0";
-            
-            temp = WIMDA.split(",")[4];
-            if temp == "": temp = "0.0";
-            temp = str((9/5 * float(temp)) + 32);
-            
-            humidity = WIMDA.split(",")[8];
-            if humidity == "": humidity = "0.0";
-            
-            windspeed = WIMWV.split(",")[2];
-            if windspeed == "": windspeed = "0.0";
-            windspeed = '{:.{}f}'.format(1.852 * float(windspeed), 1);
-            
-            winddir = WIMWV.split(",")[0];
-            if winddir == "": winddir = "0.0";
+            try:
+                barometer = WIMDA.split(",")[0];
+                if barometer == "": barometer = "0.0";
+                
+                temp = WIMDA.split(",")[4];
+                if temp == "": temp = "0.0";
+                temp = str((9/5 * float(temp)) + 32);
+                
+                humidity = WIMDA.split(",")[8];
+                if humidity == "": humidity = "0.0";
+            except Exception as x:
+                barometer = ""
+                temp = ""
+                humidity = ""
+                
+            try:
+                windspeed = WIMWV.split(",")[2];
+                if windspeed == "": windspeed = "0.0";
+                windspeed = '{:.{}f}'.format(1.852 * float(windspeed), 1);
+                
+                winddir = WIMWV.split(",")[0];
+                if winddir == "": winddir = "0.0";
+            except Exception as x:
+                windspeed = ""
+                winddir = ""
             
             rainrate = "0.0";
             solarrad = "0.0";
