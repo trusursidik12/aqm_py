@@ -20,7 +20,9 @@ PM_SDS019 = ""
 WS = ""
 pump_speed = 0
 cur_pump_state = "0"
+cur_selenoid_state = "q"
 is_COM_GASREADER = False
+is_COM_ION_SCIENCE = False
 is_COM_PM10 = False
 is_COM_PM25 = False
 is_COM_SDS019 = False
@@ -31,6 +33,7 @@ is_Arduino = False
 is_Pump_pwm = False
 
 i_retry_GASREADER = 0
+i_retry_ION_SCIENCE = 0
 i_retry_PM10 = 0
 i_retry_PM25 = 0
 i_retry_SDS019 = 0
@@ -39,6 +42,7 @@ i_retry_WS = 0
 i_retry_AIRMAR = 0
 
 retry_GASREADER = []
+retry_ION_SCIENCE = []
 retry_PM10 = []
 retry_PM25 = []
 retry_SDS019 = []
@@ -194,15 +198,37 @@ try:
             command = "gasreader_reader.py"
         else:
             command = "echo admin | sudo -S python3.5 ~/aqm_py/gasreader_reader.py"
-    else:    
+        
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
+    
+try:
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ion_science'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        is_COM_ION_SCIENCE = True
+        i_retry_GASREADER = 0
+        if sys.platform.startswith('win'):
+            command = "ionscience_reader.py"
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/ionscience_reader.py"    
+        
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
+    
+try:
+    if(is_COM_GASREADER == False and is_COM_ION_SCIENCE == False):
         if sys.platform.startswith('win'):
             command = "labjack_reader.py"
         else:
             command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py"
-
-    subprocess.Popen(command, shell=True)
+            
+        subprocess.Popen(command, shell=True)
 except Exception as e:
     print(e)
+
 
 try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm10'")
@@ -439,6 +465,27 @@ while True:
                         Arduino.write(b'j');
             except Exception as e: 
                 print(e)
+                
+            try:
+                mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'selenoid_state'")
+                rec = mycursor.fetchone()
+                for row in rec: selenoid_state = rec[0]
+                if selenoid_state != cur_selenoid_state:
+                    cur_selenoid_state = selenoid_state
+                    if cur_pump_state == "q":
+                        Arduino.write(b'q');
+                    elif cur_pump_state == "w":
+                        Arduino.write(b'w');
+                    elif cur_pump_state == "e":
+                        Arduino.write(b'e');
+                    elif cur_pump_state == "r":
+                        Arduino.write(b'r');
+                    elif cur_pump_state == "t":
+                        Arduino.write(b't');
+                    elif cur_pump_state == "y":
+                        Arduino.write(b'y');
+            except Exception as e: 
+                print(e)
 
 
         mydb.commit()
@@ -587,6 +634,7 @@ while True:
 
         print("HC = %s" % (HC))
         print("cur_pump_state = %s" % (cur_pump_state))
+        print("cur_selenoid_state = %s" % (cur_selenoid_state))
         print("--------------------------------------------------------------------------------");
         print("AIN \t|\t VOLTAGE \t|\t MIN \t\t|\t RANGE \t\t|")
         print("--------------------------------------------------------------------------------");

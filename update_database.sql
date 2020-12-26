@@ -1,9 +1,9 @@
 DELETE FROM aqm_configuration WHERE data='com_hc';
-INSERT INTO aqm_configuration (data,content) VALUES ('com_hc','/dev/ttyUSB999');
+INSERT INTO aqm_configuration (data,content) VALUES ('com_hc','');
 DELETE FROM aqm_configuration WHERE data='baud_hc';
 INSERT INTO aqm_configuration (data,content) VALUES ('baud_hc','9600');
 DELETE FROM aqm_configuration WHERE data='com_pump_pwm';
-INSERT INTO aqm_configuration (data,content) VALUES ('com_pump_pwm','/dev/ttyUSB999');
+INSERT INTO aqm_configuration (data,content) VALUES ('com_pump_pwm','');
 DELETE FROM aqm_configuration WHERE data='baud_pump_pwm';
 INSERT INTO aqm_configuration (data,content) VALUES ('baud_pump_pwm','9600');
 DELETE FROM aqm_configuration WHERE data='pump_speed';
@@ -89,8 +89,8 @@ CREATE TABLE `serial_ports` (
 
 DELETE FROM aqm_params WHERE param_id='tsp';
 INSERT INTO aqm_params (param_id,caption,default_unit,molecular_mass,formula,is_view) VALUES ('tsp','TSP','ug/m3','0','round(explode(",",$PM25)[2]/1000,4)','1');
-ALTER TABLE aqm_data_log ADD COLUMN IF NOT EXISTS tsp DOUBLE NULL AFTER pm25;
-ALTER TABLE aqm_data ADD COLUMN IF NOT EXISTS tsp DOUBLE DEFAULT '0' AFTER pm25;
+ALTER TABLE aqm_data_log ADD COLUMN tsp DOUBLE NULL AFTER pm25;
+ALTER TABLE aqm_data ADD COLUMN tsp DOUBLE DEFAULT '0' AFTER pm25;
 
 DELETE FROM aqm_configuration WHERE data='com_pm_sds019';
 INSERT INTO aqm_configuration (data,content) VALUES ('com_pm_sds019','');
@@ -101,3 +101,14 @@ DELETE FROM aqm_configuration WHERE data='com_gasreader';
 INSERT INTO aqm_configuration (data,content) VALUES ('com_gasreader','');
 DELETE FROM aqm_configuration WHERE data='baud_gasreader';
 INSERT INTO aqm_configuration (data,content) VALUES ('baud_gasreader','9600');
+
+DELETE FROM aqm_configuration WHERE data='com_ion_science';
+INSERT INTO aqm_configuration (data,content) VALUES ('com_ion_science','');
+DELETE FROM aqm_configuration WHERE data='baud_ion_science';
+INSERT INTO aqm_configuration (data,content) VALUES ('baud_ion_science','9600');
+
+
+DELETE FROM aqm_configuration WHERE data='selenoid_state';
+INSERT INTO aqm_configuration (data,content) VALUES ('selenoid_state','q');
+
+UPDATE aqm_configuration SET content='360' WHERE data='pump_interval';
