@@ -472,17 +472,17 @@ while True:
                 for row in rec: selenoid_state = rec[0]
                 if selenoid_state != cur_selenoid_state:
                     cur_selenoid_state = selenoid_state
-                    if cur_pump_state == "q":
+                    if cur_selenoid_state == "q":
                         Arduino.write(b'q');
-                    elif cur_pump_state == "w":
+                    elif cur_selenoid_state == "w":
                         Arduino.write(b'w');
-                    elif cur_pump_state == "e":
+                    elif cur_selenoid_state == "e":
                         Arduino.write(b'e');
-                    elif cur_pump_state == "r":
+                    elif cur_selenoid_state == "r":
                         Arduino.write(b'r');
-                    elif cur_pump_state == "t":
+                    elif cur_selenoid_state == "t":
                         Arduino.write(b't');
-                    elif cur_pump_state == "y":
+                    elif cur_selenoid_state == "y":
                         Arduino.write(b'y');
             except Exception as e: 
                 print(e)

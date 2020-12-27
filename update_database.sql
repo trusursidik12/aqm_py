@@ -111,4 +111,11 @@ INSERT INTO aqm_configuration (data,content) VALUES ('baud_ion_science','9600');
 DELETE FROM aqm_configuration WHERE data='selenoid_state';
 INSERT INTO aqm_configuration (data,content) VALUES ('selenoid_state','q');
 
+DELETE FROM aqm_configuration WHERE data='selenoid_names';
+INSERT INTO aqm_configuration (data,content) VALUES ('selenoid_names','Sample;Zero;Span H2S;Span CS2');
+
+
+DELETE FROM aqm_configuration WHERE data='selenoid_commands';
+INSERT INTO aqm_configuration (data,content) VALUES ('selenoid_commands','q;w;e;r');
+
 UPDATE aqm_configuration SET content='360' WHERE data='pump_interval';
