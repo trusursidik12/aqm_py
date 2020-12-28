@@ -64,7 +64,7 @@ try:
                 mydb.commit()
             
             
-            print(ionscience)
+            print(IONSCIENCE)
         except Exception as e2:
             print(e2)
             print("Reconnect IONSCIENCE");
