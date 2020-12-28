@@ -59,7 +59,7 @@ try:
                 mydb.commit()
                 
             else:
-                sql = "UPDATE aqm_sensor_values SET AIN" + sys.argv[1] + " = '" + IONSCIENCE.split(", ")[4] + "' WHERE id = 1"
+                sql = "UPDATE aqm_sensor_values SET AIN" + sys.argv[1] + " = '" + str(IONSCIENCE[4]) + "' WHERE id = 1"
                 mycursor.execute(sql)
                 mydb.commit()
             
