@@ -13,7 +13,7 @@ try:
     mydb = mysql.connector.connect(host="localhost", user="root", passwd="root", database="trusur_aqm")
     mycursor = mydb.cursor()
 
-    print("[V] IONSCIENCE Database CONNECTED")
+    print("[V] IONSCIENCE " + sys.argv[1] + " Database CONNECTED")
 except Exception as e:
     print("  [X] IONSCIENCE " + e)
 
