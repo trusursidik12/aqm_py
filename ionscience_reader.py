@@ -31,8 +31,6 @@ def connect_ionscience(ionsciencemode):
         for row in rec:
             serial_rate = str(rec[0]).split(";")[ionsciencemode]
             
-        print(serial_port)
-        print(serial_rate)
         ion=minimalmodbus.Instrument(serial_port,1)
         ion.serial.baudrate=serial_rate
         ion.serial.parity=serial.PARITY_NONE
@@ -48,18 +46,28 @@ def connect_ionscience(ionsciencemode):
         # return response
         
     except Exception as e:
-        print(e)
         return None
 
 
 try:
     while True:
         try:
-            ionscience = connect_ionscience(int(sys.argv[1]))
+            IONSCIENCE = connect_ionscience(int(sys.argv[1]))
+            if(str(IONSCIENCE).count("None") == 1):            
+                sql = "UPDATE aqm_sensor_values SET AIN" + sys.argv[1] + " = '0' WHERE id = 1"
+                mycursor.execute(sql)
+                mydb.commit()
+                
+            else:
+                sql = "UPDATE aqm_sensor_values SET AIN" + sys.argv[1] + " = '" + IONSCIENCE.split(", ")[4] + "' WHERE id = 1"
+                mycursor.execute(sql)
+                mydb.commit()
+            
+            
             print(ionscience)
         except Exception as e2:
             print(e2)
-            print("Reconnect PM");
+            print("Reconnect IONSCIENCE");
             sql = "UPDATE aqm_sensor_values SET AIN" + sys.argv[1] + " = '0' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
