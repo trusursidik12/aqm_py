@@ -48,6 +48,7 @@ def connect_ionscience(ionsciencemode):
         # return response
         
     except Exception as e:
+        print(e)
         return None
 
 
