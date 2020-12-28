@@ -213,9 +213,9 @@ try:
         i = 0
         while(i < len(str(rec[0]).split(";"))):
             if sys.platform.startswith('win'):
-                command = "ionscience_reader.py " + i
+                command = "ionscience_reader.py " + str(i)
             else:
-                command = "echo admin | sudo -S python3.5 ~/aqm_py/ionscience_reader.py " + i
+                command = "echo admin | sudo -S python3.5 ~/aqm_py/ionscience_reader.py " + str(i)
             
             print(command)
             subprocess.Popen(command, shell=True)
