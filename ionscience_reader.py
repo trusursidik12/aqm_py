@@ -55,7 +55,7 @@ def connect_ionscience(ionsciencemode):
 try:
     while True:
         try:
-            ionscience = connect_ionscience(sys.argv[1])
+            ionscience = connect_ionscience(int(sys.argv[1]))
             print(ionscience)
         except Exception as e2:
             print(e2)
