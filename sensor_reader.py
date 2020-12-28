@@ -217,7 +217,6 @@ try:
             else:
                 command = "echo admin | sudo -S python3.5 ~/aqm_py/ionscience_reader.py " + str(i)
             
-            print(command)
             subprocess.Popen(command, shell=True)
             i += 1
             
