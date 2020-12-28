@@ -208,13 +208,18 @@ try:
     rec = mycursor.fetchone()
     if(rec[0] != None and rec[0] != ""):
         is_COM_ION_SCIENCE = True
-        i_retry_GASREADER = 0
-        if sys.platform.startswith('win'):
-            command = "ionscience_reader.py"
-        else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/ionscience_reader.py"    
+        i_retry_ION_SCIENCE = 0
         
-        subprocess.Popen(command, shell=True)
+        i = 0
+        while(i < len(str(rec[0]).split(";"))):
+            if sys.platform.startswith('win'):
+                command = "ionscience_reader.py " + i
+            else:
+                command = "echo admin | sudo -S python3.5 ~/aqm_py/ionscience_reader.py " + i
+            
+            subprocess.Popen(command, shell=True)
+            i += 1
+            
 except Exception as e:
     print(e)
     
