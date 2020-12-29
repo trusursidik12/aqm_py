@@ -31,6 +31,9 @@ def connect_ionscience(ionsciencemode):
         for row in rec:
             serial_rate = str(rec[0]).split(";")[ionsciencemode]
             
+        if(serial_rate == ""):
+            serial_rate = str(rec[0]).split(";")[0]
+            
         ion=minimalmodbus.Instrument(serial_port,1)
         ion.serial.baudrate=serial_rate
         ion.serial.parity=serial.PARITY_NONE
