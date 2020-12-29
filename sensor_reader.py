@@ -231,9 +231,21 @@ try:
             command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py"
             
         subprocess.Popen(command, shell=True)
+        
+    else:
+        mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'labjack_force_on'")
+        rec = mycursor.fetchone()
+        if(str(rec[0]) == "1"):
+            if sys.platform.startswith('win'):
+                command = "labjack_reader.py"
+            else:
+                command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py"
+                
+            subprocess.Popen(command, shell=True)
+            
 except Exception as e:
     print(e)
-
+    
 
 try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_pm10'")

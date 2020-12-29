@@ -119,3 +119,6 @@ DELETE FROM aqm_configuration WHERE data='selenoid_commands';
 INSERT INTO aqm_configuration (data,content) VALUES ('selenoid_commands','q;w;e;r');
 
 UPDATE aqm_configuration SET content='360' WHERE data='pump_interval';
+
+DELETE FROM aqm_configuration WHERE data='labjack_force_on';
+INSERT INTO aqm_configuration (data,content) VALUES ('labjack_force_on','0');
