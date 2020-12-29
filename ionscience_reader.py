@@ -45,8 +45,6 @@ def connect_ionscience(ionsciencemode):
         
         response=ion.read_registers(0x1260,12,4)
         return response
-        # response=ion.read_registers(0x12c0,12,4)
-        # return response
         
     except Exception as e:
         return None
