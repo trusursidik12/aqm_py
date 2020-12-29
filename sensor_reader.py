@@ -21,6 +21,7 @@ WS = ""
 pump_speed = 0
 cur_pump_state = "0"
 cur_selenoid_state = "q"
+cur_purge_state = "o"
 is_COM_GASREADER = False
 is_COM_ION_SCIENCE = False
 is_COM_PM10 = False
@@ -503,6 +504,19 @@ while True:
                         Arduino.write(b'y');
             except Exception as e: 
                 print(e)
+                
+            try:
+                mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'purge_state'")
+                rec = mycursor.fetchone()
+                for row in rec: purge_state = rec[0]
+                if purge_state != cur_purge_state:
+                    cur_purge_state = purge_state
+                    if cur_purge_state == "o":
+                        Arduino.write(b'o');
+                    elif cur_purge_state == "p":
+                        Arduino.write(b'p');
+            except Exception as e: 
+                print(e)
 
 
         mydb.commit()
@@ -652,6 +666,7 @@ while True:
         print("HC = %s" % (HC))
         print("cur_pump_state = %s" % (cur_pump_state))
         print("cur_selenoid_state = %s" % (cur_selenoid_state))
+        print("cur_purge_state = %s" % (cur_purge_state))
         print("--------------------------------------------------------------------------------");
         print("AIN \t|\t VOLTAGE \t|\t MIN \t\t|\t RANGE \t\t|")
         print("--------------------------------------------------------------------------------");

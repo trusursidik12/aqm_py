@@ -122,3 +122,9 @@ UPDATE aqm_configuration SET content='360' WHERE data='pump_interval';
 
 DELETE FROM aqm_configuration WHERE data='labjack_force_on';
 INSERT INTO aqm_configuration (data,content) VALUES ('labjack_force_on','0');
+
+DELETE FROM aqm_configuration WHERE data='calibration_menu';
+INSERT INTO aqm_configuration (data,content) VALUES ('calibration_menu','1');
+
+DELETE FROM aqm_configuration WHERE data='purge_state';
+INSERT INTO aqm_configuration (data,content) VALUES ('purge_state','o');
