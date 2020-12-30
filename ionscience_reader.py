@@ -50,7 +50,7 @@ def connect_ionscience(ionsciencemode):
         c=hex(h).split('x')[1]
         d=hex(i).split('x')[1]
         r=d+c
-        response = struct.unpack('!f',r.decode('hex'))[0];
+        response = struct.unpack('!f',bytes.fromhex(r))[0];
         return response
         
     except Exception as e:
