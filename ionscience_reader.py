@@ -43,7 +43,13 @@ def connect_ionscience(ionsciencemode):
         ion.serial.timeout=0.05
         ion.write_register(0x1248,1)
         
-        response=ion.read_registers(0x1260,12,4)
+        h=ion.read_register(0x12c8,0,4,False)
+        i=ion.read_register(0x12ca,0,4,False)
+        
+        c=hex(h).split('x')[1]
+        d=hex(i).split('x')[1]
+        r=d+c
+        response = struct.unpack('!f',r.decode('hex'))[0];
         return response
         
     except Exception as e:
