@@ -238,9 +238,9 @@ try:
         rec = mycursor.fetchone()
         if(str(rec[0]) == "1"):
             if sys.platform.startswith('win'):
-                command = "labjack_reader.py"
+                command = "labjack_reader_force.py"
             else:
-                command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py"
+                command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader_force.py"
                 
             subprocess.Popen(command, shell=True)
             

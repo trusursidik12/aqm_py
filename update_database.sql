@@ -128,3 +128,5 @@ INSERT INTO aqm_configuration (data,content) VALUES ('calibration_menu','1');
 
 DELETE FROM aqm_configuration WHERE data='purge_state';
 INSERT INTO aqm_configuration (data,content) VALUES ('purge_state','o');
+
+ALTER TABLE aqm_sensor_values ADD COLUMN LABJACK varchar(255)  DEFAULT '' AFTER WS;
