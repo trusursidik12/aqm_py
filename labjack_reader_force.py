@@ -43,7 +43,7 @@ while True:
         AIN6 = 0
         AIN7 = 0
         
-    ljmvalue = AIN0 + ";" + AIN1 + ";" + AIN2 + ";" + AIN3 + ";" + AIN4 + ";" + AIN5 + ";" + AIN6 + ";" + AIN7;
+    ljmvalue = str(AIN0) + ";" + str(AIN1) + ";" + str(AIN2) + ";" + str(AIN3) + ";" + str(AIN4) + ";" + str(AIN5) + ";" + str(AIN6) + ";" + str(AIN7);
         
     sql = "UPDATE aqm_sensor_values SET LABJACK = %s WHERE id = 1"
     val = (ljmvalue)
