@@ -6,6 +6,7 @@ import serial
 from mysql.connector.constants import ClientFlag
 import mysql.connector
 import time
+import struct
 
 is_IONSCIENCE_connect = False
 
