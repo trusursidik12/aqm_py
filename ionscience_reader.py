@@ -62,15 +62,15 @@ try:
     while True:
         try:
             IONSCIENCE = connect_ionscience(int(sys.argv[1]))
-            # if(str(IONSCIENCE).count("None") == 1):            
-                # sql = "UPDATE aqm_sensor_values SET AIN" + sys.argv[1] + " = '0' WHERE id = 1"
-                # mycursor.execute(sql)
-                # mydb.commit()
+            if(str(IONSCIENCE).count("None") == 1):            
+                sql = "UPDATE aqm_sensor_values SET AIN" + sys.argv[1] + " = '0' WHERE id = 1"
+                mycursor.execute(sql)
+                mydb.commit()
                 
-            # else:
-                # sql = "UPDATE aqm_sensor_values SET AIN" + sys.argv[1] + " = '" + str(IONSCIENCE[4]) + "' WHERE id = 1"
-                # mycursor.execute(sql)
-                # mydb.commit()
+            else:
+                sql = "UPDATE aqm_sensor_values SET AIN" + sys.argv[1] + " = '" + str(IONSCIENCE) + "' WHERE id = 1"
+                mycursor.execute(sql)
+                mydb.commit()
             
             
             print(IONSCIENCE)
