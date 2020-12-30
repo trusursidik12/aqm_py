@@ -45,10 +45,9 @@ while True:
         
     ljmvalue = str(AIN0) + ";" + str(AIN1) + ";" + str(AIN2) + ";" + str(AIN3) + ";" + str(AIN4) + ";" + str(AIN5) + ";" + str(AIN6) + ";" + str(AIN7);
         
-    sql = "UPDATE aqm_sensor_values SET LABJACK = %s WHERE id = 1"
-    val = (ljmvalue)
-    mycursor.execute(sql, val)
+    sql = "UPDATE aqm_sensor_values SET LABJACK = '" + ljmvalue + "' WHERE id = 1"
+    mycursor.execute(sql)
     mydb.commit()
-    #print("%s" % (ljmvalue));
+    print("%s" % (ljmvalue));
     
     time.sleep(1) 
