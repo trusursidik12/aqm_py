@@ -130,3 +130,8 @@ DELETE FROM aqm_configuration WHERE data='purge_state';
 INSERT INTO aqm_configuration (data,content) VALUES ('purge_state','o');
 
 ALTER TABLE aqm_sensor_values ADD COLUMN LABJACK varchar(255)  DEFAULT '' AFTER WS;
+
+DELETE FROM aqm_configuration WHERE data='com_rht';
+INSERT INTO aqm_configuration (data,content) VALUES ('com_rht','');
+DELETE FROM aqm_configuration WHERE data='baud_rht';
+INSERT INTO aqm_configuration (data,content) VALUES ('baud_rht','115200');
