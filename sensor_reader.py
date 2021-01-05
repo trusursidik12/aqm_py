@@ -355,9 +355,9 @@ try:
         is_COM_RHT = True
         i_retry_RHT = 0
         if sys.platform.startswith('win'):
-            command = "rht_reader.py.py"
+            command = "rht_reader.py"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/rht_reader.py.py"
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/rht_reader.py"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
