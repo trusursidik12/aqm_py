@@ -74,21 +74,16 @@ def upload_log():
     return r.content
     
 def delete_log():
-    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'sta_id'")
-    rec = mycursor.fetchone()
-    for row in rec: id_stasiun = rec[0]
-    date_3_days_ago = datetime.now() - timedelta(days=1)
-    delete_filename = "RHT_" + id_stasiun + "_" + date_3_days_ago.strftime('%Y%m%d') + "*.log"
     try:
-        fileList = glob.glob("../"+delete_filename, recursive=False)
+        fileList = glob.glob("../RHT_*.log", recursive=False)
         for filePath in fileList:
-            os.remove(filePath)
+            if (os.stat(filePath).st_mtime < time.time() - (2 * 86400)):
+                os.remove(filePath)
         
         return True
     except Exception as e: 
         print(e)
         return False
-    
     
 try:
     while True :
