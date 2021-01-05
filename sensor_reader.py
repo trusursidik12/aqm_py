@@ -30,6 +30,7 @@ is_COM_SDS019 = False
 is_COM_HC = False
 is_COM_WS = False
 is_COM_AIRMAR = False
+is_COM_RHT = False
 is_Arduino = False
 is_Pump_pwm = False
 
@@ -41,6 +42,7 @@ i_retry_SDS019 = 0
 i_retry_HC = 0
 i_retry_WS = 0
 i_retry_AIRMAR = 0
+i_retry_RHT = 0
 
 retry_GASREADER = []
 retry_ION_SCIENCE = []
@@ -50,6 +52,7 @@ retry_SDS019 = []
 retry_HC = []
 retry_WS = []
 retry_AIRMAR = []
+retry_RHT = []
 
 
 def serial_ports():
@@ -340,6 +343,21 @@ try:
             command = "ws_airmar_reader.py"
         else:
             command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_airmar_reader.py"
+
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
+    
+try:        
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_rht'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        is_COM_RHT = True
+        i_retry_RHT = 0
+        if sys.platform.startswith('win'):
+            command = "rht_reader.py.py"
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/rht_reader.py.py"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
