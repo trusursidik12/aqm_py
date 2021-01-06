@@ -30,7 +30,10 @@ def connect_ionscience(ionsciencemode):
         mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'baud_ion_science'")
         rec = mycursor.fetchone()
         for row in rec:
-            serial_rate = str(rec[0]).split(";")[ionsciencemode]
+            try:
+                serial_rate = str(rec[0]).split(";")[ionsciencemode]
+            except Exception as e2:
+                serial_rate = str(rec[0]).split(";")[0]
             
         if(serial_rate == ""):
             serial_rate = str(rec[0]).split(";")[0]
