@@ -325,7 +325,7 @@ try:
                 command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_fws20n_reader.py"
         elif(rec[0] == "misol_sdr"):
             is_COM_WS = False
-            subprocess.Popen("rtl_433 > ../misol_sdr.txt", shell=True)
+            subprocess.Popen("echo admin | sudo -S rtl_433 > ../misol_sdr.txt", shell=True)
             time.sleep(3)
             command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_misol_sdr_reader.py"
         else:
