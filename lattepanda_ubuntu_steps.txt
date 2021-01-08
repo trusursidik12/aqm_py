@@ -156,6 +156,7 @@ sudo ln -s /opt/cmake-3.19.2-Linux-x86_64/bin/* /usr/local/bin
 git clone git://git.osmocom.org/rtl-sdr.git
 cd rtl-sdr
 mkdir build && cd build
+sudo apt-get install cmake libusb.1-0-0-dev build-essential
 cmake ../ -DINSTALL_UDEV_RULES=ON -DDETACH_KERNEL_DRIVER=ON
 make
 sudo make install
