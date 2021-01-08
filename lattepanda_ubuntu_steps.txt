@@ -143,14 +143,23 @@ SDR
 ==========================================
 mkdir sdr
 cd sdr
-sudo apt-get install git cmake libusb.1.0-0-dev build-essential
+sudo apt remove cmake
+wget https://github.com/Kitware/CMake/releases/download/v3.19.2/cmake-3.19.2-Linux-x86_64.sh
+sudo cp cmake-3.19.2-Linux-x86_64.sh /opt/cmake-3.19.2-Linux-x86_64.sh
+sudo chmod +x /opt/cmake-3.19.2-Linux-x86_64.sh
+cd /opt/
+sudo sh cmake-3.19.2-Linux-x86_64.sh
+sudo ln -s /opt/cmake-3.19.2-Linux-x86_64/bin/* /usr/local/bin
+
+
+
 git clone git://git.osmocom.org/rtl-sdr.git
 cd rtl-sdr
 mkdir build && cd build
 cmake ../ -DINSTALL_UDEV_RULES=ON -DDETACH_KERNEL_DRIVER=ON
 make
 sudo make install
-sudo idconfig
+sudo ldconfig
 
 cd ~/
 git clone https://github.com/merbanan/rtl_433.git
