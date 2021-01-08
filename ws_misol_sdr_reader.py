@@ -21,7 +21,7 @@ def read_ws():
     global is_WS_connect
     is_WS_connect = True
     try:
-        f = open("..\misol_sdr.txt", "r")
+        f = open("../misol_sdr.txt", "r")
         content = str(f.read()).split("Fineoffset-WHx080")
         content = content[len(content)-1]
         return content
@@ -44,7 +44,7 @@ try:
                 sql = "UPDATE aqm_sensor_values SET WS = '" + WS + "' WHERE id = 1"
                 mycursor.execute(sql)
                 mydb.commit()
-                f = open("..\misol_sdr.txt", "w")
+                f = open("../misol_sdr.txt", "w")
                 f.write("")
                 f.close()
                 
