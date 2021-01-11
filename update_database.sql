@@ -135,3 +135,10 @@ DELETE FROM aqm_configuration WHERE data='com_rht';
 INSERT INTO aqm_configuration (data,content) VALUES ('com_rht','');
 DELETE FROM aqm_configuration WHERE data='baud_rht';
 INSERT INTO aqm_configuration (data,content) VALUES ('baud_rht','115200');
+
+DELETE FROM aqm_configuration WHERE data='com_gstar_iv';
+INSERT INTO aqm_configuration (data,content) VALUES ('com_gstar_iv','');
+DELETE FROM aqm_configuration WHERE data='baud_gstar_iv';
+INSERT INTO aqm_configuration (data,content) VALUES ('baud_gstar_iv','4800');
+DELETE FROM aqm_configuration WHERE data='altitude';
+INSERT INTO aqm_configuration (data,content) VALUES ('altitude','0');
