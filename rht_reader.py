@@ -34,6 +34,7 @@ def connect_rht():
         
         COM_RHT = serial.Serial(serial_port, serial_rate)
         RHT = str(COM_RHT.readline())
+        print(RHT)
         if(RHT.count("ready") == 1):
             is_RHT_connect = True
             COM_RHT.write(b'start');
