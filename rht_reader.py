@@ -94,6 +94,7 @@ try:
                 time.sleep(1)
             else:
                 RHT = str(COM_RHT.readline()).replace("b'","").replace("\\r\\n'","")
+                print(RHT)
                 logwrite(RHT)
                 if(str(datetime.today().strftime('%M')) == "01" and uploaded_at != datetime.today().strftime('%Y-%m-%d %H:00:00')):
                    upload_log()
