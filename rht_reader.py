@@ -50,7 +50,7 @@ def logwrite(data):
     for row in rec: id_stasiun = rec[0]
     waktu = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
     filename = "RHT_" + id_stasiun + "_" + datetime.today().strftime('%Y%m%d%H0000') + ".log"
-    f = open("../"+filename, 'a+')
+    f = open("/home/admin/"+filename, 'a+')
     f.write(waktu + " => " + data + "\n")
     f.close()
     
@@ -69,13 +69,13 @@ def upload_log():
     print(filename)
     
     headers = headers = {'Content-type': 'text/plain', 'filename': filename, 'Api-Key': apikey}
-    r = requests.put(url, data=open("../"+filename, 'rb'), headers=headers, auth=('superuser', 'R2h2s12R2h2s12'))
+    r = requests.put(url, data=open("/home/admin/"+filename, 'rb'), headers=headers, auth=('superuser', 'R2h2s12R2h2s12'))
     print(r.content)
     return r.content
     
 def delete_log():
     try:
-        fileList = glob.glob("../RHT_*.log", recursive=False)
+        fileList = glob.glob("/home/admin/RHT_*.log", recursive=False)
         for filePath in fileList:
             if (os.stat(filePath).st_mtime < time.time() - (2 * 86400)):
                 os.remove(filePath)
