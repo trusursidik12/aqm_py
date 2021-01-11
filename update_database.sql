@@ -142,3 +142,5 @@ DELETE FROM aqm_configuration WHERE data='baud_gstar_iv';
 INSERT INTO aqm_configuration (data,content) VALUES ('baud_gstar_iv','4800');
 DELETE FROM aqm_configuration WHERE data='altitude';
 INSERT INTO aqm_configuration (data,content) VALUES ('altitude','0');
+
+ALTER TABLE aqm_sensor_values ADD COLUMN GPS varchar(50)  DEFAULT '' AFTER WS;

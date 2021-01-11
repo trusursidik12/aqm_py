@@ -104,7 +104,10 @@ try:
             mydb.commit()    
             sql = "UPDATE aqm_configuration SET content='" + altitude + "' WHERE data = 'altitude'";
             mycursor.execute(sql)
-            mydb.commit()           
+            mydb.commit()
+            sql = "UPDATE aqm_sensor_values SET GPS = '" + lat + ";" + lon + ";" + altitude + "' WHERE id = 1"
+            mycursor.execute(sql)
+            mydb.commit() 
             #print(lat + ";" + lon + ";" + altitude)
         except Exception as e2: 
             is_GPS_connect = False
@@ -117,7 +120,10 @@ try:
             mydb.commit() 
             sql = "UPDATE aqm_configuration SET content='0' WHERE data = 'altitude'";
             mycursor.execute(sql)
-            mydb.commit()        
+            mydb.commit()
+            sql = "UPDATE aqm_sensor_values SET GPS = ';;0' WHERE id = 1"
+            mycursor.execute(sql)
+            mydb.commit()
         
         time.sleep(1)
         
