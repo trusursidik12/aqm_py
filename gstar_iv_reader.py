@@ -105,7 +105,7 @@ try:
             sql = "UPDATE aqm_configuration SET content='" + altitude + "' WHERE data = 'altitude'";
             mycursor.execute(sql)
             mydb.commit()           
-            print(lat + ";" + lon + ";" + altitude)
+            #print(lat + ";" + lon + ";" + altitude)
         except Exception as e2: 
             is_GPS_connect = False
             print("Reconnect GPS GSTAR IV");
