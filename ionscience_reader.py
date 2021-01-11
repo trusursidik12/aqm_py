@@ -46,15 +46,19 @@ def connect_ionscience(ionsciencemode):
         ion.mode=minimalmodbus.MODE_RTU
         ion.serial.timeout=0.05
         ion.write_register(0x1248,1)
+        print(ion.read_registers(0x12c0,8,4))
         
-        h=ion.read_register(0x12c8,0,4,False)
-        i=ion.read_register(0x12ca,0,4,False)
-        
-        c=hex(h).split('x')[1]
-        d=hex(i).split('x')[1]
-        r=d+c
-        response = struct.unpack('!f',bytes.fromhex(r))[0];
-        return response
+        try:
+            h=ion.read_register(0x12c8,0,4,False)
+            i=ion.read_register(0x12ca,0,4,False)
+            
+            c=hex(h).split('x')[1]
+            d=hex(i).split('x')[1]
+            r=d+c
+            response = struct.unpack('!f',bytes.fromhex(r))[0];
+            return response
+        except Exception as ex2:
+            return 0
         
     except Exception as e:
         print(e)
@@ -76,7 +80,7 @@ try:
                 mydb.commit()
             
             
-            print(IONSCIENCE)
+            #print(IONSCIENCE)
         except Exception as e2:
             print(e2)
             print("Reconnect IONSCIENCE");
