@@ -12,6 +12,7 @@ is_IONSCIENCE_connect = False
 data_i = 0
 counter = 0
 total = 0.0
+ain_val = 0.0
 
 try:
     mydb = mysql.connector.connect(host="localhost", user="root", passwd="root", database="trusur_aqm")
