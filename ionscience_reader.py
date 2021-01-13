@@ -9,6 +9,9 @@ import time
 import struct
 
 is_IONSCIENCE_connect = False
+data_i = 0
+counter = 0
+total = 0.0
 
 try:
     mydb = mysql.connector.connect(host="localhost", user="root", passwd="root", database="trusur_aqm")
@@ -44,7 +47,7 @@ def connect_ionscience(ionsciencemode):
         ion.serial.bytesize=8
         ion.serial.stopbits=1
         ion.mode=minimalmodbus.MODE_RTU
-        ion.serial.timeout=0.05
+        ion.serial.timeout=0.1
         ion.write_register(0x1248,1)
         print(ion.read_registers(0x12c0,8,4))
         
@@ -58,6 +61,8 @@ def connect_ionscience(ionsciencemode):
             response = struct.unpack('!f',bytes.fromhex(r))[0];
             return response
         except Exception as ex2:
+            ion.write_register(0x1248,0)
+            time.sleep(2)
             return 0
         
     except Exception as e:
@@ -75,18 +80,29 @@ try:
                 mydb.commit()
                 
             else:
-                sql = "UPDATE aqm_sensor_values SET AIN" + sys.argv[1] + " = '" + str(IONSCIENCE) + "' WHERE id = 1"
+                if(float(IONSCIENCE) > 0):
+                    total = total + float(IONSCIENCE)
+                    data_i = data_i + 1
+                    
+            if(counter >= 60):
+                ain_val = total / data_i
+                total = 0.0
+                data_i = 0
+                counter = 0
+                sql = "UPDATE aqm_sensor_values SET AIN" + sys.argv[1] + " = '" + str(ain_val) + "' WHERE id = 1"
                 mycursor.execute(sql)
                 mydb.commit()
             
             
-            #print(IONSCIENCE)
+            print(ain_val)
         except Exception as e2:
             print(e2)
             print("Reconnect IONSCIENCE");
             sql = "UPDATE aqm_sensor_values SET AIN" + sys.argv[1] + " = '0' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
+        
+        counter = counter + 1
 
         time.sleep(1)
 
