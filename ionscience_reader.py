@@ -48,8 +48,9 @@ def connect_ionscience(ionsciencemode):
         ion.serial.bytesize=8
         ion.serial.stopbits=1
         ion.mode=minimalmodbus.MODE_RTU
-        ion.serial.timeout=0.1
+        ion.serial.timeout=0.3
         ion.write_register(0x1248,1)
+        time.sleep(1)
         print(ion.read_registers(0x12c0,8,4))
         
         try:
