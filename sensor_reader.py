@@ -13,6 +13,14 @@ AIN4 = 0
 AIN5 = 0
 AIN6 = 0
 AIN7 = 0
+AIN8 = 0
+AIN9 = 0
+AIN10 = 0
+AIN11 = 0
+AIN12 = 0
+AIN13 = 0
+AIN14 = 0
+AIN15 = 0
 HC = "0"
 PM10 = ""
 PM25 = ""
@@ -23,7 +31,9 @@ cur_pump_state = "0"
 cur_selenoid_state = "q"
 cur_purge_state = "o"
 is_COM_GASREADER = False
+is_COM_ADC16PIN = False
 is_COM_ION_SCIENCE = False
+is_COM_DIGITAL_SENSOR = False
 is_COM_PM10 = False
 is_COM_PM25 = False
 is_COM_SDS019 = False
@@ -36,7 +46,9 @@ is_Arduino = False
 is_Pump_pwm = False
 
 i_retry_GASREADER = 0
+i_retry_ADC16PIN = 0
 i_retry_ION_SCIENCE = 0
+i_retry_DIGITAL_SENSOR = 0
 i_retry_PM10 = 0
 i_retry_PM25 = 0
 i_retry_SDS019 = 0
@@ -47,7 +59,9 @@ i_retry_GSTAR_IV = 0
 i_retry_RHT = 0
 
 retry_GASREADER = []
+retry_ADC16PIN = []
 retry_ION_SCIENCE = []
+retry_DIGITAL_SENSOR = []
 retry_PM10 = []
 retry_PM25 = []
 retry_SDS019 = []
@@ -88,6 +102,12 @@ try:
     print("[V] Database CONNECTED")
 except Exception as e: 
     print(e)
+    
+try:
+    sql = "ALTER TABLE aqm_sensor_values ADD COLUMN AIN8 DOUBLE  DEFAULT '0' AFTER AIN7, ADD COLUMN AIN9 DOUBLE  DEFAULT '0' AFTER AIN8, ADD COLUMN AIN10 DOUBLE  DEFAULT '0' AFTER AIN9, ADD COLUMN AIN11 DOUBLE  DEFAULT '0' AFTER AIN10, ADD COLUMN AIN12 DOUBLE  DEFAULT '0' AFTER AIN11, ADD COLUMN AIN13 DOUBLE  DEFAULT '0' AFTER AIN12, ADD COLUMN AIN14 DOUBLE  DEFAULT '0' AFTER AIN13, ADD COLUMN AIN15 DOUBLE  DEFAULT '0' AFTER AIN14"
+    mycursor.execute(sql)
+except Exception as e:
+    print("[X]AIN8 to AIN15 already exsited" + str(e))
 
 mycursor.execute("TRUNCATE TABLE serial_ports")
 mydb.commit()
@@ -185,6 +205,14 @@ AIN4_less = 99999
 AIN5_less = 99999
 AIN6_less = 99999
 AIN7_less = 99999
+AIN8_less = 99999
+AIN9_less = 99999
+AIN10_less = 99999
+AIN11_less = 99999
+AIN12_less = 99999
+AIN13_less = 99999
+AIN14_less = 99999
+AIN15_less = 99999
 AIN0_range = 0
 AIN1_range = 0
 AIN2_range = 0
@@ -193,6 +221,14 @@ AIN4_range = 0
 AIN5_range = 0
 AIN6_range = 0
 AIN7_range = 0
+AIN8_range = 0
+AIN9_range = 0
+AIN10_range = 0
+AIN11_range = 0
+AIN12_range = 0
+AIN13_range = 0
+AIN14_range = 0
+AIN15_range = 0
 
 
 try:
@@ -207,6 +243,42 @@ try:
             command = "echo admin | sudo -S python3.5 ~/aqm_py/gasreader_reader.py"
         
         subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
+    
+try:
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_adc16pin'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        is_COM_ADC16PIN = True
+        i_retry_ADC16PIN = 0
+        if sys.platform.startswith('win'):
+            command = "adc16pin_reader.py"
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/adc16pin_reader.py"
+        
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
+    
+try:
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_digital_sensors'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        is_COM_DIGITAL_SENSOR = True
+        i_retry_DIGITAL_SENSOR = 0
+        
+        i = 0
+        while(i < len(str(rec[0]).split(";"))):
+            if(str(rec[0]).split(";")[i] != ""):
+                if sys.platform.startswith('win'):
+                    command = "global_digital_sensor_reader.py " + str(i)
+                else:
+                    command = "echo admin | sudo -S python3.5 ~/aqm_py/global_digital_sensor_reader.py " + str(i)
+                
+                subprocess.Popen(command, shell=True)
+            i += 1
+            
 except Exception as e:
     print(e)
     
@@ -231,7 +303,7 @@ except Exception as e:
     print(e)
     
 try:
-    if(is_COM_GASREADER == False and is_COM_ION_SCIENCE == False):
+    if(is_COM_ADC16PIN == False and is_COM_GASREADER == False and is_COM_ION_SCIENCE == False):
         if sys.platform.startswith('win'):
             command = "labjack_reader.py"
         else:
@@ -244,9 +316,11 @@ try:
         rec = mycursor.fetchone()
         if(str(rec[0]) == "1"):
             if sys.platform.startswith('win'):
-                command = "labjack_reader_force.py"
+                #command = "labjack_reader_force.py"
+                command = "labjack_reader.py"
             else:
-                command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader_force.py"
+                #command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader_force.py"
+                command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py"
                 
             subprocess.Popen(command, shell=True)
             
@@ -392,7 +466,7 @@ time.sleep(5)
 while True:
     try:
         try:
-            mycursor.execute("SELECT AIN0,AIN1,AIN2,AIN3,AIN4,AIN5,AIN6,AIN7 FROM aqm_sensor_values WHERE id = '1'")
+            mycursor.execute("SELECT AIN0,AIN1,AIN2,AIN3,AIN4,AIN5,AIN6,AIN7,AIN8,AIN9,AIN10,AIN11,AIN12,AIN13,AIN14,AIN15 FROM aqm_sensor_values WHERE id = '1'")
             rec = mycursor.fetchone()
             AIN0 = float(rec[0])
             AIN1 = float(rec[1])
@@ -402,6 +476,14 @@ while True:
             AIN5 = float(rec[5])
             AIN6 = float(rec[6])
             AIN7 = float(rec[7])
+            AIN8 = float(rec[8])
+            AIN9 = float(rec[9])
+            AIN10 = float(rec[10])
+            AIN11 = float(rec[11])
+            AIN12 = float(rec[12])
+            AIN13 = float(rec[13])
+            AIN14 = float(rec[14])
+            AIN15 = float(rec[15])
             if AIN0 < 0: 
                 AIN0 = 0
                 AIN0_less = 0
@@ -426,6 +508,30 @@ while True:
             if AIN7 < 0: 
                 AIN7 = 0
                 AIN7_less = 0
+            if AIN8 < 0: 
+                AIN8 = 0
+                AIN8_less = 0
+            if AIN9 < 0: 
+                AIN9 = 0
+                AIN9_less = 0
+            if AIN10 < 0: 
+                AIN10 = 0
+                AIN10_less = 0
+            if AIN11 < 0: 
+                AIN11 = 0
+                AIN11_less = 0
+            if AIN12 < 0: 
+                AIN12 = 0
+                AIN12_less = 0
+            if AIN3 < 0: 
+                AIN13 = 0
+                AIN13_less = 0
+            if AIN14 < 0: 
+                AIN14 = 0
+                AIN14_less = 0
+            if AIN15 < 0: 
+                AIN15 = 0
+                AIN15_less = 0
             if AIN0_less > AIN0 and AIN0 > 0: AIN0_less = AIN0
             if AIN1_less > AIN1 and AIN1 > 0: AIN1_less = AIN1
             if AIN2_less > AIN2 and AIN2 > 0: AIN2_less = AIN2
@@ -434,6 +540,14 @@ while True:
             if AIN5_less > AIN5 and AIN5 > 0: AIN5_less = AIN4
             if AIN6_less > AIN6 and AIN6 > 0: AIN6_less = AIN6
             if AIN7_less > AIN7 and AIN7 > 0: AIN7_less = AIN7
+            if AIN8_less > AIN8 and AIN8 > 0: AIN8_less = AIN8
+            if AIN9_less > AIN9 and AIN9 > 0: AIN9_less = AIN9
+            if AIN10_less > AIN10 and AIN10 > 0: AIN10_less = AIN10
+            if AIN11_less > AIN11 and AIN11 > 0: AIN11_less = AIN11
+            if AIN12_less > AIN12 and AIN12 > 0: AIN12_less = AIN12
+            if AIN13_less > AIN13 and AIN13 > 0: AIN13_less = AIN13
+            if AIN14_less > AIN14 and AIN14 > 0: AIN14_less = AIN14
+            if AIN15_less > AIN15 and AIN15 > 0: AIN15_less = AIN15
             AIN0_range = 0.04 - AIN0_less
             AIN1_range = 0.04 - AIN1_less
             AIN2_range = 0.04 - AIN2_less
@@ -442,6 +556,14 @@ while True:
             AIN5_range = 0.04 - AIN5_less
             AIN6_range = 0.04 - AIN6_less
             AIN7_range = 0.04 - AIN7_less
+            AIN8_range = 0.04 - AIN8_less
+            AIN9_range = 0.04 - AIN9_less
+            AIN10_range = 0.04 - AIN10_less
+            AIN11_range = 0.04 - AIN11_less
+            AIN12_range = 0.04 - AIN12_less
+            AIN13_range = 0.04 - AIN13_less
+            AIN14_range = 0.04 - AIN14_less
+            AIN15_range = 0.04 - AIN15_less
             
         except Exception as e: 
             print(e)
@@ -453,6 +575,14 @@ while True:
             AIN5 = 0
             AIN6 = 0
             AIN7 = 0
+            AIN8 = 0
+            AIN9 = 0
+            AIN10 = 0
+            AIN11 = 0
+            AIN12 = 0
+            AIN13 = 0
+            AIN14 = 0
+            AIN15 = 0
             AIN0_less = 0
             AIN1_less = 0
             AIN2_less = 0
@@ -461,6 +591,14 @@ while True:
             AIN5_less = 0
             AIN6_less = 0
             AIN7_less = 0
+            AIN8_less = 0
+            AIN9_less = 0
+            AIN10_less = 0
+            AIN11_less = 0
+            AIN12_less = 0
+            AIN13_less = 0
+            AIN14_less = 0
+            AIN15_less = 0
             AIN0_range = 0
             AIN1_range = 0
             AIN2_range = 0
@@ -469,6 +607,14 @@ while True:
             AIN5_range = 0
             AIN6_range = 0
             AIN7_range = 0
+            AIN8_range = 0
+            AIN9_range = 0
+            AIN10_range = 0
+            AIN11_range = 0
+            AIN12_range = 0
+            AIN13_range = 0
+            AIN14_range = 0
+            AIN15_range = 0
             
         try :
             mycursor.execute("SELECT PM10 FROM aqm_sensor_values WHERE id = '1'")
@@ -697,29 +843,24 @@ while True:
                         break
         ##======END RETRY ========================================================================================================
         
-        print("PM10 = %s" % (PM10.replace("\r\n","")))
-        print("PM25 = %s" % (PM25.replace("\r\n","")))
+        print("PM10 = %s \t; PM25 = %s" % (PM10.replace("\r\n",""),PM25.replace("\r\n","")))
         try:
             print("WS = %s" % (WS[0:75]))
         except Exception as e:
             print("WS = 0")
 
         print("HC = %s" % (HC))
-        print("cur_pump_state = %s" % (cur_pump_state))
-        print("cur_selenoid_state = %s" % (cur_selenoid_state))
-        print("cur_purge_state = %s" % (cur_purge_state))
-        print("--------------------------------------------------------------------------------");
-        print("AIN \t|\t VOLTAGE \t|\t MIN \t\t|\t RANGE \t\t|")
-        print("--------------------------------------------------------------------------------");
-        print("AIN0 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN0,AIN0_less,AIN0_range))
-        print("AIN1 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN1,AIN1_less,AIN1_range))
-        print("AIN2 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN2,AIN2_less,AIN2_range))
-        print("AIN3 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN3,AIN3_less,AIN3_range))
-        print("AIN4 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN4,AIN4_less,AIN4_range))
-        print("AIN5 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN5,AIN5_less,AIN5_range))
-        print("AIN6 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN6,AIN6_less,AIN6_range))
-        print("AIN7 \t|\t %f \t|\t %f \t|\t %f \t|" % (AIN7,AIN7_less,AIN7_range))
-        print("================================================================================");
+        print("cur_pump_state = %s \t cur_selenoid_state = %s \t cur_purge_state = %s" % (cur_pump_state,cur_selenoid_state,cur_purge_state))
+        print("");
+        print("AIN0 =>\t %f \t|| AIN08 =>\t %f" % (AIN0,AIN8))
+        print("AIN1 =>\t %f \t|| AIN09 =>\t %f" % (AIN1,AIN9))
+        print("AIN2 =>\t %f \t|| AIN10 =>\t %f" % (AIN2,AIN10))
+        print("AIN3 =>\t %f \t|| AIN11 =>\t %f" % (AIN3,AIN11))
+        print("AIN4 =>\t %f \t|| AIN12 =>\t %f" % (AIN4,AIN12))
+        print("AIN5 =>\t %f \t|| AIN13 =>\t %f" % (AIN5,AIN13))
+        print("AIN6 =>\t %f \t|| AIN14 =>\t %f" % (AIN6,AIN14))
+        print("AIN7 =>\t %f \t|| AIN15 =>\t %f" % (AIN7,AIN15))
+        print("");
         
     except Exception as e2: 
         print(e2)
