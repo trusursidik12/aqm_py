@@ -24,6 +24,7 @@ AIN15 = 0
 HC = "0"
 PM10 = ""
 PM25 = ""
+TSP = ""
 PM_SDS019 = ""
 WS = ""
 pump_speed = 0
@@ -36,6 +37,7 @@ is_COM_ION_SCIENCE = False
 is_COM_DIGITAL_SENSOR = False
 is_COM_PM10 = False
 is_COM_PM25 = False
+is_COM_TSP = False
 is_COM_SDS019 = False
 is_COM_HC = False
 is_COM_WS = False
@@ -51,6 +53,7 @@ i_retry_ION_SCIENCE = 0
 i_retry_DIGITAL_SENSOR = 0
 i_retry_PM10 = 0
 i_retry_PM25 = 0
+i_retry_TSP = 0
 i_retry_SDS019 = 0
 i_retry_HC = 0
 i_retry_WS = 0
@@ -64,6 +67,7 @@ retry_ION_SCIENCE = []
 retry_DIGITAL_SENSOR = []
 retry_PM10 = []
 retry_PM25 = []
+retry_TSP = []
 retry_SDS019 = []
 retry_HC = []
 retry_WS = []
@@ -372,6 +376,45 @@ try:
         subprocess.Popen(command, shell=True)
 except Exception as e:
     print(e)
+    
+try:
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ebam25'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        if sys.platform.startswith('win'):
+            command = "ebam_reader.py ebam25"
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py ebam25"
+
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
+    
+try:
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ebam10'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        if sys.platform.startswith('win'):
+            command = "ebam_reader.py ebam10"
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py ebam10"
+
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
+    
+try:
+    mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_ebamtsp'")
+    rec = mycursor.fetchone()
+    if(rec[0] != None and rec[0] != ""):
+        if sys.platform.startswith('win'):
+            command = "ebam_reader.py ebamtsp"
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py ebamtsp"
+
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
 
 try:    
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_hc'")
@@ -631,6 +674,13 @@ while True:
             PM25 = "b'000.000,0.0,+0.0,0,0,00,*0\\r\\n'"
             
         try :
+            mycursor.execute("SELECT TSP FROM aqm_sensor_values WHERE id = '1'")
+            rec = mycursor.fetchone()
+            TSP = rec[0]
+        except Exception as e:
+            TSP = "b'000.000,0.0,+0.0,0,0,00,*0\\r\\n'"
+            
+        try :
             mycursor.execute("SELECT HC FROM aqm_sensor_values WHERE id = '1'")
             rec = mycursor.fetchone()
             HC = rec[0]
@@ -843,7 +893,7 @@ while True:
                         break
         ##======END RETRY ========================================================================================================
         
-        print("PM10 = %s \t; PM25 = %s" % (PM10.replace("\r\n",""),PM25.replace("\r\n","")))
+        print("PM10 = %s \t; PM25 = %s \t; TSP = %s" % (PM10.replace("\r\n",""),PM25.replace("\r\n",""),TSP.replace("\r\n","")))
         try:
             print("WS = %s" % (WS[0:75]))
         except Exception as e:
