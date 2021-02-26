@@ -384,7 +384,7 @@ try:
         if sys.platform.startswith('win'):
             command = "ebam_reader.py ebam25"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py ebam25"
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/ebam_reader.py ebam25"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -397,7 +397,7 @@ try:
         if sys.platform.startswith('win'):
             command = "ebam_reader.py ebam10"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py ebam10"
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/ebam_reader.py ebam10"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -410,7 +410,7 @@ try:
         if sys.platform.startswith('win'):
             command = "ebam_reader.py ebamtsp"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py ebamtsp"
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/ebam_reader.py ebamtsp"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
