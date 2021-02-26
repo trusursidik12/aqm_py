@@ -57,7 +57,7 @@ try:
             
             EBAM = connect_ebam(sys.argv[1])
             if(EBAM == None):
-                EBAM = "b'0000-00-00 00:00:00,+0,+0,+0.0,+0.0,000,000,+0.0,000,00000\\r\\n'"
+                EBAM = ""
                 
             sql = "UPDATE aqm_sensor_values SET " + sensor_field_name + " = '" + EBAM.replace("'","''") + "' WHERE id = 1"
             mycursor.execute(sql)
@@ -68,7 +68,7 @@ try:
             print(e2)
             is_EBAM_connect = False
             print("Reconnect EBAM" + sys.argv[1]);
-            sql = "UPDATE aqm_sensor_values SET " + sensor_field_name + " = '" + "b''0000-00-00 00:00:00,+0,+0,+0.0,+0.0,000,000,+0.0,000,00000\\r\\n''" + "' WHERE id = 1"
+            sql = "UPDATE aqm_sensor_values SET " + sensor_field_name + " = '' WHERE id = 1"
             mycursor.execute(sql)
             mydb.commit()
         
