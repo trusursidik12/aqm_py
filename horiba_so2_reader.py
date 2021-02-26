@@ -45,7 +45,7 @@ try:
     while True :
         try:
             
-            HORIBA = connect_horiba(sys.argv[1])
+            HORIBA = connect_horiba()
             if(HORIBA == None):
                 HORIBA = ""
                 
