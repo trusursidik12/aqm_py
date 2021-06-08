@@ -33,10 +33,7 @@ def connect_horiba():
         horiba.write(stx + b'DA' + etx + b'04')
         if (horiba):
             is_HORIBA_connect = True
-            try:
-                return str(horiba.readline()).split(" ")[80]
-            except Exception as e2: 
-                return "0"
+            return str(horiba.readline())
         else:
             is_HORIBA_connect = False
             return None
