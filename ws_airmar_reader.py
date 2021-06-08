@@ -135,23 +135,25 @@ try:
             rainrate = "0.0"
             solarrad = "0.0"
 
-            # lat = GPGGA.split(",")[1];
+            lat = GPGGA.split(",")[1]
             ns = GPGGA.split(",")[2]
-            # lon = GPGGA.split(",")[3];
+            lon = GPGGA.split(",")[3]
             ew = GPGGA.split(",")[4]
 
-            # if lat != "" and lon != "":
-            #     lat = str(float(lat) / 100);
-            #     lon = str(float(lon) / 100);
-            #     lat1 = lat.split(".")[0];
-            #     lat2 = str(float("0." + lat.split(".")[1]) / 60).replace("0.00","");
-            #     lat = lat1 + "." + lat2;
-            #     lon1 = lon.split(".")[0];
-            #     lon2 = str(float("0." + lon.split(".")[1]) / 60).replace("0.00","");
-            #     lon = lon1 + "." + lon2;
+            if lat != "" and lon != "":
+                lat = str(float(lat) / 100)
+                lon = str(float(lon) / 100)
+                lat1 = lat.split(".")[0]
+                lat2 = str(float("0." + lat.split(".")[1]) / 60).replace("0.00", "")
+                lat = lat1 + "." + lat2
+                lon1 = lon.split(".")[0]
+                lon2 = str(float("0." + lon.split(".")[1]) / 60).replace("0.00", "")
+                lon = lon1 + "." + lon2
 
-            #     if ns == "S": lat = "-" + lat;
-            #     if ew == "W": lon = "-" + lon;
+                if ns == "S":
+                    lat = "-" + lat
+                if ew == "W":
+                    lon = "-" + lon
 
             WS = (
                 ";0;"
@@ -188,14 +190,14 @@ try:
 
             # sql = "UPDATE aqm_configuration SET content='" + lat + "' WHERE data = 'sta_lat'";
             # mycursor.execute(sql)
-            mydb.commit()
-            sql = (
-                "UPDATE aqm_configuration SET content='"
-                + lon
-                + "' WHERE data = 'sta_lon'"
-            )
-            mycursor.execute(sql)
-            mydb.commit()
+            # mydb.commit()
+            # sql = (
+            #     "UPDATE aqm_configuration SET content='"
+            #     + lon
+            #     + "' WHERE data = 'sta_lon'"
+            # )
+            # mycursor.execute(sql)
+            # mydb.commit()
             # print(WS)
         except Exception as e2:
             is_WS_connect = False
