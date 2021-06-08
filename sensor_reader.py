@@ -42,7 +42,7 @@ is_COM_SDS019 = False
 is_COM_HC = False
 is_COM_WS = False
 is_COM_AIRMAR = False
-IS_COM_GSTAR_IV = False
+# IS_COM_GSTAR_IV = False
 is_COM_RHT = False
 is_Arduino = False
 is_Pump_pwm = False
@@ -58,7 +58,7 @@ i_retry_SDS019 = 0
 i_retry_HC = 0
 i_retry_WS = 0
 i_retry_AIRMAR = 0
-i_retry_GSTAR_IV = 0
+# i_retry_GSTAR_IV = 0
 i_retry_RHT = 0
 
 retry_GASREADER = []
@@ -72,7 +72,7 @@ retry_SDS019 = []
 retry_HC = []
 retry_WS = []
 retry_AIRMAR = []
-retry_GSTAR_IV = []
+# retry_GSTAR_IV = []
 retry_RHT = []
 
 
