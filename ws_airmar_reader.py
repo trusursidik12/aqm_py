@@ -188,16 +188,22 @@ try:
             mycursor.execute(sql)
             mydb.commit()
 
-            # sql = "UPDATE aqm_configuration SET content='" + lat + "' WHERE data = 'sta_lat'";
-            # mycursor.execute(sql)
-            # mydb.commit()
+            # sql = (
+            #     "UPDATE aqm_configuration SET content='"
+            #     + lat
+            #     + "' WHERE data = 'sta_lat'"
+            # )
+            sql = ""
+            mycursor.execute(sql)
+            mydb.commit()
             # sql = (
             #     "UPDATE aqm_configuration SET content='"
             #     + lon
             #     + "' WHERE data = 'sta_lon'"
             # )
-            # mycursor.execute(sql)
-            # mydb.commit()
+            sql = ""
+            mycursor.execute(sql)
+            mydb.commit()
             # print(WS)
         except Exception as e2:
             is_WS_connect = False
