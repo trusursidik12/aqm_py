@@ -188,20 +188,18 @@ try:
             mycursor.execute(sql)
             mydb.commit()
 
-            # sql = (
-            #     "UPDATE aqm_configuration SET content='"
-            #     + lat
-            #     + "' WHERE data = 'sta_lat'"
-            # )
-            sql = ""
+            sql = (
+                "UPDATE aqm_configuration SET content='"
+                + lat
+                + "' WHERE data = 'sta_lat'"
+            )
             mycursor.execute(sql)
             mydb.commit()
-            # sql = (
-            #     "UPDATE aqm_configuration SET content='"
-            #     + lon
-            #     + "' WHERE data = 'sta_lon'"
-            # )
-            sql = ""
+            sql = (
+                "UPDATE aqm_configuration SET content='"
+                + lon
+                + "' WHERE data = 'sta_lon'"
+            )
             mycursor.execute(sql)
             mydb.commit()
             # print(WS)

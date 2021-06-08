@@ -42,7 +42,7 @@ is_COM_SDS019 = False
 is_COM_HC = False
 is_COM_WS = False
 is_COM_AIRMAR = False
-# IS_COM_GSTAR_IV = False
+IS_COM_GSTAR_IV = False
 is_COM_RHT = False
 is_Arduino = False
 is_Pump_pwm = False
@@ -58,7 +58,7 @@ i_retry_SDS019 = 0
 i_retry_HC = 0
 i_retry_WS = 0
 i_retry_AIRMAR = 0
-# i_retry_GSTAR_IV = 0
+i_retry_GSTAR_IV = 0
 i_retry_RHT = 0
 
 retry_GASREADER = []
@@ -72,7 +72,7 @@ retry_SDS019 = []
 retry_HC = []
 retry_WS = []
 retry_AIRMAR = []
-# retry_GSTAR_IV = []
+retry_GSTAR_IV = []
 retry_RHT = []
 
 
@@ -533,22 +533,22 @@ try:
 except Exception as e:
     print(e)
 
-# try:
-#     mycursor.execute(
-#         "SELECT content FROM aqm_configuration WHERE data = 'com_gstar_iv'"
-#     )
-#     rec = mycursor.fetchone()
-#     if rec[0] != None and rec[0] != "":
-#         IS_COM_GSTAR_IV = True
-#         I_RETRY_GSTAR_IV = 0
-#         if sys.platform.startswith("win"):
-#             command = "gstar_iv_reader.py"
-#         else:
-#             command = "echo admin | sudo -S python3.5 ~/aqm_py/gstar_iv_reader.py"
+try:
+    mycursor.execute(
+        "SELECT content FROM aqm_configuration WHERE data = 'com_gstar_iv'"
+    )
+    rec = mycursor.fetchone()
+    if rec[0] != None and rec[0] != "":
+        IS_COM_GSTAR_IV = True
+        I_RETRY_GSTAR_IV = 0
+        if sys.platform.startswith("win"):
+            command = "gstar_iv_reader.py"
+        else:
+            command = "echo admin | sudo -S python3.5 ~/aqm_py/gstar_iv_reader.py"
 
-#         subprocess.Popen(command, shell=True)
-# except Exception as e:
-#     print(e)
+        subprocess.Popen(command, shell=True)
+except Exception as e:
+    print(e)
 
 try:
     mycursor.execute("SELECT content FROM aqm_configuration WHERE data = 'com_rht'")
