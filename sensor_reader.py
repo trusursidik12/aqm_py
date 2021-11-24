@@ -156,6 +156,8 @@ def check_as_arduino(port):
         COM.timeout = 3
         COM.open()
         retval = str(COM.readline())
+        time.sleep(3)
+        retval = str(COM.readline())
 
         if(retval.count("PUMP") > 0):
             mycursor.execute("UPDATE aqm_configuration SET content='" + port + "' WHERE data LIKE 'controller' AND content='' LIMIT 1")
@@ -173,7 +175,7 @@ def check_as_arduino(port):
             print(" ==> HC")
             
         if(retval.replace("b'","").replace("\\r\\n'","") == ""):
-            None
+            print(" ==> None")
             
     except Exception as e: 
         None
@@ -215,7 +217,6 @@ if(is_AUTOSEARCHING):
                 sensor_reader_id = ""
                 
             if(str(sensor_reader_id) == ""):
-                time.sleep(3)
                 check_as_arduino(serial_port[0])
 
             time.sleep(1)
