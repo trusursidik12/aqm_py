@@ -171,6 +171,10 @@ def check_as_arduino(port):
             mycursor.execute("UPDATE aqm_configuration SET content='" + port + "' WHERE data LIKE 'com_hc' AND content='' LIMIT 1")
             mydb.commit()
             print(" ==> HC")
+            
+        if(retval == ""):
+            None
+            
     except Exception as e: 
         None
         
