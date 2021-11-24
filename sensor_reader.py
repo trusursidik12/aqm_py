@@ -172,7 +172,7 @@ def check_as_arduino(port):
             mydb.commit()
             print(" ==> HC")
             
-        if(retval == ""):
+        if(retval.replace("b'","").replace("\\r\\n'","") == ""):
             None
             
     except Exception as e: 
