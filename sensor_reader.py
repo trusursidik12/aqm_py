@@ -100,40 +100,6 @@ def serial_ports():
         except (OSError, serial.SerialException):
             pass
     return result
-    
-def check_as_arduino(port):
-    try:
-        COM = serial.Serial()
-        COM.port = port
-        COM.baudrate = 9600
-        COM.timeout = 3
-        COM.open()
-        retval = str(COM.readline())
-
-        if(retval.count("000.") > 0 and retval.count(",+") > 0 and retval.count(",*") > 0):
-            mycursor.execute("UPDATE aqm_configuration SET content='" + port + "' WHERE (data LIKE 'com_pm10' OR data LIKE 'com_pm25') AND content='' LIMIT 1")
-            mydb.commit()
-            print(" ==> PM")
-            
-        if(int(retval.replace("b'","").replace("\\r\\n'","")) >= 0 and int(retval.replace("b'","").replace("\\r\\n'","")) <= 60000):
-            mycursor.execute("UPDATE aqm_configuration SET content='" + port + "' WHERE data LIKE 'com_hc' AND content='' LIMIT 1")
-            mydb.commit()
-            print(" ==> HC")
-    except Exception as e: 
-        None
-        
-def check_as_ventagepro2(port):
-    try:
-        COM_WS = VantagePro2.from_url("serial:%s:19200:8N1" % (port))
-        ws_data = COM_WS.get_current_data()
-        WS = ws_data.to_csv(';',False)
-        mycursor.execute("UPDATE aqm_configuration SET content='" + port + "' WHERE data LIKE 'com_ws' AND content='' LIMIT 1")
-        mydb.commit() 
-        print(" ==> VANTAGEPRO2")
-    except Exception as e:
-        None
-
-
 
 try:
     mydb = mysql.connector.connect(
@@ -182,6 +148,38 @@ for port in serial_ports():
     mydb.commit()    
     
 ##=============================AUTO DETECT SERIAL PORTS=================================
+def check_as_arduino(port):
+    try:
+        COM = serial.Serial()
+        COM.port = port
+        COM.baudrate = 9600
+        COM.timeout = 3
+        COM.open()
+        retval = str(COM.readline())
+
+        if(retval.count("000.") > 0 and retval.count(",+") > 0 and retval.count(",*") > 0):
+            mycursor.execute("UPDATE aqm_configuration SET content='" + port + "' WHERE (data LIKE 'com_pm10' OR data LIKE 'com_pm25') AND content='' LIMIT 1")
+            mydb.commit()
+            print(" ==> PM")
+            
+        if(int(retval.replace("b'","").replace("\\r\\n'","")) >= 0 and int(retval.replace("b'","").replace("\\r\\n'","")) <= 60000):
+            mycursor.execute("UPDATE aqm_configuration SET content='" + port + "' WHERE data LIKE 'com_hc' AND content='' LIMIT 1")
+            mydb.commit()
+            print(" ==> HC")
+    except Exception as e: 
+        None
+        
+def check_as_ventagepro2(port):
+    try:
+        COM_WS = VantagePro2.from_url("serial:%s:19200:8N1" % (port))
+        ws_data = COM_WS.get_current_data()
+        WS = ws_data.to_csv(';',False)
+        mycursor.execute("UPDATE aqm_configuration SET content='" + port + "' WHERE data LIKE 'com_ws' AND content='' LIMIT 1")
+        mydb.commit() 
+        print(" ==> VANTAGEPRO2")
+    except Exception as e:
+        None
+
 if(is_AUTOSEARCHING):
     mycursor.execute("UPDATE aqm_configuration SET content='' WHERE data LIKE 'com_pm10'")
     mydb.commit()
