@@ -213,8 +213,12 @@ if(is_AUTOSEARCHING):
                 sensor_reader_id = mycursor.fetchone()[0]
             except Exception as e:
                 sensor_reader_id = ""
+                
             if(str(sensor_reader_id) == ""):
-                check_as_arduino(serial_port[0])    
+                time.sleep(3)
+                check_as_arduino(serial_port[0])
+
+            time.sleep(1)
     
 ##=============================END AUTO DETECT SERIAL PORTS=================================
 
