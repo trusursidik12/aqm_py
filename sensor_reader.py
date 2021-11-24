@@ -157,6 +157,11 @@ def check_as_arduino(port):
         COM.open()
         retval = str(COM.readline())
 
+        if(retval.count("PUMP") > 0):
+            mycursor.execute("UPDATE aqm_configuration SET content='" + port + "' WHERE data LIKE 'controller' AND content='' LIMIT 1")
+            mydb.commit()
+            print(" ==> PUMP CONTROLLER")
+
         if(retval.count("000.") > 0 and retval.count(",+") > 0 and retval.count(",*") > 0):
             mycursor.execute("UPDATE aqm_configuration SET content='" + port + "' WHERE (data LIKE 'com_pm10' OR data LIKE 'com_pm25') AND content='' LIMIT 1")
             mydb.commit()
@@ -188,6 +193,8 @@ if(is_AUTOSEARCHING):
     mycursor.execute("UPDATE aqm_configuration SET content='' WHERE data LIKE 'com_hc'")
     mydb.commit()
     mycursor.execute("UPDATE aqm_configuration SET content='' WHERE data LIKE 'com_ws'")
+    mydb.commit()    
+    mycursor.execute("UPDATE aqm_configuration SET content='' WHERE data LIKE 'controller'")
     mydb.commit()    
     
     mycursor.execute("SELECT port,description FROM serial_ports WHERE port NOT LIKE 'COM1' ORDER BY port")
