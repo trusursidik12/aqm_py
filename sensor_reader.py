@@ -8,7 +8,7 @@ import time
 import subprocess
 import glob
 
-is_AUTOSEARCHING = True
+is_AUTOSEARCHING = False
 
 AIN0 = 0
 AIN1 = 0
@@ -366,7 +366,7 @@ try:
         if sys.platform.startswith("win"):
             command = "gasreader_reader.py"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/gasreader_reader.py"
+            command = "echo admin | sudo -S python3 /home/pi/aqm_py/gasreader_reader.py"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -383,7 +383,7 @@ try:
         if sys.platform.startswith("win"):
             command = "adc16pin_reader.py"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/adc16pin_reader.py"
+            command = "echo admin | sudo -S python3 /home/pi/aqm_py/adc16pin_reader.py"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -405,7 +405,7 @@ try:
                     command = "global_digital_sensor_reader.py " + str(i)
                 else:
                     command = (
-                        "echo admin | sudo -S python3.5 ~/aqm_py/global_digital_sensor_reader.py "
+                        "echo admin | sudo -S python3 /home/pi/aqm_py/global_digital_sensor_reader.py "
                         + str(i)
                     )
 
@@ -430,7 +430,7 @@ try:
                 command = "ionscience_reader.py " + str(i)
             else:
                 command = (
-                    "echo admin | sudo -S python3.5 ~/aqm_py/ionscience_reader.py "
+                    "echo admin | sudo -S python3 /home/pi/aqm_py/ionscience_reader.py "
                     + str(i)
                 )
 
@@ -449,7 +449,7 @@ try:
         if sys.platform.startswith("win"):
             command = "labjack_reader.py"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py"
+            command = "echo admin | sudo -S python3 /home/pi/aqm_py/labjack_reader.py"
 
         subprocess.Popen(command, shell=True)
 
@@ -463,8 +463,8 @@ try:
                 # command = "labjack_reader_force.py"
                 command = "labjack_reader.py"
             else:
-                # command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader_force.py"
-                command = "echo admin | sudo -S python3.5 ~/aqm_py/labjack_reader.py"
+                # command = "echo admin | sudo -S python3 /home/pi/aqm_py/labjack_reader_force.py"
+                command = "echo admin | sudo -S python3 /home/pi/aqm_py/labjack_reader.py"
 
             subprocess.Popen(command, shell=True)
 
@@ -481,7 +481,7 @@ try:
         if sys.platform.startswith("win"):
             command = "pm_reader.py 10"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 10"
+            command = "echo admin | sudo -S python3 /home/pi/aqm_py/pm_reader.py 10"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -496,7 +496,7 @@ try:
         if sys.platform.startswith("win"):
             command = "pm_reader.py 25"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_reader.py 25"
+            command = "echo admin | sudo -S python3 /home/pi/aqm_py/pm_reader.py 25"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -513,7 +513,7 @@ try:
         if sys.platform.startswith("win"):
             command = "pm_sds019_reader.py"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/pm_sds019_reader.py"
+            command = "echo admin | sudo -S python3 /home/pi/aqm_py/pm_sds019_reader.py"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -526,7 +526,7 @@ try:
         if sys.platform.startswith("win"):
             command = "ebam_reader.py ebam25"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/ebam_reader.py ebam25"
+            command = "echo admin | sudo -S python3 /home/pi/aqm_py/ebam_reader.py ebam25"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -539,7 +539,7 @@ try:
         if sys.platform.startswith("win"):
             command = "ebam_reader.py ebam10"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/ebam_reader.py ebam10"
+            command = "echo admin | sudo -S python3 /home/pi/aqm_py/ebam_reader.py ebam10"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -552,7 +552,7 @@ try:
         if sys.platform.startswith("win"):
             command = "ebam_reader.py ebamtsp"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/ebam_reader.py ebamtsp"
+            command = "echo admin | sudo -S python3 /home/pi/aqm_py/ebam_reader.py ebamtsp"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -567,7 +567,7 @@ try:
         if sys.platform.startswith("win"):
             command = "hc_reader.py"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/hc_reader.py"
+            command = "echo admin | sudo -S python3 /home/pi/aqm_py/hc_reader.py"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -584,19 +584,19 @@ try:
             if sys.platform.startswith("win"):
                 command = "ws_fws20n_reader.py"
             else:
-                command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_fws20n_reader.py"
+                command = "echo admin | sudo -S python3 /home/pi/aqm_py/ws_fws20n_reader.py"
         elif rec[0] == "misol_sdr":
             is_COM_WS = False
             subprocess.Popen(
                 "echo admin | sudo -S rtl_433 > ~/misol_sdr.txt", shell=True
             )
             time.sleep(3)
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_misol_sdr_reader.py"
+            command = "echo admin | sudo -S python3 /home/pi/aqm_py/ws_misol_sdr_reader.py"
         else:
             if sys.platform.startswith("win"):
                 command = "ws_davis_reader.py"
             else:
-                command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_davis_reader.py"
+                command = "echo admin | sudo -S python3 /home/pi/aqm_py/ws_davis_reader.py"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -611,7 +611,7 @@ try:
         if sys.platform.startswith("win"):
             command = "ws_airmar_reader.py"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/ws_airmar_reader.py"
+            command = "echo admin | sudo -S python3 /home/pi/aqm_py/ws_airmar_reader.py"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
@@ -628,7 +628,7 @@ except Exception as e:
 #         if sys.platform.startswith("win"):
 #             command = "gstar_iv_reader.py"
 #         else:
-#             command = "echo admin | sudo -S python3.5 ~/aqm_py/gstar_iv_reader.py"
+#             command = "echo admin | sudo -S python3 /home/pi/aqm_py/gstar_iv_reader.py"
 
 #         subprocess.Popen(command, shell=True)
 # except Exception as e:
@@ -643,7 +643,7 @@ try:
         if sys.platform.startswith("win"):
             command = "rht_reader.py"
         else:
-            command = "echo admin | sudo -S python3.5 ~/aqm_py/rht_reader.py"
+            command = "echo admin | sudo -S python3 /home/pi/aqm_py/rht_reader.py"
 
         subprocess.Popen(command, shell=True)
 except Exception as e:
