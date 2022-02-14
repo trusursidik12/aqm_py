@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=AQM
 Comment=AQM
-Icon=gnome-info
+Icon=/var/www/html/aqmmaster/assets/dist/img/trusur_logo3.png
 Exec=lxterminal -e "sh /home/pi/aqm_py/aqm_show.sh"
 Terminal=true
 Type=Application

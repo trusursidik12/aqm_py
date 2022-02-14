@@ -5,6 +5,6 @@ Encoding=UTF-8
 Name=AQM
 Comment=AQM
 Icon=/var/www/html/aqmmaster/assets/dist/img/trusur_logo3.png
-Exec=sh /home/admin/aqm_py/aqm_show.sh
+Exec=lxterminal -e "sh /home/pi/aqm_py/aqm_show.sh"
 Terminal=true
 Type=Application
